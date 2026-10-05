@@ -1,0 +1,66 @@
+---
+import { Image } from 'astro:assets';
+import Icon from './Icon.astro';
+import { site } from '../data/site';
+import portrait from '../assets/brand/peter-about.png';
+---
+<section class="section about" id="about" aria-labelledby="about-title">
+  <div class="container-sm about__inner">
+    <div class="about__portrait" data-reveal>
+      <Image src={portrait} alt="Peter Rebik" widths={[150, 270]} sizes="135px" />
+    </div>
+    <h2 id="about-title" class="t-display" data-reveal>Hi, I’m <span class="hl">Peter</span>.</h2>
+    <div class="about__body" data-reveal>
+      <p>I’m a designer and art director focused on bringing clarity to complex ideas through brand systems, campaigns, and communications. My work sits at the intersection of strategy and execution, helping organisations define what they’re saying, how they say it, and how it comes to life across every touchpoint.</p>
+      <p>I’ve led projects ranging from scalable brand systems and multi-channel campaigns to messaging and digital experiences, delivering measurable results across engagement, recruitment, and audience reach. I’m drawn to work with real-world impact, where clear communication can shift perception, support growth, and make something more useful or accessible.</p>
+    </div>
+
+    <aside class="visa" data-reveal aria-labelledby="visa-title">
+      <div class="visa__flags">
+        <Icon name="flag-uk" label="United Kingdom flag" />
+        <Icon name="flag-scotland" label="Scotland flag" />
+      </div>
+      <h3 id="visa-title" class="t-h4">UK Skilled Worker Sponsorship</h3>
+      <p>I’m preparing to relocate to Glasgow with my wife (a UK citizen) to be closer to family as we welcome our first child in March 2027. I’m currently seeking opportunities with UK employers able to provide Skilled Worker visa sponsorship.</p>
+    </aside>
+
+    <a href={site.mailto} class="btn" data-reveal>Let’s Talk</a>
+  </div>
+</section>
+
+<style>
+  .about__inner { display: grid; justify-items: center; text-align: center; max-width: 600px; }
+  .about__portrait {
+    width: 135px; aspect-ratio: 1; border-radius: 50%; overflow: hidden; background: var(--accent);
+    transition: transform var(--dur-base) var(--ease-spring);
+  }
+  .about__portrait:hover { transform: rotate(-6deg) scale(1.05); }
+  .about__portrait img { width: 100%; height: 100%; object-fit: cover; }
+  .about h2 { margin-top: var(--space-4); }
+  .about__body {
+    margin-top: var(--space-6); display: grid; gap: 1.5em;
+    font-size: var(--fs-body-lg); line-height: var(--lh-relaxed);
+    text-align: justify; text-align-last: left; hyphens: auto;
+  }
+  .visa {
+    margin-top: var(--space-8); width: min(100%, 492px);
+    background: var(--bg-alt); border-radius: var(--radius-lg);
+    padding: var(--space-5) var(--space-6) var(--space-6);
+    display: grid; justify-items: center; gap: var(--space-2);
+    transition: transform var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out);
+  }
+  .visa:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+  .visa__flags { display: flex; gap: var(--space-3); }
+  .visa__flags :global(.icon) { width: 56px; height: 48px; transform-origin: 0 50%; }
+  .visa:hover .visa__flags :global(.icon) { animation: wave 1.2s var(--ease-in-out); }
+  .visa:hover .visa__flags :global(.icon:last-child) { animation-delay: 120ms; }
+  @keyframes wave { 25% { transform: skewY(-4deg) rotate(-3deg); } 60% { transform: skewY(3deg) rotate(2deg); } }
+  .visa p { font-size: var(--fs-small); line-height: 1.6; text-align: justify; text-align-last: center; hyphens: auto; }
+  .about .btn { margin-top: var(--space-7); }
+
+  @media (max-width: 760px) {
+    .about__body { text-align: left; hyphens: manual; }
+    .visa { padding-inline: var(--space-5); }
+    .visa p { text-align: left; text-align-last: auto; }
+  }
+</style>

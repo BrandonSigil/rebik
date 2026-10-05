@@ -1,0 +1,35 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import ContactCTA from '../../components/ContactCTA.astro';
+import { getAllWork } from '../../lib/work';
+const projects = await getAllWork();
+---
+<Base title="Work" description="Selected projects by Peter Rebik.">
+  <section class="section">
+    <header class="section-head container-md" data-reveal>
+      <h1 class="t-display">All <span class="hl">work</span>.</h1>
+      <p>A closer look at the design challenges behind each project, the thinking that shaped the solutions, and the outcomes that followed.</p>
+    </header>
+    <ul role="list" class="grid container">
+      {projects.map((p, i) => (
+        <li data-reveal style={`--i:${i % 3}`}>
+          <a href={`/work/${p.id}/`} class="item">
+            <div class="item__media"><Image src={p.data.cover} alt={p.data.coverAlt} widths={[400, 720]} sizes="(max-width: 760px) 100vw, 360px" /></div>
+            <h2 class="t-h2">{p.data.title}</h2>
+            <p>{p.data.summary}</p>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+  <ContactCTA />
+</Base>
+<style>
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: var(--space-8) var(--space-6); }
+  .item { display: grid; gap: var(--space-3); }
+  .item__media { aspect-ratio: 3 / 2; border-radius: var(--radius-md); overflow: hidden; transition: box-shadow var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-out); }
+  .item__media img { width: 100%; height: 100%; object-fit: cover; transition: transform 900ms var(--ease-out); }
+  .item:hover .item__media { box-shadow: var(--shadow-md); transform: translateY(-4px); }
+  .item:hover .item__media img { transform: scale(1.05); }
+</style>

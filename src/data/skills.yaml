@@ -1,0 +1,32 @@
+# "How I can help" cards. Order = grid order (left→right, top→bottom).
+# icon: file name in src/icons (without .svg)
+- id: brand-strategy
+  order: 1
+  title: "Brand\nStrategy"
+  icon: icon-brand-strategy
+  description: I build brands that are clear, consistent and built to last. From visual identity and typography to guidelines, templates and scalable systems, I create frameworks that help organisations communicate with confidence.
+- id: creative-direction
+  order: 2
+  title: "Creative\nDirection"
+  icon: icon-creative-direction
+  description: I develop campaigns that connect strategy, audience insight and creative execution. From concept and messaging through art direction and multi-channel delivery, I create work designed to engage audiences and deliver measurable results.
+- id: messaging-story
+  order: 3
+  title: "Messaging\n& Story"
+  icon: icon-messaging
+  description: I make complex ideas easier to understand and act on. I help organisations find the right message, shape compelling narratives and translate strategy into clear communications that resonate with audiences.
+- id: systems-processes
+  order: 4
+  title: "Systems &\nProcesses"
+  icon: icon-systems
+  description: I create the systems behind good design. From asset libraries and reusable templates to brand guidance and streamlined workflows, I help teams work more consistently, efficiently and independently.
+- id: digital-experiences
+  order: 5
+  title: "Digital\nExperiences"
+  icon: icon-digital
+  description: I design digital experiences around user needs. Through content structure, user journeys, wireframes, web design and research, I turn complex information into straightforward, accessible experiences.
+- id: alignment-collaboration
+  order: 6
+  title: "Alignment &\nCollaboration"
+  icon: icon-alignment
+  description: I bring people, ideas and disciplines together to solve complex problems. I lead projects, mentor designers and collaborate with stakeholders and cross-functional teams, keeping work focused on clear objectives.

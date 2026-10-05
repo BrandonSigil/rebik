@@ -1,0 +1,140 @@
+---
+/**
+ * PROJECT TEMPLATE — every file in src/content/work renders through this page.
+ * Layout: intro → meta → cover → results → write-up (markdown) → gallery → next project → CTA
+ */
+import { Image } from 'astro:assets';
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import ContactCTA from '../../components/ContactCTA.astro';
+import { getAllWork, type Work } from '../../lib/work';
+
+export async function getStaticPaths() {
+  const all = await getAllWork();
+  return all.map((entry, i) => ({
+    params: { slug: entry.id },
+    props: { entry, next: all[(i + 1) % all.length] },
+  }));
+}
+
+interface Props { entry: Work; next: Work }
+const { entry, next } = Astro.props;
+const { data } = entry;
+const { Content } = await render(entry);
+const meta = [
+  { label: 'Client', value: data.client },
+  { label: 'Role', value: data.role },
+  { label: 'Year', value: data.year?.toString() },
+  { label: 'Services', value: data.services.join(', ') || undefined },
+].filter((m) => m.value);
+---
+<Base title={data.title} description={data.summary} image={data.cover}>
+  <article class="project">
+    <header class="project__intro container-md">
+      <a href="/#work" class="back"><span aria-hidden="true">←</span> All work</a>
+      <h1 class="t-display" data-reveal>{data.title}</h1>
+      <p class="t-body-lg project__summary" data-reveal style="--i:1">{data.summary}</p>
+      {meta.length > 0 && (
+        <dl class="meta" data-reveal style="--i:2">
+          {meta.map((m) => (<div><dt>{m.label}</dt><dd>{m.value}</dd></div>))}
+        </dl>
+      )}
+    </header>
+
+    <figure class="project__cover container" data-reveal style="--i:3">
+      <Image src={data.cover} alt={data.coverAlt} widths={[640, 960, 1280, 1800]} sizes="(max-width: 1180px) 100vw, 1140px" loading="eager" fetchpriority="high" />
+    </figure>
+
+    {data.results.length > 0 && (
+      <section class="results section--alt" aria-label="Results">
+        <ul role="list" class="container-md results__list">
+          {data.results.map((r, i) => (
+            <li data-reveal style={`--i:${i}`}><strong>{r.value}</strong><span>{r.label}</span></li>
+          ))}
+        </ul>
+      </section>
+    )}
+
+    <div class="prose container-sm">
+      <Content />
+    </div>
+
+    {data.gallery.length > 0 && (
+      <section class="gallery container" aria-label="Project images">
+        {data.gallery.map((g) => (
+          <figure class:list={['gallery__item', `gallery__item--${g.layout}`]} data-reveal>
+            <Image src={g.src} alt={g.alt} widths={g.layout === 'full' ? [640, 1280, 1800] : [480, 800, 1100]} sizes={g.layout === 'full' ? '(max-width: 1180px) 100vw, 1140px' : '(max-width: 760px) 100vw, 560px'} />
+            {g.caption && <figcaption>{g.caption}</figcaption>}
+          </figure>
+        ))}
+      </section>
+    )}
+
+    {next && next.id !== entry.id && (
+      <nav class="next container-md" aria-label="Next project">
+        <a href={`/work/${next.id}/`} class="next__link">
+          <span class="next__label">Next project</span>
+          <span class="t-display next__title">{next.data.title} <span aria-hidden="true" class="next__arrow">→</span></span>
+          <span class="next__summary">{next.data.summary}</span>
+        </a>
+      </nav>
+    )}
+  </article>
+  <ContactCTA />
+</Base>
+
+<style>
+  .project__intro { padding-top: clamp(2.5rem, 2rem + 3vw, 5rem); display: grid; justify-items: start; gap: var(--space-5); }
+  .back {
+    font-family: var(--font-display); font-size: var(--fs-xs); color: var(--color-forest);
+    display: inline-flex; gap: 0.5em; padding: 0.5em 1em; border-radius: var(--radius-pill); background: var(--bg-alt);
+    transition: transform var(--dur-base) var(--ease-out), background-color var(--dur-fast) linear;
+  }
+  .back:hover { background: var(--accent); transform: translateX(-4px); }
+  .project__summary { max-width: 38rem; }
+  .meta {
+    width: 100%; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: var(--space-5);
+    border-top: 2px solid var(--accent); padding-top: var(--space-5); margin-top: var(--space-3);
+  }
+  .meta dt { font-family: var(--font-display); font-size: var(--fs-xs); color: var(--color-forest); }
+  .meta dd { font-size: var(--fs-small); margin-top: var(--space-1); }
+
+  .project__cover { margin-top: var(--space-8); border-radius: var(--radius-lg); overflow: hidden; }
+  .project__cover img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; }
+
+  .results { margin-top: var(--space-9); padding-block: var(--space-8); }
+  .results__list { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-6); text-align: center; }
+  .results__list li { display: grid; gap: var(--space-1); }
+  .results__list strong { font-family: var(--font-display); font-weight: 400; font-size: clamp(2.5rem, 2rem + 2.5vw, 3.75rem); color: var(--color-forest); line-height: 1; }
+  .results__list span { font-size: var(--fs-body); }
+
+  .prose { padding-block: var(--space-9); font-size: var(--fs-body-lg); line-height: var(--lh-relaxed); }
+  .prose :global(h2) { font-size: var(--fs-h2); margin-top: var(--space-8); margin-bottom: var(--space-3); }
+  .prose :global(h2:first-child) { margin-top: 0; }
+  .prose :global(h3) { font-size: var(--fs-h3); margin-top: var(--space-6); margin-bottom: var(--space-2); }
+  .prose :global(p + p) { margin-top: 1em; }
+  .prose :global(ul), .prose :global(ol) { padding-left: 1.2em; margin-top: 1em; }
+  .prose :global(li::marker) { color: var(--accent); }
+  .prose :global(a) { text-decoration: underline; text-decoration-color: var(--accent); text-decoration-thickness: 2px; text-underline-offset: 3px; }
+  .prose :global(img) { border-radius: var(--radius-md); margin-block: var(--space-6); }
+  .prose :global(blockquote) { border-left: 4px solid var(--accent); padding-left: var(--space-5); font-family: var(--font-display); color: var(--color-forest); font-size: var(--fs-h3); line-height: 1.25; margin-block: var(--space-6); }
+
+  .gallery { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-5); }
+  .gallery__item { border-radius: var(--radius-lg); overflow: hidden; }
+  .gallery__item--full { grid-column: 1 / -1; }
+  .gallery__item img { width: 100%; height: 100%; object-fit: cover; transition: transform 900ms var(--ease-out); }
+  .gallery__item:hover img { transform: scale(1.03); }
+  .gallery__item figcaption { padding-top: var(--space-2); font-size: var(--fs-xs); color: var(--text-muted); }
+
+  .next { padding-block: var(--section-pad); }
+  .next__link { display: grid; gap: var(--space-2); justify-items: center; text-align: center; }
+  .next__label { font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-muted); }
+  .next__arrow { display: inline-block; color: var(--accent); transition: transform var(--dur-base) var(--ease-out); }
+  .next__link:hover .next__arrow { transform: translateX(10px); }
+  .next__summary { max-width: 34rem; }
+
+  @media (max-width: 760px) {
+    .gallery { grid-template-columns: 1fr; }
+    .project__cover { width: 100%; border-radius: 0; }
+  }
+</style>

@@ -1,0 +1,78 @@
+---
+/** Living brand guide — renders the tokens from src/styles/tokens.css. Not linked; noindex. */
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+const colors = [
+  ['Primary', [['forest', '#162d16'], ['lime', '#98d81e']]],
+  ['Secondary', [['lime-soft', '#ade04b'], ['mint', '#e2f7d2'], ['white', '#ffffff']]],
+  ['Tertiary', [['ink', '#000000'], ['graphite', '#4d4d4d'], ['sage', '#8b968b'], ['sage-dark', '#5c6c5c']]],
+] as const;
+const type = [
+  ['t-display', 'Display / H1', 'I turn complex ideas into clear, visual solutions.'],
+  ['t-h2', 'H2 · card title', 'Brand Strategy'],
+  ['t-h3', 'H3 · sub-section', 'The approach'],
+  ['t-h4', 'H4 · eyebrow', 'Hi, my name’s Peter Rebik.'],
+  ['t-h5', 'H5 · footer heading', 'Quick Links'],
+  ['t-body-lg', 'Body large · Epilogue', 'With over 13 years of design experience, I’m able to help organisations better understand the problem.'],
+  ['', 'Body · Epilogue', 'Peter always has great communication. He listens to our needs and promptly delivers.'],
+  ['t-small', 'Small', 'I’m preparing to relocate to Glasgow.'],
+  ['t-xs', 'XS', 'Strategic Community Engagement Admin.'],
+];
+const icons = ['icon-brand-strategy', 'icon-creative-direction', 'icon-messaging', 'icon-systems', 'icon-digital', 'icon-alignment', 'star', 'info', 'arrow-left', 'arrow-right', 'flag-uk', 'flag-scotland'];
+---
+<Base title="Brand guide" noindex>
+  <div class="container sg">
+    <h1 class="t-display">Brand <span class="hl">guide</span>.</h1>
+    <p class="t-body-lg">Rendered from <code>src/styles/tokens.css</code>. Full rules in <code>BRAND.md</code>.</p>
+
+    <h2 class="t-h2">Color</h2>
+    {colors.map(([group, list]) => (
+      <section><h3 class="t-h4">{group}</h3>
+        <ul role="list" class="swatches">
+          {list.map(([name, hex]) => (
+            <li><span class="chip" style={`background:var(--color-${name})`} /><strong>--color-{name}</strong><code>{hex}</code></li>
+          ))}
+        </ul>
+      </section>
+    ))}
+
+    <h2 class="t-h2">Typography</h2>
+    <dl class="type">
+      {type.map(([cls, label, sample]) => (<div><dt>{label}<code>{cls ? `.${cls}` : 'p'}</code></dt><dd class={cls}>{sample}</dd></div>))}
+    </dl>
+
+    <h2 class="t-h2">Buttons</h2>
+    <div class="row">
+      <a class="btn" href="#">Let’s Talk</a>
+      <a class="btn btn--outline" href="#">See My Work</a>
+      <span style="background:var(--color-forest);padding:12px;border-radius:12px"><a class="btn btn--nav" href="#">Let’s Talk</a></span>
+    </div>
+
+    <h2 class="t-h2">Icons</h2>
+    <ul role="list" class="icons">{icons.map((n) => <li><Icon name={n} /><code>{n}</code></li>)}</ul>
+
+    <h2 class="t-h2">Radius &amp; elevation</h2>
+    <div class="row">
+      {['sm', 'md', 'lg'].map((r) => <div class="box" style={`border-radius:var(--radius-${r})`}>radius-{r}</div>)}
+      {['sm', 'md', 'lift'].map((s) => <div class="box box--white" style={`box-shadow:var(--shadow-${s})`}>shadow-{s}</div>)}
+    </div>
+  </div>
+</Base>
+<style>
+  .sg { padding-block: var(--space-9); display: grid; gap: var(--space-5); }
+  .sg > h2 { margin-top: var(--space-8); border-top: 2px solid var(--accent); padding-top: var(--space-4); }
+  code { font-size: 0.8em; color: var(--text-muted); }
+  .swatches { display: flex; flex-wrap: wrap; gap: var(--space-5); margin-top: var(--space-3); }
+  .swatches li { display: grid; gap: 4px; width: 150px; font-size: var(--fs-xs); }
+  .chip { height: 80px; border-radius: var(--radius-md); border: 1px solid rgb(0 0 0 / 0.08); }
+  .type { display: grid; gap: var(--space-5); }
+  .type div { display: grid; grid-template-columns: 200px 1fr; gap: var(--space-5); align-items: baseline; }
+  .type dt { font-size: var(--fs-xs); display: grid; }
+  .row { display: flex; flex-wrap: wrap; gap: var(--space-5); align-items: center; }
+  .icons { display: flex; flex-wrap: wrap; gap: var(--space-5); color: var(--accent); }
+  .icons li { display: grid; justify-items: center; gap: 6px; width: 110px; }
+  .icons :global(.icon) { width: 48px; height: 48px; }
+  .box { width: 120px; height: 80px; display: grid; place-items: center; background: var(--bg-alt); font-size: var(--fs-xs); }
+  .box--white { background: #fff; border-radius: var(--radius-lg); }
+  @media (max-width: 760px) { .type div { grid-template-columns: 1fr; gap: 4px; } }
+</style>

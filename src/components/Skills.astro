@@ -1,0 +1,92 @@
+---
+import { getCollection } from 'astro:content';
+import Icon from './Icon.astro';
+import { site } from '../data/site';
+const skills = (await getCollection('skills')).sort((a, b) => a.data.order - b.data.order);
+---
+<section class="section section--alt" id="help" aria-labelledby="help-title">
+  <div class="container-md">
+    <header class="section-head" data-reveal>
+      <h2 id="help-title" class="t-display">How I can <span class="hl">help</span>.</h2>
+      <p>With over 13 years of design experience, I’m able to help organisations better understand the problem, develop a creative approach, build systems and lead the work through delivery.</p>
+    </header>
+
+    <ul class="skills" role="list">
+      {skills.map(({ data }, i) => (
+        <li data-reveal style={`--i:${i}`}>
+          <button class="skill" aria-pressed="false" aria-label={`${data.title.replace('\n', ' ')}: ${data.description}`} data-skill>
+            <span class="skill__front" aria-hidden="true">
+              <Icon name={data.icon} class="skill__icon" />
+              <span class="t-h2 skill__title" set:html={data.title.replace('\n', '<br/>')} />
+            </span>
+            <span class="skill__back" aria-hidden="true">{data.description}</span>
+          </button>
+        </li>
+      ))}
+    </ul>
+
+    <p class="hint" data-reveal>
+      <Icon name="info" class="hint__icon" />
+      <span class="hint__fine">select a card to learn more</span>
+    </p>
+
+    <div class="section-foot" style="margin-top: var(--space-7)"><a href={site.mailto} class="btn">Let’s Talk</a></div>
+  </div>
+</section>
+
+<style>
+  .skills { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
+  .skills > li { display: grid; }
+  .skill {
+    position: relative; display: grid; place-items: center;
+    min-height: 183px; padding: var(--space-5) var(--space-5);
+    background: var(--color-white); border-radius: var(--radius-lg);
+    text-align: center; isolation: isolate;
+    transition: transform var(--dur-base) var(--ease-out), background-color var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out);
+  }
+  .skill > * { grid-area: 1 / 1; transition: opacity var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-out); }
+  .skill__front { display: grid; justify-items: center; gap: var(--space-2); }
+  .skill :global(.skill__icon) { width: 50px; height: 50px; color: var(--accent); transition: transform var(--dur-slow) var(--ease-spring); }
+  .skill__title { line-height: 1.05; }
+  .skill__back {
+    color: var(--color-white); font-size: var(--fs-small); line-height: 1.32;
+    opacity: 0; transform: translateY(10px);
+  }
+
+  .skill:is(:hover, :focus-visible, .is-active) {
+    background: var(--color-forest); transform: scale(var(--hover-scale)); box-shadow: var(--shadow-md); z-index: 2;
+  }
+  .skill:is(:hover, :focus-visible, .is-active) .skill__front { opacity: 0; transform: translateY(-10px) scale(0.96); }
+  .skill:is(:hover, :focus-visible, .is-active) .skill__back { opacity: 1; transform: none; transition-delay: 60ms; }
+  .skills > li:hover { z-index: 2; position: relative; }
+
+  /* idle wiggle on icon when the card is merely approached by keyboard/hover elsewhere */
+  .skill:active { transform: scale(1.04); }
+
+  .hint { display: flex; justify-content: center; align-items: center; gap: var(--space-2); margin-top: var(--space-5); }
+  .hint :global(.hint__icon) { width: 18px; height: 18px; color: var(--color-forest); }
+  .hint :global(.hint__icon path:last-child), .hint :global(.hint__icon path:nth-child(2)) { fill: var(--bg-alt); }
+  .hint__fine { font-size: var(--fs-micro); color: var(--color-forest); }
+
+  @media (max-width: 900px) { .skills { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 760px) {
+    .skills { grid-template-columns: 1fr; max-width: 312px; margin-inline: auto; gap: 14px; }
+    .skill { min-height: 162px; }
+    .skill:is(:hover, :focus-visible, .is-active) { transform: scale(1.04); }
+  }
+</style>
+
+<script>
+  // Touch devices have no hover: tap toggles a card open (one at a time).
+  const cards = document.querySelectorAll<HTMLButtonElement>('[data-skill]');
+  cards.forEach((card) =>
+    card.addEventListener('click', () => {
+      const open = !card.classList.contains('is-active');
+      cards.forEach((c) => { c.classList.remove('is-active'); c.setAttribute('aria-pressed', 'false'); });
+      if (open) { card.classList.add('is-active'); card.setAttribute('aria-pressed', 'true'); }
+    }),
+  );
+  document.addEventListener('click', (e) => {
+    if (!(e.target as Element).closest('[data-skill]')) cards.forEach((c) => { c.classList.remove('is-active'); c.setAttribute('aria-pressed', 'false'); });
+  });
+</script>

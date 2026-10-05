@@ -1,0 +1,183 @@
+---
+import { Image } from 'astro:assets';
+import Icon from './Icon.astro';
+import { site } from '../data/site';
+import { getFeaturedWork } from '../lib/work';
+
+const projects = await getFeaturedWork();
+const start = Math.floor((projects.length - 1) / 2); // middle card starts centered
+---
+<section class="section work" id="work" aria-labelledby="work-title">
+  <header class="section-head container-md" data-reveal>
+    <h2 id="work-title" class="t-display">A few <span class="hl">real world</span> examples.</h2>
+    <p>A closer look at the design challenges behind each project, the thinking that shaped the solutions, and the outcomes that followed.</p>
+  </header>
+
+  <div class="carousel" data-carousel data-start={start} role="region" aria-roledescription="carousel" aria-label="Work examples" tabindex="-1">
+    <div class="carousel__stage" data-stage>
+      {projects.map((p, i) => (
+        <article class="card" data-card data-index={i} aria-roledescription="slide" aria-label={`${i + 1} of ${projects.length}: ${p.data.title}`}>
+          <a href={`/work/${p.id}/`} class="card__link" data-card-link>
+            <div class="card__media">
+              <Image src={p.data.cover} alt={p.data.coverAlt} widths={[320, 480, 720]} sizes="(max-width: 760px) 80vw, 300px" loading="lazy" />
+            </div>
+            <h3 class="card__title" set:html={(p.data.cardTitle ?? p.data.title).replace('\n', '<br/>')} />
+            <p class="card__summary">{p.data.summary}</p>
+            <span class="card__cta">View Project</span>
+          </a>
+        </article>
+      ))}
+    </div>
+    <button class="carousel__arrow carousel__arrow--prev" data-prev aria-label="Previous project"><Icon name="arrow-left" /></button>
+    <button class="carousel__arrow carousel__arrow--next" data-next aria-label="Next project"><Icon name="arrow-right" /></button>
+    <p class="sr-only" aria-live="polite" data-live></p>
+  </div>
+
+  <div class="section-foot"><a href={site.mailto} class="btn">Let’s Talk</a></div>
+</section>
+
+<style>
+  .work { overflow: hidden; }
+  .carousel {
+    --card-w: 260px;
+    --step-1: 290px;   /* distance to 1st neighbours */
+    --step-2: 535px;   /* distance to outer cards */
+    position: relative; outline: none; touch-action: pan-y;
+  }
+  .carousel__stage { display: grid; justify-items: center; align-items: start; }
+  .card {
+    --pos: 0; --abs: 0;
+    grid-area: 1 / 1; width: var(--card-w);
+    transform: translateX(calc(var(--pos-x, 0) * 1px)) scale(var(--s, 1));
+    transform-origin: 50% 0;
+    opacity: var(--o, 1);
+    transition: transform var(--dur-slow) var(--ease-in-out), opacity var(--dur-slow) var(--ease-in-out), filter var(--dur-slow) var(--ease-in-out);
+    z-index: var(--z, 1);
+    will-change: transform;
+  }
+  /* Position states (set by JS via data-pos) */
+  .card[data-pos="0"] { --s: 1;    --o: 1;    --z: 5; }
+  .card[data-pos="-1"], .card[data-pos="1"] { --s: 0.83; --o: 0.78; --z: 4; }
+  .card[data-pos="-2"], .card[data-pos="2"] { --s: 0.7;  --o: 0.3;  --z: 3; }
+  .card[data-pos="hidden"] { --s: 0.6; --o: 0; --z: 1; pointer-events: none; }
+
+  .card__link { display: grid; justify-items: center; text-align: center; gap: var(--space-2); }
+  .card__media {
+    width: 100%; aspect-ratio: 3 / 2; border-radius: var(--radius-md); overflow: hidden; background: var(--bg-alt);
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow var(--dur-base) var(--ease-out);
+  }
+  .card__media img { width: 100%; height: 100%; object-fit: cover; transition: transform 900ms var(--ease-out); }
+  .card__title { font-size: 2.25rem; line-height: 1.02; margin-top: var(--space-4); }
+  .card__summary { font-size: var(--fs-body); max-width: 30ch; line-height: 1.38; }
+  .card__cta {
+    margin-top: var(--space-4); font-family: var(--font-display); font-size: var(--fs-button); color: var(--accent);
+    display: inline-flex; align-items: center; gap: 0.4em;
+  }
+  .card__cta::after { content: "→"; display: inline-block; width: 0; opacity: 0; transform: translateX(-6px); transition: all var(--dur-base) var(--ease-out); }
+  .card[data-pos="0"] .card__link:hover .card__media,
+  .card[data-pos="0"] .card__link:focus-visible .card__media { box-shadow: var(--shadow-md); }
+  .card[data-pos="0"] .card__link:hover .card__media img { transform: scale(1.05); }
+  .card[data-pos="0"] .card__link:hover .card__cta::after { width: 1em; opacity: 1; transform: none; }
+  .card:not([data-pos="0"]) .card__link { cursor: pointer; }
+
+  .carousel__arrow {
+    position: absolute; top: calc(var(--card-w) * 0.47); z-index: 10;
+    width: 45px; height: 45px; border-radius: 50%; color: var(--color-forest);
+    transition: transform var(--dur-base) var(--ease-out);
+  }
+  .carousel__arrow :global(svg) { width: 100%; height: 100%; }
+  .carousel__arrow :global(path:first-child) { transition: fill var(--dur-fast) linear; }
+  .carousel__arrow:hover { transform: scale(var(--hover-scale)); }
+  .carousel__arrow:hover :global(path:first-child) { fill: var(--accent-hover); }
+  .carousel__arrow--prev { left: clamp(0.75rem, 3vw, 2.25rem); }
+  .carousel__arrow--next { right: clamp(0.75rem, 3vw, 2.25rem); top: calc(var(--card-w) * 0.52); }
+
+  @media (min-width: 1400px) { .carousel { --card-w: 290px; --step-1: 330px; --step-2: 610px; } }
+  @media (max-width: 760px) {
+    .carousel { --card-w: min(76vw, 300px); --step-1: calc(var(--card-w) * 0.98); --step-2: calc(var(--card-w) * 1.8); }
+    .card__title { font-size: 1.5rem; }
+    .carousel__arrow { width: 34px; height: 34px; top: calc(var(--card-w) * 0.55); }
+    .carousel__arrow--next { top: calc(var(--card-w) * 0.55); }
+    .carousel__arrow--prev { left: calc(50% - var(--card-w) / 2 - 17px); }
+    .carousel__arrow--next { right: calc(50% - var(--card-w) / 2 - 17px); }
+  }
+</style>
+
+<script>
+  class Carousel {
+    root: HTMLElement; cards: HTMLElement[]; active: number; live: HTMLElement;
+    timer?: number; paused = false; inView = false;
+    constructor(root: HTMLElement) {
+      this.root = root;
+      this.cards = [...root.querySelectorAll<HTMLElement>('[data-card]')];
+      this.live = root.querySelector('[data-live]')!;
+      this.active = Number(root.dataset.start ?? 0);
+      root.querySelector('[data-prev]')!.addEventListener('click', () => this.go(this.active - 1, true));
+      root.querySelector('[data-next]')!.addEventListener('click', () => this.go(this.active + 1, true));
+      root.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') { e.preventDefault(); this.go(this.active - 1, true); }
+        if (e.key === 'ArrowRight') { e.preventDefault(); this.go(this.active + 1, true); }
+      });
+      // Clicking a side card brings it to centre instead of navigating.
+      this.cards.forEach((card, i) =>
+        card.querySelector('[data-card-link]')!.addEventListener('click', (e) => {
+          if (i !== this.active) { e.preventDefault(); this.go(i, true); }
+        }),
+      );
+      this.swipe();
+      addEventListener('resize', () => this.layout(), { passive: true });
+      root.addEventListener('pointerenter', () => (this.paused = true));
+      root.addEventListener('pointerleave', () => (this.paused = false));
+      root.addEventListener('focusin', () => (this.paused = true));
+      root.addEventListener('focusout', () => (this.paused = false));
+      new IntersectionObserver(([e]) => (this.inView = e.isIntersecting), { threshold: 0.4 }).observe(root);
+      if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        this.timer = window.setInterval(() => { if (!this.paused && this.inView && !document.hidden) this.go(this.active + 1); }, 6000);
+      }
+      this.layout();
+    }
+    offset(i: number) {
+      const n = this.cards.length, half = Math.floor(n / 2);
+      let d = (((i - this.active) % n) + n) % n;
+      if (d > half) d -= n;
+      return d;
+    }
+    layout() {
+      const cs = getComputedStyle(this.root);
+      const step1 = parseFloat(cs.getPropertyValue('--step-1'));
+      const step2 = parseFloat(cs.getPropertyValue('--step-2'));
+      const cardW = this.cards[0]?.offsetWidth ?? 300;
+      const s1 = Number.isFinite(step1) ? step1 : cardW * 0.98;
+      const s2 = Number.isFinite(step2) ? step2 : cardW * 1.8;
+      this.cards.forEach((card, i) => {
+        const d = this.offset(i);
+        const abs = Math.abs(d);
+        card.dataset.pos = abs > 2 ? 'hidden' : String(d);
+        const x = abs === 0 ? 0 : Math.sign(d) * (abs === 1 ? s1 : abs === 2 ? s2 : s2 * 1.3);
+        card.style.setProperty('--pos-x', String(x));
+        const link = card.querySelector<HTMLElement>('[data-card-link]')!;
+        link.tabIndex = d === 0 ? 0 : -1;
+        card.setAttribute('aria-hidden', d === 0 ? 'false' : 'true');
+      });
+    }
+    go(i: number, user = false) {
+      const n = this.cards.length;
+      this.active = ((i % n) + n) % n;
+      if (user) this.paused = true, setTimeout(() => (this.paused = false), 8000);
+      this.layout();
+      const title = this.cards[this.active].getAttribute('aria-label');
+      if (user) this.live.textContent = `Showing ${title}`;
+    }
+    swipe() {
+      let x0: number | null = null, y0 = 0;
+      this.root.addEventListener('pointerdown', (e) => { if (e.pointerType !== 'mouse') { x0 = e.clientX; y0 = e.clientY; } });
+      this.root.addEventListener('pointerup', (e) => {
+        if (x0 === null) return;
+        const dx = e.clientX - x0, dy = e.clientY - y0; x0 = null;
+        if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) this.go(this.active + (dx < 0 ? 1 : -1), true);
+      });
+    }
+  }
+  document.querySelectorAll<HTMLElement>('[data-carousel]').forEach((el) => new Carousel(el));
+</script>

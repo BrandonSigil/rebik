@@ -1,0 +1,43 @@
+---
+import Logo from './Logo.astro';
+import { site, quickLinks } from '../data/site';
+const year = new Date().getFullYear();
+---
+<footer class="footer">
+  <div class="container footer__inner">
+    <div class="footer__brand">
+      <Logo size="sm" href="/#intro" />
+      <p>{site.tagline}</p>
+    </div>
+    <nav class="footer__col" aria-label="Quick links">
+      <h2 class="t-h5">Quick Links</h2>
+      <ul role="list">{quickLinks.map((l) => <li><a href={l.href}>{l.label}</a></li>)}</ul>
+    </nav>
+    <div class="footer__col">
+      <h2 class="t-h5">Let’s Talk</h2>
+      <p>Interested in hiring me?<br />Email me at<br /><a href={site.mailto}>{site.email}</a></p>
+    </div>
+  </div>
+  <p class="container footer__legal">© {year} Peter Rebik</p>
+</footer>
+<style>
+  .footer { background: var(--color-forest); color: var(--color-sage); font-size: var(--fs-xs); line-height: 1.45; padding-bottom: var(--space-7); }
+  .footer__inner {
+    border-top: 1px solid rgb(139 150 139 / 0.6);
+    padding-top: var(--space-7);
+    display: grid; grid-template-columns: 1fr auto auto; gap: var(--space-9);
+  }
+  .footer__brand { display: grid; gap: var(--space-2); max-width: 360px; align-content: start; }
+  .footer__brand p { max-width: 34ch; }
+  .footer h2 { color: var(--accent); margin-bottom: var(--space-2); }
+  .footer__col ul { display: grid; gap: 2px; }
+  .footer a:not(.logo) { transition: color var(--dur-fast) linear; }
+  .footer a:not(.logo):hover, .footer a:not(.logo):focus-visible { color: var(--color-white); }
+  .footer__legal { margin-top: var(--space-7); font-size: var(--fs-micro); opacity: 0.6; }
+
+  @media (max-width: 760px) {
+    .footer { color: var(--color-sage-dark); color: var(--color-sage); }
+    .footer__inner { grid-template-columns: auto auto; gap: var(--space-6) var(--space-7); justify-content: start; }
+    .footer__brand { grid-column: 1 / -1; }
+  }
+</style>

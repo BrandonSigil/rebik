@@ -1,0 +1,117 @@
+---
+import { Image } from 'astro:assets';
+import Icon from './Icon.astro';
+import { site } from '../data/site';
+import avatar from '../assets/brand/peter-avatar.png';
+import phone from '../assets/hero/website-phone.png';
+import billboard from '../assets/hero/billboard.png';
+import beautifulDay from '../assets/hero/beautiful-day.png';
+import guidelines from '../assets/hero/brand-guidelines.png';
+import report from '../assets/hero/annual-report.png';
+import market from '../assets/hero/farmers-market.png';
+
+/* Collage tiles. `area` maps to the grid in the <style> block; `tilt` = hover rotation. */
+const tiles = [
+  { src: phone, alt: 'Phone displaying a redesigned school website', area: 'phone', tilt: -3 },
+  { src: billboard, alt: 'Billboard: Because Opportunity Matters', area: 'billboard', tilt: 3 },
+  { src: beautifulDay, alt: 'Beautiful Day Cleaning Company logo', area: 'day', tilt: -2 },
+  { src: guidelines, alt: 'Brand guidelines spread', area: 'guide', tilt: 2 },
+  { src: report, alt: 'Annual report cover on a desk', area: 'report', tilt: -2.5 },
+  { src: market, alt: 'Farmers market street banner being installed', area: 'market', tilt: 3 },
+];
+---
+<section class="hero" id="intro" aria-labelledby="hero-title">
+  <div class="hero__inner">
+    <div class="hero__collage" aria-label="Selected work">
+      {tiles.map((t, i) => (
+        <figure class="tile" style={`grid-area:${t.area};--tilt:${t.tilt}deg;--i:${i}`}>
+          <Image src={t.src} alt={t.alt} widths={[240, 400, 640]} sizes="(max-width: 760px) 45vw, 260px" loading={i < 2 ? 'eager' : 'lazy'} fetchpriority={i === 0 ? 'high' : 'auto'} />
+        </figure>
+      ))}
+    </div>
+
+    <div class="hero__copy">
+      <div class="hero__hello">
+        <Image src={avatar} alt="Portrait of Peter Rebik" width={108} height={108} class="hero__avatar" loading="eager" />
+        <p class="t-h4 hero__eyebrow">Hi, my name’s<br />Peter Rebik.</p>
+      </div>
+      <h1 id="hero-title" class="t-display hero__title">
+        I turn complex ideas into{' '}
+        <span class="scribble">clear<Icon name="scribble-circle" class="scribble__svg" /></span>,{' '}
+        <span class="hl hero__hl">visual solutions.</span>
+      </h1>
+      <p class="t-body-lg hero__lede">I’m a designer and art director that bridges strategy and execution, helping organisations define their visual presence across every touchpoint.</p>
+      <p class="hero__note">I’m seeking Skilled Worker sponsorship in the UK - my wife and I plan to move to Glasgow to be near friends and family as we expect our first child March 1.</p>
+      <div class="hero__ctas">
+        <a href={site.mailto} class="btn">Let’s Talk</a>
+        <a href="#work" class="btn btn--outline">See My Work</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero { padding-block: clamp(2.5rem, 1rem + 4vw, 5.5rem) clamp(3rem, 2rem + 3vw, 4.75rem); }
+  .hero__inner {
+    width: min(100% - 2 * var(--gutter), 940px); margin-inline: auto;
+    display: grid; grid-template-columns: 345fr 525fr; gap: clamp(1.5rem, 4vw, 2.75rem); align-items: start;
+  }
+
+  /* ---- Collage: 2 rows of mirrored masonry (matches wireframe proportions) ---- */
+  .hero__collage {
+    display: grid; gap: 8px;
+    grid-template-columns: 97fr 31fr 97fr;
+    grid-template-rows: 86fr 62fr 86fr 62fr;
+    grid-template-areas:
+      "phone billboard billboard"
+      "phone day day"
+      "guide guide market"
+      "report report market";
+    aspect-ratio: 230 / 311;
+  }
+  .tile {
+    position: relative; border-radius: var(--radius-md); overflow: hidden; background: var(--bg-alt);
+    transition: transform var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out);
+    z-index: 1;
+  }
+  .tile img { width: 100%; height: 100%; object-fit: cover; }
+  .tile:hover { transform: scale(var(--hover-scale)) rotate(var(--tilt)); box-shadow: var(--shadow-md); z-index: 2; }
+  .js .tile { animation: tile-in 800ms var(--ease-out) backwards; animation-delay: calc(120ms + var(--i) * 70ms); }
+  @keyframes tile-in { from { opacity: 0; transform: translateY(18px) scale(0.96); } }
+
+  /* ---- Copy ---- */
+  .hero__copy { display: grid; justify-items: start; }
+  .hero__hello { display: flex; align-items: center; gap: var(--space-4); }
+  .hero__avatar { width: 54px; height: 54px; border-radius: 50%; }
+  .hero__eyebrow { color: var(--accent); }
+  .hero__title { margin-top: var(--space-5); line-height: 1.09; text-wrap: initial; }
+  .hero__hl { background-size: 100% 0.09em; }
+  .hero__lede { margin-top: var(--space-6); }
+  .hero__note { margin-top: var(--space-2); font-size: var(--fs-micro); color: var(--text-muted); line-height: 1.5; }
+  .hero__ctas { display: flex; flex-wrap: wrap; gap: var(--space-4); margin-top: var(--space-6); }
+
+  /* ---- Scribble circle around "clear," ---- */
+  .scribble { position: relative; display: inline-block; white-space: nowrap; }
+  .scribble :global(.scribble__svg) {
+    position: absolute; left: -7%; top: -0.1em; width: 120%; height: 1.55em; pointer-events: none; color: var(--accent);
+  }
+  .scribble :global(path) {
+    stroke-dasharray: 400; stroke-dashoffset: 400;
+    animation: draw var(--dur-draw) var(--ease-out) 700ms forwards;
+  }
+  @keyframes draw { to { stroke-dashoffset: 0; } }
+  @media (prefers-reduced-motion: reduce) { .scribble :global(path) { stroke-dashoffset: 0; animation: none; } }
+
+  /* hero underline draws on load rather than on scroll */
+  .js .hero__hl { background-size: 0% 0.09em; animation: underline var(--dur-draw) var(--ease-out) 1100ms forwards; transition: none; }
+  @keyframes underline { to { background-size: 100% 0.09em; } }
+
+  @media (max-width: 760px) {
+    .hero__inner { grid-template-columns: 1fr; gap: var(--space-8); }
+    .hero__collage { order: 2; gap: 6px; }
+    .hero__ctas { display: grid; width: 100%; gap: var(--space-3); }
+    .hero__ctas .btn { width: 100%; min-height: 46px; }
+    .hero__title { margin-top: var(--space-6); }
+    .hero__lede { margin-top: var(--space-5); }
+  }
+</style>

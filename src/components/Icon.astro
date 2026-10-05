@@ -1,0 +1,12 @@
+---
+/** Inline SVG from src/icons. Inherits `color` via currentColor. */
+interface Props { name: string; class?: string; label?: string }
+const { name, class: cls, label } = Astro.props;
+const icons = import.meta.glob<string>('../icons/*.svg', { query: '?raw', import: 'default', eager: true });
+const raw = icons[`../icons/${name}.svg`];
+if (!raw) throw new Error(`Icon "${name}" not found in src/icons`);
+const svg = raw
+  .replace(/ width="[^"]*" height="[^"]*"/, '')
+  .replace('<svg ', `<svg ${label ? `role="img" aria-label="${label}"` : 'aria-hidden="true" focusable="false"'} `);
+---
+<span class:list={['icon', cls]} set:html={svg} />

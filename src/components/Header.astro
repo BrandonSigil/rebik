@@ -1,0 +1,110 @@
+---
+import Logo from './Logo.astro';
+import { nav, site } from '../data/site';
+---
+<header class="nav" data-nav>
+  <div class="nav__inner">
+    <Logo />
+    <nav class="nav__links" aria-label="Primary">
+      <ul role="list">
+        {nav.map((item) => <li><a href={item.href} class="nav__link">{item.label}</a></li>)}
+      </ul>
+      <a href={site.mailto} class="btn btn--nav">Let’s Talk</a>
+    </nav>
+    <button class="nav__toggle" aria-expanded="false" aria-controls="mobile-menu" data-nav-toggle>
+      <span class="sr-only">Open menu</span>
+      <span class="nav__burger" aria-hidden="true"><i></i><i></i><i></i></span>
+    </button>
+  </div>
+  <div class="nav__menu" id="mobile-menu" data-nav-menu hidden>
+    <ul role="list">
+      {nav.map((item, i) => <li style={`--i:${i}`}><a href={item.href} data-nav-close>{item.label}</a></li>)}
+    </ul>
+    <a href={site.mailto} class="btn" data-nav-close>Let’s Talk</a>
+  </div>
+</header>
+
+<style>
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    background: var(--color-forest);
+    transition: box-shadow var(--dur-base) var(--ease-out);
+  }
+  .nav.is-scrolled { box-shadow: 0 6px 24px -10px rgb(0 0 0 / 0.45); }
+  .nav__inner {
+    height: var(--nav-h);
+    display: flex; align-items: center; justify-content: space-between;
+    padding-inline: clamp(1.25rem, 3vw, 2.25rem);
+  }
+  .nav__links { display: flex; align-items: center; gap: clamp(1.5rem, 3vw, 2.25rem); }
+  .nav__links ul { display: flex; gap: clamp(1.25rem, 3vw, 2.25rem); }
+  .nav__link {
+    position: relative; color: var(--color-white); font-size: var(--fs-xs);
+    padding-block: var(--space-2);
+    transition: color var(--dur-fast) linear;
+  }
+  .nav__link::after {
+    content: ""; position: absolute; left: 0; right: 0; bottom: 2px; height: 2px;
+    background: var(--color-sage); transform: scaleX(0); transform-origin: right;
+    transition: transform var(--dur-base) var(--ease-out);
+  }
+  .nav__link:hover, .nav__link:focus-visible { color: var(--color-sage); }
+  .nav__link:hover::after { transform: scaleX(1); transform-origin: left; }
+
+  .nav__toggle { display: none; width: 44px; height: 44px; margin-right: -8px; place-items: center; }
+  .nav__burger { position: relative; width: 26px; height: 20px; display: block; }
+  .nav__burger i {
+    position: absolute; left: 0; width: 100%; height: 2.5px; border-radius: 2px; background: var(--accent);
+    transition: transform var(--dur-base) var(--ease-out), opacity var(--dur-fast) linear;
+  }
+  .nav__burger i:nth-child(1) { top: 0; }
+  .nav__burger i:nth-child(2) { top: 50%; translate: 0 -50%; }
+  .nav__burger i:nth-child(3) { bottom: 0; }
+  [aria-expanded="true"] .nav__burger i:nth-child(1) { transform: translateY(8.75px) rotate(45deg); }
+  [aria-expanded="true"] .nav__burger i:nth-child(2) { opacity: 0; }
+  [aria-expanded="true"] .nav__burger i:nth-child(3) { transform: translateY(-8.75px) rotate(-45deg); }
+
+  .nav__menu {
+    position: absolute; inset: 100% 0 auto; background: var(--color-forest);
+    padding: var(--space-5) var(--gutter) var(--space-8);
+    border-top: 1px solid rgb(139 150 139 / 0.25);
+    display: grid; gap: var(--space-6);
+    box-shadow: 0 24px 40px -20px rgb(0 0 0 / 0.5);
+  }
+  .nav__menu[hidden] { display: none; }
+  .nav__menu ul { display: grid; gap: var(--space-2); }
+  .nav__menu ul a {
+    display: block; padding-block: var(--space-2);
+    font-family: var(--font-display); font-size: 1.75rem; color: var(--color-white);
+  }
+  .nav__menu ul a:hover { color: var(--accent); }
+  .nav__menu.is-open li { animation: menu-in var(--dur-slow) var(--ease-out) backwards; animation-delay: calc(var(--i) * 50ms); }
+  @keyframes menu-in { from { opacity: 0; transform: translateY(-8px); } }
+
+  @media (max-width: 760px) {
+    .nav__links { display: none; }
+    .nav__toggle { display: grid; }
+  }
+</style>
+
+<script>
+  const header = document.querySelector<HTMLElement>('[data-nav]')!;
+  const toggle = header.querySelector<HTMLButtonElement>('[data-nav-toggle]')!;
+  const menu = header.querySelector<HTMLElement>('[data-nav-menu]')!;
+  const label = toggle.querySelector('.sr-only')!;
+
+  const setOpen = (open: boolean) => {
+    toggle.setAttribute('aria-expanded', String(open));
+    label.textContent = open ? 'Close menu' : 'Open menu';
+    menu.hidden = !open;
+    menu.classList.toggle('is-open', open);
+  };
+  toggle.addEventListener('click', () => setOpen(toggle.getAttribute('aria-expanded') !== 'true'));
+  menu.querySelectorAll('[data-nav-close]').forEach((a) => a.addEventListener('click', () => setOpen(false)));
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') setOpen(false); });
+  matchMedia('(min-width: 761px)').addEventListener('change', (e) => e.matches && setOpen(false));
+
+  const onScroll = () => header.classList.toggle('is-scrolled', scrollY > 8);
+  addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+</script>

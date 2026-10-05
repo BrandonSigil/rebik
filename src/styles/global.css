@@ -1,0 +1,140 @@
+@import "./tokens.css";
+
+/* ---------- Reset ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+* { margin: 0; }
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--nav-h) + 8px);
+}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body {
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: clip;
+}
+img, svg, picture { display: block; max-width: 100%; }
+img { height: auto; }
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+a { color: inherit; text-decoration: none; }
+ul[role="list"], ol[role="list"] { list-style: none; padding: 0; }
+:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 3px; border-radius: 6px; }
+::selection { background: var(--color-lime); color: var(--color-forest); }
+
+.sr-only {
+  position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+.skip-link {
+  position: absolute; left: var(--space-4); top: -100px; z-index: 100;
+  background: var(--color-lime); color: var(--color-forest);
+  padding: var(--space-2) var(--space-4); border-radius: var(--radius-pill);
+  font-family: var(--font-display); font-size: var(--fs-xs);
+}
+.skip-link:focus { top: var(--space-3); }
+
+/* ---------- Typography hierarchy ----------
+   h1/.t-display  Dela Gothic One  — page + section titles
+   h2/.t-h2       Dela Gothic One  — card titles
+   h3/.t-h3       Dela Gothic One  — sub-sections
+   h4/.t-h4       Dela Gothic One  — eyebrows, small titles
+   .t-body-lg     Epilogue         — intro paragraphs
+   p              Epilogue         — body
+   .t-small/.t-xs Epilogue         — fine print
+--------------------------------------------- */
+h1, h2, h3, h4, h5, .t-display, .t-h2, .t-h3, .t-h4, .t-h5 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  color: var(--text-heading);
+  letter-spacing: 0;
+  text-wrap: balance;
+}
+.t-display { font-size: var(--fs-display); line-height: 1.1; }
+.t-h2 { font-size: var(--fs-h2); line-height: var(--lh-tight); }
+.t-h3 { font-size: var(--fs-h3); line-height: var(--lh-snug); }
+.t-h4 { font-size: var(--fs-h4); line-height: var(--lh-snug); }
+.t-h5 { font-size: var(--fs-h5); line-height: var(--lh-snug); }
+.t-body-lg { font-size: var(--fs-body-lg); line-height: var(--lh-body); }
+.t-small { font-size: var(--fs-small); }
+.t-xs { font-size: var(--fs-xs); }
+.t-muted { color: var(--text-muted); }
+p { text-wrap: pretty; }
+
+/* ---------- Layout ---------- */
+.container { width: min(100% - 2 * var(--gutter), var(--container)); margin-inline: auto; }
+.container-md { width: min(100% - 2 * var(--gutter), var(--container-md)); margin-inline: auto; }
+.container-sm { width: min(100% - 2 * var(--gutter), var(--container-sm)); margin-inline: auto; }
+.section { padding-block: var(--section-pad); }
+.section--alt { background: var(--bg-alt); }
+.section--inverse { background: var(--bg-inverse); color: var(--text-inverse); }
+.section-head { text-align: center; display: grid; gap: var(--space-4); justify-items: center; margin-bottom: var(--space-8); }
+.section-head p { max-width: 40rem; font-size: var(--fs-body-lg); }
+.section-foot { display: flex; justify-content: center; margin-top: var(--space-8); }
+
+/* ---------- Highlight underline (draws in on reveal) ---------- */
+.hl {
+  background-image: linear-gradient(var(--accent), var(--accent));
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 100% 0.09em;
+  padding-bottom: 0.04em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+.js .hl { background-size: 0% 0.09em; transition: background-size var(--dur-draw) var(--ease-out) 250ms; }
+.js .is-in .hl, .js .hl.is-in { background-size: 100% 0.09em; }
+
+/* ---------- Buttons ---------- */
+.btn {
+  --btn-bg: var(--accent);
+  --btn-fg: var(--color-forest);
+  --btn-border: var(--accent);
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2);
+  min-height: 45px; min-width: 165px;
+  padding: 0 var(--space-6);
+  font-family: var(--font-display); font-size: var(--fs-button); line-height: 1;
+  color: var(--btn-fg); background: var(--btn-bg);
+  border: 2px solid var(--btn-border); border-radius: var(--radius-pill);
+  white-space: nowrap;
+  transition:
+    transform var(--dur-base) var(--ease-out),
+    background-color var(--dur-fast) linear,
+    border-color var(--dur-fast) linear,
+    color var(--dur-fast) linear,
+    box-shadow var(--dur-base) var(--ease-out);
+  will-change: transform;
+}
+.btn:hover, .btn:focus-visible {
+  --btn-bg: var(--accent-hover);
+  --btn-border: var(--accent-hover);
+  transform: scale(var(--hover-scale));
+  box-shadow: var(--shadow-lift);
+}
+.btn:active { transform: scale(1.03); transition-duration: 80ms; }
+.btn--outline { --btn-bg: transparent; }
+.btn--nav {
+  --btn-bg: transparent; --btn-fg: var(--accent);
+  min-height: 36px; min-width: 0; padding: 0 var(--space-4);
+  font-size: var(--fs-xs); border-width: 1.5px;
+}
+.btn--nav:hover, .btn--nav:focus-visible { --btn-bg: var(--accent); --btn-border: var(--accent); --btn-fg: var(--color-forest); box-shadow: none; }
+
+/* ---------- Reveal on scroll ---------- */
+.js [data-reveal] {
+  opacity: 0; transform: translateY(24px);
+  transition: opacity var(--dur-slow) var(--ease-out), transform var(--dur-slow) var(--ease-out);
+  transition-delay: calc(var(--i, 0) * 70ms);
+}
+.js [data-reveal].is-in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  .js [data-reveal] { opacity: 1; transform: none; }
+}
+
+/* ---------- Icon helper ---------- */
+.icon svg { width: 100%; height: 100%; }

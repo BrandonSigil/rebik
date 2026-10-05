@@ -1,0 +1,61 @@
+---
+import { getCollection } from 'astro:content';
+import Icon from './Icon.astro';
+import { site } from '../data/site';
+const reviews = (await getCollection('reviews')).sort((a, b) => a.data.order - b.data.order);
+---
+<section class="section section--alt" id="reviews" aria-labelledby="reviews-title">
+  <div class="container-md">
+    <header class="section-head" data-reveal>
+      <h2 id="reviews-title" class="t-display">Don’t <span class="hl">just take</span><br class="br-desk" /> my word for it.</h2>
+      <p>Great work is rarely created alone. Here’s what the people I’ve worked with have to say about collaborating with me, solving creative challenges, and bringing ideas to life together.</p>
+    </header>
+
+    <ul class="reviews" role="list">
+      {reviews.map(({ data }, i) => (
+        <li class="review" data-reveal style={`--i:${i % 3}`}>
+          <figure>
+            <div class="review__stars" role="img" aria-label="5 out of 5 stars">
+              {[0, 1, 2, 3, 4].map(() => <Icon name="star" />)}
+            </div>
+            <blockquote class="review__quote"><p>{data.quote}</p></blockquote>
+            <figcaption class="review__by">
+              <strong>{data.org}</strong>
+              <span>{data.role}</span>
+            </figcaption>
+          </figure>
+        </li>
+      ))}
+    </ul>
+
+    <div class="section-foot" style="margin-top: var(--space-10)"><a href={site.mailto} class="btn">Let’s Talk</a></div>
+  </div>
+</section>
+
+<style>
+  .reviews { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; max-width: 920px; margin-inline: auto; }
+  .review figure {
+    height: 100%; display: flex; flex-direction: column; align-items: center; text-align: center;
+    gap: var(--space-3); padding: var(--space-6) var(--space-3);
+    background: var(--color-white); border-radius: var(--radius-lg);
+    transition: transform var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out);
+  }
+  .review figure:hover { transform: translateY(-6px); box-shadow: var(--shadow-md); }
+  .review__stars { display: flex; gap: 3px; color: var(--accent); }
+  .review__stars :global(.icon) { width: 22px; height: 22px; transition: transform var(--dur-base) var(--ease-spring); }
+  .review figure:hover .review__stars :global(.icon) { transform: rotate(72deg) scale(1.08); }
+  .review figure:hover .review__stars :global(.icon:nth-child(2)) { transition-delay: 40ms; }
+  .review figure:hover .review__stars :global(.icon:nth-child(3)) { transition-delay: 80ms; }
+  .review figure:hover .review__stars :global(.icon:nth-child(4)) { transition-delay: 120ms; }
+  .review figure:hover .review__stars :global(.icon:nth-child(5)) { transition-delay: 160ms; }
+  .review__quote { font-size: var(--fs-body); line-height: 1.3; flex: 1; min-height: 5.2em; }
+  .review__by { display: grid; gap: 2px; margin-top: var(--space-2); }
+  .review__by strong { font-weight: var(--fw-semibold); font-size: var(--fs-small); }
+  .review__by span { font-size: var(--fs-xs); color: var(--text-muted); letter-spacing: 0.01em; }
+
+  @media (max-width: 900px) { .reviews { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 760px) {
+    .reviews { grid-template-columns: 1fr; max-width: 340px; gap: 18px; }
+    .br-desk { display: none; }
+  }
+</style>
