@@ -86,7 +86,7 @@ const meta = [
 <style>
   .project__intro { padding-top: clamp(2.5rem, 2rem + 3vw, 5rem); display: grid; justify-items: start; gap: var(--space-5); }
   .back {
-    font-family: var(--font-display); font-size: var(--fs-xs); color: var(--color-forest);
+    font-family: var(--font-label); font-size: var(--fs-xs); color: var(--color-forest); text-transform: var(--label-case); letter-spacing: var(--label-tracking);
     display: inline-flex; gap: 0.5em; padding: 0.5em 1em; border-radius: var(--radius-pill); background: var(--bg-alt);
     transition: transform var(--dur-base) var(--ease-out), background-color var(--dur-fast) linear;
   }
@@ -96,7 +96,7 @@ const meta = [
     width: 100%; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: var(--space-5);
     border-top: 2px solid var(--accent); padding-top: var(--space-5); margin-top: var(--space-3);
   }
-  .meta dt { font-family: var(--font-display); font-size: var(--fs-xs); color: var(--color-forest); }
+  .meta dt { font-family: var(--font-label); text-transform: var(--label-case); letter-spacing: var(--label-tracking); font-size: var(--fs-xs); color: var(--color-forest); }
   .meta dd { font-size: var(--fs-small); margin-top: var(--space-1); }
 
   .project__cover { margin-top: var(--space-8); border-radius: var(--radius-lg); overflow: hidden; }
@@ -105,7 +105,7 @@ const meta = [
   .results { margin-top: var(--space-9); padding-block: var(--space-8); }
   .results__list { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-6); text-align: center; }
   .results__list li { display: grid; gap: var(--space-1); }
-  .results__list strong { font-family: var(--font-display); font-weight: 400; font-size: clamp(2.5rem, 2rem + 2.5vw, 3.75rem); color: var(--color-forest); line-height: 1; }
+  .results__list strong { font-family: var(--font-heading); font-weight: var(--heading-weight); letter-spacing: var(--heading-tracking); font-size: clamp(2.5rem, 2rem + 2.5vw, 3.75rem); color: var(--color-forest); line-height: 1; }
   .results__list span { font-size: var(--fs-body); }
 
   .prose { padding-block: var(--space-9); font-size: var(--fs-body-lg); line-height: var(--lh-relaxed); }
@@ -117,7 +117,7 @@ const meta = [
   .prose :global(li::marker) { color: var(--accent); }
   .prose :global(a) { text-decoration: underline; text-decoration-color: var(--accent); text-decoration-thickness: 2px; text-underline-offset: 3px; }
   .prose :global(img) { border-radius: var(--radius-md); margin-block: var(--space-6); }
-  .prose :global(blockquote) { border-left: 4px solid var(--accent); padding-left: var(--space-5); font-family: var(--font-display); color: var(--color-forest); font-size: var(--fs-h3); line-height: 1.25; margin-block: var(--space-6); }
+  .prose :global(blockquote) { border-left: 4px solid var(--accent); padding-left: var(--space-5); font-family: var(--font-accent, var(--font-heading)); font-style: var(--hl-style); color: var(--color-forest); font-size: var(--fs-h3); line-height: 1.25; margin-block: var(--space-6); }
 
   .gallery { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-5); }
   .gallery__item { border-radius: var(--radius-lg); overflow: hidden; }

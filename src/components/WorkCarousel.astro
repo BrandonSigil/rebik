@@ -71,7 +71,8 @@ const start = Math.floor((projects.length - 1) / 2); // middle card starts cente
   .card__title { font-size: 2.25rem; line-height: 1.02; margin-top: var(--space-4); }
   .card__summary { font-size: var(--fs-body); max-width: 30ch; line-height: 1.38; }
   .card__cta {
-    margin-top: var(--space-4); font-family: var(--font-display); font-size: var(--fs-button); color: var(--accent);
+    margin-top: var(--space-4); font-family: var(--font-label); font-size: var(--fs-button); color: var(--accent-text);
+    font-weight: var(--label-weight); text-transform: var(--label-case); letter-spacing: var(--label-tracking);
     display: inline-flex; align-items: center; gap: 0.4em;
   }
   .card__cta::after { content: "→"; display: inline-block; width: 0; opacity: 0; transform: translateX(-6px); transition: all var(--dur-base) var(--ease-out); }

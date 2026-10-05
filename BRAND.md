@@ -140,3 +140,46 @@ Motion should feel **quick, confident, never bouncy for its own sake.**
 ## 7. Voice
 
 Clear, warm, confident. Short sentences. Lead with outcomes, and use numbers when you have them (“Reduced design time by ~30%”).
+
+---
+
+# Theme B: "2026" (tinker branch)
+
+This is an alternative theme layered on top of the original. The original tokens in `tokens.css` are untouched, and `src/styles/themes/2026.css` overrides them when `<html data-theme="2026">` is set.
+
+- **Switch the whole site:** set `theme` in `src/data/site.ts` to `'2026'` or `'original'`.
+- **Preview in a browser:** add `?theme=original` or `?theme=2026` to the URL. The choice is remembered; `?theme=reset` clears it. The preview swaps colors and type only. The skills section layout (reel vs. grid) follows `site.theme` at build time.
+
+## Color (B)
+| Name | Token | Hex | Use | Contrast |
+|---|---|---|---|---|
+| Pine | `--color-forest` | `#0c1f14` | Text, nav, footer, dark sections | 15.5:1 on bone |
+| Volt | `--color-lime` | `#c4f04d` | Fills, CTAs, highlighter marker. **Never as text on light.** | pine on volt 13:1 |
+| Volt soft | `--color-lime-soft` | `#d5f77f` | Hover on volt | — |
+| Moss | `--color-moss` / `--accent-text` | `#1f5130` | Green *text* on light (eyebrow, View Project) | 8.3:1 on bone |
+| Bone | `--color-bone` / `--bg` | `#f4f3ee` | Page background (warm off-white) | — |
+| Mist | `--color-mint` | `#e6eedc` | Alternate sections | — |
+| Graphite | `--color-graphite` | `#4f5b52` | Muted text | 6.4:1 on bone |
+| Sage | `--color-sage` | `#9fb0a3` | Text on pine (footer) | 7.5:1 on pine |
+| Ember | `--color-ember` | `#ff6a3d` | Rare warm pop, art only | — |
+
+Every text pairing passes WCAG AA, and most pass AAA.
+
+## Type (B)
+| Role | Typeface | Free stand-in for | Notes |
+|---|---|---|---|
+| Display / headings | **Bricolage Grotesque** (variable, optical size) | expressive agency grotesks (Die Grotesk, Söhne Schmal) | weight 720, tracking −0.035em, leading 0.98 |
+| Body | **Geist** | Söhne / ABC Diatype / Neue Montreal | neutral neo-grotesk |
+| Labels, buttons, tags | **Geist Mono** | Berkeley Mono / ABC Diatype Mono | UPPERCASE, +0.06em tracking, 13px |
+| Accent (`.hl` words) | **Instrument Serif *Italic*** | Editorial New / Reckless | sits on a volt highlighter marker |
+
+All four are SIL Open Font License, self-hosted via `@fontsource`.
+
+**Pattern:** every section title is a heavy grotesk, with *one* phrase set in serif italic on a volt marker. On dark sections the marker is dropped and the phrase turns volt.
+
+## Skills reel (B)
+- `SkillsReel.astro` replaces the 3×2 grid. The original `Skills.astro` is kept for the original theme.
+- It scrolls slowly (70s loop). It pauses on hover or keyboard focus, has an explicit Pause/Play button (WCAG 2.2.2), and also pauses when off-screen.
+- Hover, focus or tap opens a card: the image blurs and darkens, the description slides up, the tags turn volt, and the other cards dim.
+- With reduced motion it becomes a swipeable row instead.
+- Card art lives in `src/assets/skills/*.jpg` at a 4:5 ratio. It's placeholder generative art from `scripts/generate-skill-art.py`. Swap in a photo with the same file name, or change `image:` in `skills.yaml`.

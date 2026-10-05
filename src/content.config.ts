@@ -45,7 +45,14 @@ const work = defineCollection({
 
 const skills = defineCollection({
   loader: file('./src/data/skills.yaml'),
-  schema: z.object({ order: z.number(), title: z.string(), icon: z.string(), description: z.string() }),
+  schema: z.object({
+    order: z.number(),
+    title: z.string(),
+    icon: z.string(),
+    image: z.string().optional(),
+    tags: z.array(z.string()).default([]),
+    description: z.string(),
+  }),
 });
 
 const reviews = defineCollection({

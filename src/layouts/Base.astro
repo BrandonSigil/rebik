@@ -2,7 +2,13 @@
 import '@fontsource/epilogue/latin-400.css';
 import '@fontsource/epilogue/latin-600.css';
 import '@fontsource/dela-gothic-one/latin-400.css';
+// 2026 theme fonts (only downloaded when the theme uses them)
+import '@fontsource-variable/bricolage-grotesque/opsz.css';
+import '@fontsource-variable/geist';
+import '@fontsource-variable/geist-mono';
+import '@fontsource/instrument-serif/latin-400-italic.css';
 import '../styles/global.css';
+import '../styles/themes/2026.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { site } from '../data/site';
@@ -10,6 +16,9 @@ import ogImage from '../assets/hero/billboard.png';
 import { getImage } from 'astro:assets';
 import delaWoff2 from '@fontsource/dela-gothic-one/files/dela-gothic-one-latin-400-normal.woff2?url';
 import epilogueWoff2 from '@fontsource/epilogue/files/epilogue-latin-400-normal.woff2?url';
+import bricolageWoff2 from '@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-latin-opsz-normal.woff2?url';
+import geistWoff2 from '@fontsource-variable/geist/files/geist-latin-wght-normal.woff2?url';
+const preloads = site.theme === '2026' ? [bricolageWoff2, geistWoff2] : [delaWoff2, epilogueWoff2];
 
 interface Props { title?: string; description?: string; image?: ImageMetadata; noindex?: boolean }
 const { title, description = site.description, image = ogImage, noindex = false } = Astro.props;
@@ -18,7 +27,7 @@ const og = await getImage({ src: image, width: 1200, format: 'jpg' });
 const canonical = new URL(Astro.url.pathname, Astro.site);
 ---
 <!doctype html>
-<html lang="en-GB">
+<html lang="en-GB" data-theme={site.theme}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -26,17 +35,26 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta name="description" content={description} />
     {noindex && <meta name="robots" content="noindex, nofollow" />}
     <link rel="canonical" href={canonical} />
-    <link rel="preload" href={delaWoff2} as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href={epilogueWoff2} as="font" type="font/woff2" crossorigin />
+    {preloads.map((href) => <link rel="preload" href={href} as="font" type="font/woff2" crossorigin />)}
     <link rel="icon" type="image/png" href="/favicon.png" />
-    <meta name="theme-color" content="#162d16" />
+    <meta name="theme-color" content={site.theme === '2026' ? '#0c1f14' : '#162d16'} />
     <meta property="og:type" content="website" />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={new URL(og.src, Astro.site)} />
     <meta name="twitter:card" content="summary_large_image" />
-    <script is:inline>document.documentElement.classList.add('js');</script>
+    <script is:inline>
+      document.documentElement.classList.add('js');
+      // Theme preview: ?theme=original | 2026 (remembered), ?theme=reset to clear
+      try {
+        var q = new URLSearchParams(location.search).get('theme');
+        if (q === 'reset') localStorage.removeItem('theme');
+        else if (q) localStorage.setItem('theme', q);
+        var t = localStorage.getItem('theme');
+        if (t) document.documentElement.dataset.theme = t;
+      } catch (e) {}
+    </script>
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>

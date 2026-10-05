@@ -35,7 +35,7 @@ ul[role="list"], ol[role="list"] { list-style: none; padding: 0; }
   position: absolute; left: var(--space-4); top: -100px; z-index: 100;
   background: var(--color-lime); color: var(--color-forest);
   padding: var(--space-2) var(--space-4); border-radius: var(--radius-pill);
-  font-family: var(--font-display); font-size: var(--fs-xs);
+  font-family: var(--font-label); font-size: var(--fs-xs);
 }
 .skip-link:focus { top: var(--space-3); }
 
@@ -49,13 +49,13 @@ ul[role="list"], ol[role="list"] { list-style: none; padding: 0; }
    .t-small/.t-xs Epilogue         — fine print
 --------------------------------------------- */
 h1, h2, h3, h4, h5, .t-display, .t-h2, .t-h3, .t-h4, .t-h5 {
-  font-family: var(--font-display);
-  font-weight: 400;
+  font-family: var(--font-heading);
+  font-weight: var(--heading-weight);
   color: var(--text-heading);
-  letter-spacing: 0;
+  letter-spacing: var(--heading-tracking);
   text-wrap: balance;
 }
-.t-display { font-size: var(--fs-display); line-height: 1.1; }
+.t-display { font-size: var(--fs-display); line-height: var(--heading-leading); }
 .t-h2 { font-size: var(--fs-h2); line-height: var(--lh-tight); }
 .t-h3 { font-size: var(--fs-h3); line-height: var(--lh-snug); }
 .t-h4 { font-size: var(--fs-h4); line-height: var(--lh-snug); }
@@ -79,16 +79,18 @@ p { text-wrap: pretty; }
 
 /* ---------- Highlight underline (draws in on reveal) ---------- */
 .hl {
-  background-image: linear-gradient(var(--accent), var(--accent));
+  font-family: var(--font-accent);
+  font-style: var(--hl-style);
+  background-image: linear-gradient(var(--hl-color), var(--hl-color));
   background-repeat: no-repeat;
-  background-position: 0 100%;
-  background-size: 100% 0.09em;
+  background-position: 0 calc(100% - var(--hl-offset));
+  background-size: 100% var(--hl-thickness);
   padding-bottom: 0.04em;
   -webkit-box-decoration-break: clone;
   box-decoration-break: clone;
 }
-.js .hl { background-size: 0% 0.09em; transition: background-size var(--dur-draw) var(--ease-out) 250ms; }
-.js .is-in .hl, .js .hl.is-in { background-size: 100% 0.09em; }
+.js .hl { background-size: 0% var(--hl-thickness); transition: background-size var(--dur-draw) var(--ease-out) 250ms; }
+.js .is-in .hl, .js .hl.is-in { background-size: 100% var(--hl-thickness); }
 
 /* ---------- Buttons ---------- */
 .btn {
@@ -98,7 +100,8 @@ p { text-wrap: pretty; }
   display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2);
   min-height: 45px; min-width: 165px;
   padding: 0 var(--space-6);
-  font-family: var(--font-display); font-size: var(--fs-button); line-height: 1;
+  font-family: var(--font-label); font-size: var(--fs-button); line-height: 1;
+  font-weight: var(--label-weight); text-transform: var(--label-case); letter-spacing: var(--label-tracking);
   color: var(--btn-fg); background: var(--btn-bg);
   border: 2px solid var(--btn-border); border-radius: var(--radius-pill);
   white-space: nowrap;

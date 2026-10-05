@@ -3,6 +3,8 @@ import Base from '../layouts/Base.astro';
 import Hero from '../components/Hero.astro';
 import Marquee from '../components/Marquee.astro';
 import Skills from '../components/Skills.astro';
+import SkillsReel from '../components/SkillsReel.astro';
+import { site } from '../data/site';
 import WorkCarousel from '../components/WorkCarousel.astro';
 import Reviews from '../components/Reviews.astro';
 import About from '../components/About.astro';
@@ -11,7 +13,7 @@ import ContactCTA from '../components/ContactCTA.astro';
 <Base>
   <Hero />
   <Marquee />
-  <Skills />
+  {site.theme === '2026' ? <SkillsReel /> : <Skills />}
   <WorkCarousel />
   <Reviews />
   <About />

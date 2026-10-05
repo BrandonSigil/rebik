@@ -83,9 +83,9 @@ const tiles = [
   .hero__copy { display: grid; justify-items: start; }
   .hero__hello { display: flex; align-items: center; gap: var(--space-4); }
   .hero__avatar { width: 54px; height: 54px; border-radius: 50%; }
-  .hero__eyebrow { color: var(--accent); }
+  .hero__eyebrow { color: var(--accent-text); }
   .hero__title { margin-top: var(--space-5); line-height: 1.09; text-wrap: initial; }
-  .hero__hl { background-size: 100% 0.09em; }
+  .hero__hl { background-size: 100% var(--hl-thickness); }
   .hero__lede { margin-top: var(--space-6); }
   .hero__note { margin-top: var(--space-2); font-size: var(--fs-micro); color: var(--text-muted); line-height: 1.5; }
   .hero__ctas { display: flex; flex-wrap: wrap; gap: var(--space-4); margin-top: var(--space-6); }
@@ -103,8 +103,8 @@ const tiles = [
   @media (prefers-reduced-motion: reduce) { .scribble :global(path) { stroke-dashoffset: 0; animation: none; } }
 
   /* hero underline draws on load rather than on scroll */
-  .js .hero__hl { background-size: 0% 0.09em; animation: underline var(--dur-draw) var(--ease-out) 1100ms forwards; transition: none; }
-  @keyframes underline { to { background-size: 100% 0.09em; } }
+  .js .hero__hl { background-size: 0% var(--hl-thickness); animation: underline var(--dur-draw) var(--ease-out) 1100ms forwards; transition: none; }
+  @keyframes underline { to { background-size: 100% var(--hl-thickness); } }
 
   @media (max-width: 760px) {
     .hero__inner { grid-template-columns: 1fr; gap: var(--space-8); }

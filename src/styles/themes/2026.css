@@ -1,0 +1,78 @@
+/* ==========================================================================
+   Theme · "2026" (tinker)
+   Activated by <html data-theme="2026">. Overrides tokens from tokens.css,
+   which remain the ORIGINAL wireframe theme. To revert: set `theme: 'original'`
+   in src/data/site.ts (or preview with ?theme=original).
+   ========================================================================== */
+
+:root[data-theme="2026"] {
+  /* ---------- Color ----------
+     Contrast (WCAG): pine/bone 15.5 · pine/volt 13.0 · moss/bone 8.3 ·
+     graphite/bone 6.4 · sage/pine 7.5 · volt/pine 13.0  */
+  --color-forest: #0c1f14;     /* "Pine"  — primary dark: text, nav, footer */
+  --color-lime: #c4f04d;       /* "Volt"  — accent fills, markers, CTAs */
+  --color-lime-soft: #d5f77f;  /* "Volt soft" — hover on volt fills */
+  --color-moss: #1f5130;       /* "Moss"  — green TEXT on light (8.3:1) */
+  --color-mint: #e6eedc;       /* "Mist"  — alternate section bg */
+  --color-bone: #f4f3ee;       /* "Bone"  — main bg (warm off-white) */
+  --color-white: #ffffff;      /* cards */
+  --color-ink: #111813;        /* body text */
+  --color-graphite: #4f5b52;   /* muted text (6.4:1 on bone) */
+  --color-sage: #9fb0a3;       /* text on pine (7.5:1) */
+  --color-ember: #ff6a3d;      /* rare warm pop — art & tiny details only */
+
+  --bg: var(--color-bone);
+  --accent-text: var(--color-moss);
+  --hl-color: var(--color-lime);
+  --hl-thickness: 0.38em;      /* underline becomes a highlighter marker */
+  --hl-offset: 0.16em;
+
+  /* ---------- Type ----------
+     Display: Bricolage Grotesque (variable, optical size) — expressive grotesk
+     Body:    Geist — neutral neo-grotesk (free stand-in for Söhne / ABC Diatype)
+     Labels:  Geist Mono — uppercase, tracked
+     Accent:  Instrument Serif Italic — highlighted words  */
+  --font-display: "Bricolage Grotesque Variable", "Arial Narrow", sans-serif;
+  --font-body: "Geist Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono Variable", ui-monospace, "SF Mono", Menlo, monospace;
+  --font-heading: var(--font-display);
+  --font-label: var(--font-mono);
+  --font-accent: "Instrument Serif", Georgia, serif;
+  --hl-style: italic;
+  --heading-weight: 720;
+  --heading-tracking: -0.035em;
+  --heading-leading: 0.98;
+  --label-weight: 500;
+  --label-case: uppercase;
+  --label-tracking: 0.06em;
+
+  --fs-display: clamp(2.75rem, 1.5rem + 3.6vw, 4.5rem);   /* 44 → 72 */
+  --fs-h2: clamp(1.5rem, 1.1rem + 1.2vw, 2.125rem);       /* 24 → 34 */
+  --fs-button: 0.8125rem;                                 /* 13 mono caps */
+
+  --radius-md: 16px;
+  --radius-lg: 24px;
+}
+
+/* ---------- Component tweaks that tokens alone can't express ---------- */
+[data-theme="2026"] body { font-feature-settings: "ss01", "cv11"; }
+[data-theme="2026"] h1, [data-theme="2026"] h2, [data-theme="2026"] h3,
+[data-theme="2026"] .t-display, [data-theme="2026"] .t-h2 { font-optical-sizing: auto; }
+
+/* Highlighted words: serif italic sits a touch larger + lighter than the grotesk */
+[data-theme="2026"] .hl { font-weight: 400; font-size: 1.08em; letter-spacing: -0.01em; padding-inline: 0.04em; }
+
+/* On dark sections the marker would kill contrast → volt text, no marker */
+[data-theme="2026"] .section--inverse .hl { background-image: none; color: var(--color-lime); }
+
+/* Outline buttons: pine border (lime border failed non-text contrast) */
+[data-theme="2026"] .btn--outline { --btn-border: var(--color-forest); }
+[data-theme="2026"] .btn--outline:hover { --btn-border: var(--accent-hover); }
+[data-theme="2026"] .btn { min-height: 48px; padding-inline: var(--space-6); }
+[data-theme="2026"] .btn--nav { min-height: 36px; padding-inline: var(--space-4); }
+
+/* Eyebrow + fine labels in mono */
+[data-theme="2026"] .t-h4 { letter-spacing: -0.015em; }
+
+/* Hero: give the scribbled word breathing room under tight tracking */
+[data-theme="2026"] .scribble { margin-left: 0.18em; }

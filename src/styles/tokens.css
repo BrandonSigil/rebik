@@ -31,6 +31,10 @@
   --accent: var(--color-lime);
   --accent-hover: var(--color-lime-soft);
   --focus-ring: var(--color-lime);
+  --accent-text: var(--color-lime);     /* accent-colored TEXT on light backgrounds */
+  --hl-color: var(--accent);            /* .hl underline / marker */
+  --hl-thickness: 0.09em;               /* .hl underline height (bigger = marker) */
+  --hl-offset: 0%;                      /* .hl vertical nudge */
 
   /* ---------- Typography · Families ---------- */
   --font-display: "Dela Gothic One", "Arial Black", "Helvetica Neue", sans-serif;
@@ -48,6 +52,21 @@
   --fs-small: 0.9375rem;                                      /* 15       visa copy, attribution */
   --fs-xs: 0.8125rem;                                         /* 13       nav, fine print, footer */
   --fs-micro: 0.75rem;                                        /* 12       helper text */
+
+  /* ---------- Typography · Roles ----------
+     Components use these, never the family tokens directly.
+     Themes (src/styles/themes/*.css) remap them. */
+  --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
+  --font-heading: var(--font-display);  /* h1–h5 */
+  --font-label: var(--font-display);    /* buttons, eyebrows, marquee, tags */
+  --font-accent: inherit;               /* highlighted words (.hl) */
+  --hl-style: normal;                   /* font-style of .hl */
+  --heading-weight: 400;
+  --heading-tracking: 0em;
+  --heading-leading: 1.1;
+  --label-weight: 400;
+  --label-case: none;
+  --label-tracking: 0em;
 
   --lh-tight: 1.05;    /* display + card headings */
   --lh-snug: 1.15;     /* small headings */

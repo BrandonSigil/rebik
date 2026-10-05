@@ -1,0 +1,207 @@
+---
+/**
+ * "How I can help" — auto-scrolling reel of image cards.
+ * Replaces the 3×2 grid (Skills.astro is kept for the original theme / easy revert).
+ * Data: src/data/skills.yaml · Images: src/assets/skills/
+ */
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+import { site } from '../data/site';
+
+const skills = (await getCollection('skills')).sort((a, b) => a.data.order - b.data.order);
+const images = import.meta.glob<{ default: ImageMetadata }>('../assets/skills/*.{jpg,jpeg,png,webp,avif}', { eager: true });
+const imageFor = (file?: string) => (file ? images[`../assets/skills/${file}`]?.default : undefined);
+const pad = (n: number) => String(n).padStart(2, '0');
+---
+<section class="section section--alt reel-section" id="help" aria-labelledby="help-title">
+  <div class="container reel-head">
+    <div data-reveal>
+      <p class="reel-eyebrow">Skills — {pad(skills.length)} disciplines</p>
+      <h2 id="help-title" class="t-display">How I can <span class="hl">help</span>.</h2>
+    </div>
+    <div class="reel-head__aside" data-reveal style="--i:1">
+      <p>With over 13 years of design experience, I’m able to help organisations better understand the problem, develop a creative approach, build systems and lead the work through delivery.</p>
+      <a href={site.mailto} class="reel-link">Let’s Talk <span aria-hidden="true">↗</span></a>
+    </div>
+  </div>
+
+  <div class="reel" data-reel>
+    <div class="reel__track" data-reel-track>
+      {[0, 1].map((copy) => (
+        <ul class="reel__group" role="list" aria-hidden={copy === 1 ? 'true' : undefined} inert={copy === 1 ? true : undefined}>
+          {skills.map(({ data }, i) => {
+            const img = imageFor(data.image);
+            return (
+              <li class="rcard" tabindex={copy === 0 ? 0 : undefined} data-rcard>
+                {img && <Image src={img} alt="" widths={[360, 540, 760]} sizes="(max-width: 760px) 72vw, 380px" loading="lazy" class="rcard__img" />}
+                <div class="rcard__scrim" aria-hidden="true" />
+                <div class="rcard__top">
+                  <h3 class="rcard__title" set:html={data.title.replace('\n', '<br/>')} />
+                  <span class="rcard__num" aria-hidden="true">{pad(i + 1)}</span>
+                </div>
+                <div class="rcard__bottom">
+                  <p class="rcard__desc">{data.description}</p>
+                  <ul class="rcard__tags" role="list">
+                    {data.tags.map((t) => <li>{t}</li>)}
+                  </ul>
+                </div>
+              </li>
+            );
+          })}
+        </ul>
+      ))}
+    </div>
+  </div>
+
+  <div class="container reel-controls">
+    <p class="reel-hint">Hover or tap a card to read more</p>
+    <button class="reel-toggle" data-reel-toggle aria-pressed="false">
+      <span class="reel-toggle__icon" aria-hidden="true"></span>
+      <span data-reel-label>Pause</span>
+    </button>
+  </div>
+</section>
+
+<style>
+  .reel-section { overflow: hidden; }
+  .reel-head {
+    display: grid; grid-template-columns: 1.2fr 1fr; gap: var(--space-8); align-items: end;
+    margin-bottom: var(--space-8);
+  }
+  .reel-eyebrow, .reel-hint, .reel-toggle, .rcard__num, .rcard__tags, .reel-link {
+    font-family: var(--font-label); text-transform: var(--label-case); letter-spacing: var(--label-tracking);
+  }
+  .reel-eyebrow { font-size: var(--fs-micro); color: var(--text-muted); margin-bottom: var(--space-4); }
+  .reel-head__aside { display: grid; gap: var(--space-4); justify-items: start; }
+  .reel-head__aside p { font-size: var(--fs-body-lg); color: var(--text); max-width: 34rem; }
+  .reel-link {
+    font-size: var(--fs-xs); color: var(--color-forest);
+    border-bottom: 1.5px solid currentColor; padding-bottom: 2px;
+    transition: color var(--dur-fast) linear, gap var(--dur-base) var(--ease-out);
+    display: inline-flex; gap: 0.4em;
+  }
+  .reel-link:hover { color: var(--accent-text); gap: 0.7em; }
+
+  /* ---------- Track ---------- */
+  .reel { --card-w: clamp(260px, 26vw, 380px); --gap: 16px; --speed: 70s; }
+  .reel__track { display: flex; width: max-content; animation: reel var(--speed) linear infinite; }
+  .reel__group { display: flex; gap: var(--gap); padding-right: var(--gap); }
+  .reel:is(:hover, :focus-within) .reel__track,
+  .reel.is-paused .reel__track { animation-play-state: paused; }
+  @keyframes reel { to { transform: translateX(-50%); } }
+
+  /* ---------- Card ---------- */
+  .rcard {
+    position: relative; flex: none; width: var(--card-w); aspect-ratio: 4 / 5;
+    border-radius: var(--radius-lg); overflow: hidden; isolation: isolate;
+    background: var(--color-forest); color: #fff; outline-offset: 4px;
+    transition: transform var(--dur-slow) var(--ease-out), opacity var(--dur-base) linear, filter var(--dur-base) linear;
+  }
+  .rcard__img {
+    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2;
+    transition: transform 1.4s var(--ease-out), filter var(--dur-slow) var(--ease-out);
+  }
+  .rcard__scrim {
+    position: absolute; inset: 0; z-index: -1;
+    background:
+      linear-gradient(180deg, rgb(12 31 20 / 0.55) 0%, rgb(12 31 20 / 0) 30%),
+      linear-gradient(0deg, rgb(12 31 20 / 0.7) 0%, rgb(12 31 20 / 0) 42%);
+    transition: background-color var(--dur-slow) var(--ease-out);
+  }
+  .rcard__top { position: absolute; inset: var(--space-5) var(--space-5) auto; display: flex; justify-content: space-between; align-items: start; gap: var(--space-4); }
+  .rcard__title {
+    color: #fff; font-size: var(--fs-h2); line-height: 0.98;
+    text-shadow: 0 1px 18px rgb(0 0 0 / 0.25);
+  }
+  .rcard__num { font-size: var(--fs-micro); opacity: 0.85; padding-top: 0.35em; }
+  .rcard__bottom { position: absolute; inset: auto var(--space-4) var(--space-4); display: grid; gap: var(--space-3); }
+  .rcard__desc {
+    font-size: var(--fs-small); line-height: 1.4; color: #fff;
+    max-height: 0; opacity: 0; transform: translateY(12px); overflow: hidden;
+    transition: max-height var(--dur-slow) var(--ease-out), opacity var(--dur-base) linear, transform var(--dur-slow) var(--ease-out);
+  }
+  .rcard__tags { display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.6875rem; }
+  .rcard__tags li {
+    padding: 0.5em 0.9em; border-radius: var(--radius-pill);
+    background: rgb(255 255 255 / 0.16); color: #fff;
+    -webkit-backdrop-filter: blur(10px) saturate(1.4); backdrop-filter: blur(10px) saturate(1.4);
+    border: 1px solid rgb(255 255 255 / 0.18);
+  }
+
+  /* Hover / focus / tap-open */
+  .reel:has(.rcard:is(:hover, :focus-visible, .is-open)) .rcard:not(:is(:hover, :focus-visible, .is-open)) { opacity: 0.55; filter: saturate(0.6); }
+  .rcard:is(:hover, :focus-visible, .is-open) { transform: translateY(-6px); }
+  .rcard:is(:hover, :focus-visible, .is-open) .rcard__img { transform: scale(1.07); filter: blur(2px) brightness(0.7); }
+  .rcard:is(:hover, :focus-visible, .is-open) .rcard__scrim { background-color: rgb(12 31 20 / 0.35); }
+  .rcard:is(:hover, :focus-visible, .is-open) .rcard__desc { max-height: 12em; opacity: 1; transform: none; }
+  .rcard:is(:hover, :focus-visible, .is-open) .rcard__tags li { background: var(--color-lime); color: var(--color-forest); border-color: transparent; }
+
+  /* ---------- Controls ---------- */
+  .reel-controls { display: flex; justify-content: space-between; align-items: center; margin-top: var(--space-6); gap: var(--space-4); }
+  .reel-hint { font-size: var(--fs-micro); color: var(--text-muted); }
+  .reel-toggle {
+    display: inline-flex; align-items: center; gap: var(--space-2);
+    font-size: var(--fs-micro); color: var(--color-forest);
+    padding: 0.7em 1.1em; border: 1.5px solid var(--color-forest); border-radius: var(--radius-pill);
+    transition: background-color var(--dur-fast) linear, color var(--dur-fast) linear;
+  }
+  .reel-toggle:hover { background: var(--color-forest); color: var(--bg-alt); }
+  .reel-toggle__icon { width: 10px; height: 10px; display: inline-block;
+    background: linear-gradient(90deg, currentColor 0 35%, transparent 35% 65%, currentColor 65%); }
+  .reel-toggle[aria-pressed="true"] .reel-toggle__icon { background: currentColor; clip-path: polygon(0 0, 100% 50%, 0 100%); }
+
+  @media (max-width: 860px) {
+    .reel-head { grid-template-columns: 1fr; gap: var(--space-5); }
+    .reel { --card-w: 72vw; --speed: 55s; }
+    .reel-hint { display: none; }
+    .reel-controls { justify-content: flex-end; }
+  }
+
+  /* Reduced motion: no auto-scroll — a swipeable row instead */
+  @media (prefers-reduced-motion: reduce) {
+    .reel { overflow-x: auto; scroll-snap-type: x mandatory; padding-inline: var(--gutter); scrollbar-width: none; }
+    .reel__track { animation: none; }
+    .reel__group:nth-child(2) { display: none; }
+    .rcard { scroll-snap-align: start; }
+    .reel-toggle { display: none; }
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-reel]').forEach((reel) => {
+    const section = reel.closest('section')!;
+    const toggle = section.querySelector<HTMLButtonElement>('[data-reel-toggle]')!;
+    const label = section.querySelector<HTMLElement>('[data-reel-label]')!;
+    const cards = reel.querySelectorAll<HTMLElement>('[data-rcard]');
+
+    // Paused when the user pressed Pause OR a card is tapped open.
+    let userPaused = false;
+    const sync = () => {
+      const anyOpen = reel.querySelector('.rcard.is-open') !== null;
+      reel.classList.toggle('is-paused', userPaused || anyOpen);
+      toggle.setAttribute('aria-pressed', String(userPaused));
+      label.textContent = userPaused ? 'Play' : 'Pause';
+    };
+    toggle.addEventListener('click', () => { userPaused = !userPaused; sync(); });
+    cards.forEach((card) =>
+      card.addEventListener('click', () => {
+        const open = !card.classList.contains('is-open');
+        cards.forEach((c) => c.classList.remove('is-open'));
+        card.classList.toggle('is-open', open);
+        sync();
+      }),
+    );
+    document.addEventListener('click', (e) => {
+      if (reel.contains(e.target as Node)) return;
+      cards.forEach((c) => c.classList.remove('is-open'));
+      sync();
+    });
+
+    // Save battery: stop animating when off-screen.
+    new IntersectionObserver(([e]) => reel.classList.toggle('is-offscreen', !e.isIntersecting)).observe(reel);
+  });
+</script>
+
+<style is:global>
+  .reel.is-offscreen .reel__track { animation-play-state: paused; }
+</style>

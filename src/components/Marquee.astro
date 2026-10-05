@@ -25,7 +25,8 @@ const run = [...words, ...words, ...words];
   .marquee:hover .marquee__track { animation-play-state: paused; }
   .marquee__group { display: flex; flex-shrink: 0; }
   .marquee__group li {
-    font-family: var(--font-display); font-size: var(--fs-xs); white-space: nowrap;
+    font-family: var(--font-label); font-size: var(--fs-xs); white-space: nowrap;
+    font-weight: var(--label-weight); text-transform: var(--label-case); letter-spacing: var(--label-tracking);
     display: flex; align-items: center;
   }
   .marquee__group li::after { content: "•"; margin-inline: clamp(1.25rem, 3vw, 2.4rem); font-size: 0.9em; }

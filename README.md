@@ -28,6 +28,9 @@ Node 22+.
 | Homepage sections | `src/components/*.astro` (composed in `src/pages/index.astro`) |
 | Icons (SVG, `currentColor`) | `src/icons/` |
 | Source wireframe | `docs/wireframe-landing.pdf` |
+| Theme switch (`original` / `2026`) | `theme` in `src/data/site.ts` · preview with `?theme=original` |
+| 2026 theme overrides | `src/styles/themes/2026.css` |
+| Skills reel art (placeholder) | `src/assets/skills/` · regenerate with `python3 scripts/generate-skill-art.py` |
 
 ## Common edits
 

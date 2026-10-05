@@ -75,7 +75,7 @@ import { nav, site } from '../data/site';
   .nav__menu ul { display: grid; gap: var(--space-2); }
   .nav__menu ul a {
     display: block; padding-block: var(--space-2);
-    font-family: var(--font-display); font-size: 1.75rem; color: var(--color-white);
+    font-family: var(--font-heading); font-weight: var(--heading-weight); letter-spacing: var(--heading-tracking); font-size: 1.75rem; color: var(--color-white);
   }
   .nav__menu ul a:hover { color: var(--accent); }
   .nav__menu.is-open li { animation: menu-in var(--dur-slow) var(--ease-out) backwards; animation-delay: calc(var(--i) * 50ms); }
