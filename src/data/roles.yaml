@@ -1,0 +1,10 @@
+# "My Role" chips on project pages. Reference these ids in a project's `roles: [...]`.
+# icon: file name in src/icons (without .svg)
+- id: graphic-designer
+  order: 1
+  label: graphic designer
+  icon: role-graphic-designer
+- id: art-director
+  order: 2
+  label: art director
+  icon: role-art-director

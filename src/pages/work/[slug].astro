@@ -1,140 +1,349 @@
 ---
 /**
  * PROJECT TEMPLATE — every file in src/content/work renders through this page.
- * Layout: intro → meta → cover → results → write-up (markdown) → gallery → next project → CTA
+ * Layout (desktop): sticky text column (employer, title, My Role, Skills Used, intro, write-up card)
+ *                   beside an image column built from `gallery` rows. Lime prev/next band at the bottom.
+ * Mobile: text first, images underneath.
  */
-import { Image } from 'astro:assets';
-import { render } from 'astro:content';
+import { Image, getImage } from 'astro:assets';
+import { render, getEntries } from 'astro:content';
 import Base from '../../layouts/Base.astro';
-import ContactCTA from '../../components/ContactCTA.astro';
+import Icon from '../../components/Icon.astro';
 import { getAllWork, type Work } from '../../lib/work';
 
 export async function getStaticPaths() {
   const all = await getAllWork();
   return all.map((entry, i) => ({
     params: { slug: entry.id },
-    props: { entry, next: all[(i + 1) % all.length] },
+    props: {
+      entry,
+      prev: all[(i - 1 + all.length) % all.length],
+      next: all[(i + 1) % all.length],
+    },
   }));
 }
 
-interface Props { entry: Work; next: Work }
-const { entry, next } = Astro.props;
+interface Props { entry: Work; prev: Work; next: Work }
+const { entry, prev, next } = Astro.props;
 const { data } = entry;
 const { Content } = await render(entry);
-const meta = [
-  { label: 'Client', value: data.client },
-  { label: 'Role', value: data.role },
-  { label: 'Year', value: data.year?.toString() },
-  { label: 'Services', value: data.services.join(', ') || undefined },
-].filter((m) => m.value);
+const hasWriteUp = entry.body?.trim().length > 0;
+
+const roles = (await getEntries(data.roles)).sort((a, b) => a.data.order - b.data.order);
+const skills = (await getEntries(data.skills)).sort((a, b) => a.data.order - b.data.order);
+const skillLabel = (t: string) => t.replace(/\s*\n\s*/g, ' ').replace(/&/g, '+').toLowerCase();
+
+const intro = data.intro.split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean);
+
+/* Gallery rows → equal-width tiles sharing one aspect ratio per row (so the row lines up).
+   Images whose shape is far from the row's shape are letterboxed instead of cropped. */
+const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v));
+const SIZES: Record<number, { widths: number[]; sizes: string }> = {
+  1: { widths: [480, 800, 1320], sizes: '(max-width: 900px) 100vw, 680px' },
+  2: { widths: [360, 680], sizes: '(max-width: 900px) 50vw, 340px' },
+  3: { widths: [240, 460], sizes: '(max-width: 900px) 33vw, 230px' },
+};
+let count = 0;
+const rows = await Promise.all(
+  data.gallery.map(async (row) => {
+    const ratios = row.map((g) => g.src.width / g.src.height);
+    const avg = ratios.reduce((a, b) => a + b, 0) / ratios.length;
+    const aspect = row.length === 1 ? clamp(avg, 0.8, 3) : clamp(avg, 0.62, 2.2);
+    const items = await Promise.all(
+      row.map(async (g, i) => {
+        const full = await getImage({ src: g.src, width: Math.min(2000, g.src.width), format: 'webp' });
+        const off = Math.abs(ratios[i] / aspect - 1) > 0.3;
+        return { ...g, index: count++, full: full.src, fit: g.fit ?? (off ? 'contain' : 'cover') };
+      }),
+    );
+    return { n: row.length, aspect: aspect.toFixed(4), items };
+  }),
+);
+const ogImage = data.gallery[0]?.[0]?.src ?? data.cover;
 ---
-<Base title={data.title} description={data.summary} image={data.cover}>
+<Base title={data.title} description={data.summary} image={ogImage}>
   <article class="project">
-    <header class="project__intro container-md">
-      <a href="/#work" class="back"><span aria-hidden="true">←</span> All work</a>
-      <h1 class="t-display" data-reveal>{data.title}</h1>
-      <p class="t-body-lg project__summary" data-reveal style="--i:1">{data.summary}</p>
-      {meta.length > 0 && (
-        <dl class="meta" data-reveal style="--i:2">
-          {meta.map((m) => (<div><dt>{m.label}</dt><dd>{m.value}</dd></div>))}
-        </dl>
-      )}
-    </header>
+    <div class="project__grid container">
+      <div class="project__text" data-sticky>
+        <header class="project__head">
+          {data.employer && <p class="eyebrow t-h4" data-reveal>{data.employer}</p>}
+          <h1 class="t-display project__title" data-reveal style="--i:1">{data.title}</h1>
+        </header>
 
-    <figure class="project__cover container" data-reveal style="--i:3">
-      <Image src={data.cover} alt={data.coverAlt} widths={[640, 960, 1280, 1800]} sizes="(max-width: 1180px) 100vw, 1140px" loading="eager" fetchpriority="high" />
-    </figure>
+        {roles.length > 0 && (
+          <details class="facet" open data-reveal style="--i:2">
+            <summary><span class="facet__dash" aria-hidden="true"></span>My Role</summary>
+            <ul role="list" class="chips">
+              {roles.map((r) => (
+                <li class="chip"><span class="chip__icon"><Icon name={r.data.icon} /></span>{r.data.label}</li>
+              ))}
+            </ul>
+          </details>
+        )}
 
-    {data.results.length > 0 && (
-      <section class="results section--alt" aria-label="Results">
-        <ul role="list" class="container-md results__list">
-          {data.results.map((r, i) => (
-            <li data-reveal style={`--i:${i}`}><strong>{r.value}</strong><span>{r.label}</span></li>
+        {skills.length > 0 && (
+          <details class="facet" open data-reveal style="--i:3">
+            <summary><span class="facet__dash" aria-hidden="true"></span>Skills Used</summary>
+            <ul role="list" class="chips">
+              {skills.map((s) => (
+                <li>
+                  <a class="chip chip--link" href="/#help" title={`More on ${skillLabel(s.data.title)}`}>
+                    <span class="chip__icon"><Icon name={s.data.icon} /></span>{skillLabel(s.data.title)}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </details>
+        )}
+
+        {intro.length > 0 && (
+          <div class="project__intro t-body-lg" data-reveal style="--i:4">
+            {intro.map((p) => <p>{p}</p>)}
+          </div>
+        )}
+
+        {hasWriteUp && (
+          <div class="story" data-reveal style="--i:5">
+            <Content />
+          </div>
+        )}
+      </div>
+
+      {rows.length > 0 && (
+        <section class="project__media" aria-label="Project images">
+          {rows.map((row) => (
+            <div class={`row row--${row.n}`} style={`--ar:${row.aspect}`} data-reveal>
+              {row.items.map((g) => (
+                <a href={g.full} class:list={['tile', `tile--${g.fit}`]} data-lightbox={g.index} aria-label={`View larger: ${g.alt}`}>
+                  <Image
+                    src={g.src}
+                    alt={g.alt}
+                    widths={SIZES[row.n].widths}
+                    sizes={SIZES[row.n].sizes}
+                    loading={g.index < 2 ? 'eager' : 'lazy'}
+                    fetchpriority={g.index === 0 ? 'high' : undefined}
+                    style={g.position ? `object-position:${g.position}` : undefined}
+                  />
+                </a>
+              ))}
+            </div>
           ))}
-        </ul>
-      </section>
-    )}
-
-    <div class="prose container-sm">
-      <Content />
+        </section>
+      )}
     </div>
-
-    {data.gallery.length > 0 && (
-      <section class="gallery container" aria-label="Project images">
-        {data.gallery.map((g) => (
-          <figure class:list={['gallery__item', `gallery__item--${g.layout}`]} data-reveal>
-            <Image src={g.src} alt={g.alt} widths={g.layout === 'full' ? [640, 1280, 1800] : [480, 800, 1100]} sizes={g.layout === 'full' ? '(max-width: 1180px) 100vw, 1140px' : '(max-width: 760px) 100vw, 560px'} />
-            {g.caption && <figcaption>{g.caption}</figcaption>}
-          </figure>
-        ))}
-      </section>
-    )}
-
-    {next && next.id !== entry.id && (
-      <nav class="next container-md" aria-label="Next project">
-        <a href={`/work/${next.id}/`} class="next__link">
-          <span class="next__label">Next project</span>
-          <span class="t-display next__title">{next.data.title} <span aria-hidden="true" class="next__arrow">→</span></span>
-          <span class="next__summary">{next.data.summary}</span>
-        </a>
-      </nav>
-    )}
   </article>
-  <ContactCTA />
+
+  <nav class="pager" aria-label="More projects">
+    <div class="container pager__inner">
+      <a href={`/work/${prev.id}/`} class="pager__btn" rel="prev">
+        <Icon name="arrow-long-left" class="pager__arrow" />
+        <span>See Prev</span>
+        <span class="sr-only">: {prev.data.title}</span>
+      </a>
+      <a href={`/work/${next.id}/`} class="pager__btn" rel="next">
+        <span>See Next</span>
+        <span class="sr-only">: {next.data.title}</span>
+        <Icon name="arrow-long-right" class="pager__arrow" />
+      </a>
+    </div>
+  </nav>
+
+  <dialog class="lightbox" aria-label="Image viewer">
+    <img class="lightbox__img" alt="" />
+    <p class="lightbox__count t-xs" aria-live="polite"></p>
+    <button class="lightbox__btn lightbox__close" type="button" aria-label="Close">×</button>
+    <button class="lightbox__btn lightbox__prev" type="button" aria-label="Previous image"><Icon name="arrow-long-left" /></button>
+    <button class="lightbox__btn lightbox__next" type="button" aria-label="Next image"><Icon name="arrow-long-right" /></button>
+  </dialog>
 </Base>
 
+<script>
+  /* Sticky text column: scrolls with the page until its bottom is in view, then holds
+     while the image column keeps going. Only when the two columns sit side by side. */
+  const aside = document.querySelector<HTMLElement>('[data-sticky]');
+  const media = document.querySelector<HTMLElement>('.project__media');
+  const wide = window.matchMedia('(min-width: 901px)');
+  function pin() {
+    if (!aside) return;
+    if (!wide.matches || !media || media.offsetHeight <= aside.offsetHeight) { aside.style.top = ''; aside.classList.remove('is-sticky'); return; }
+    const nav = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--nav-h')) || 76;
+    const gap = 24;
+    aside.style.top = `${Math.min(nav + gap, window.innerHeight - aside.offsetHeight - gap)}px`;
+    aside.classList.add('is-sticky');
+  }
+  if (aside) {
+    new ResizeObserver(pin).observe(aside);
+    if (media) new ResizeObserver(pin).observe(media);
+    window.addEventListener('resize', pin);
+    wide.addEventListener('change', pin);
+    pin();
+  }
+
+  /* Lightbox */
+  const dlg = document.querySelector<HTMLDialogElement>('.lightbox');
+  const links = [...document.querySelectorAll<HTMLAnchorElement>('[data-lightbox]')];
+  if (dlg && links.length && typeof dlg.showModal === 'function') {
+    const img = dlg.querySelector<HTMLImageElement>('.lightbox__img')!;
+    const counter = dlg.querySelector<HTMLElement>('.lightbox__count')!;
+    let i = 0;
+    const show = (n: number) => {
+      i = (n + links.length) % links.length;
+      const a = links[i];
+      img.src = a.href;
+      img.alt = a.querySelector('img')?.alt ?? '';
+      counter.textContent = `${i + 1} / ${links.length}`;
+    };
+    links.forEach((a, n) => a.addEventListener('click', (e) => {
+      if (e.metaKey || e.ctrlKey || e.shiftKey) return;
+      e.preventDefault(); show(n); dlg.showModal();
+    }));
+    dlg.querySelector('.lightbox__close')!.addEventListener('click', () => dlg.close());
+    dlg.querySelector('.lightbox__prev')!.addEventListener('click', () => show(i - 1));
+    dlg.querySelector('.lightbox__next')!.addEventListener('click', () => show(i + 1));
+    dlg.addEventListener('click', (e) => { if (e.target === dlg) dlg.close(); });
+    dlg.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') show(i - 1);
+      if (e.key === 'ArrowRight') show(i + 1);
+    });
+    dlg.addEventListener('close', () => links[i]?.focus());
+  }
+</script>
+
 <style>
-  .project__intro { padding-top: clamp(2.5rem, 2rem + 3vw, 5rem); display: grid; justify-items: start; gap: var(--space-5); }
-  .back {
-    font-family: var(--font-display); font-size: var(--fs-xs); color: var(--color-forest);
-    display: inline-flex; gap: 0.5em; padding: 0.5em 1em; border-radius: var(--radius-pill); background: var(--bg-alt);
+  .project { padding-block: clamp(2rem, 1.5rem + 2.5vw, 3rem) var(--section-pad); }
+  .project__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+    gap: clamp(1.5rem, 1rem + 2vw, 2.5rem);
+    align-items: start;
+  }
+  .project__text { display: grid; gap: var(--space-5); align-content: start; }
+  .project__text.is-sticky { position: sticky; }
+
+  /* Title block */
+  .project__head { display: grid; gap: var(--space-1); }
+  .eyebrow { color: var(--accent-text, var(--color-lime)); }
+  [data-theme="original"] .eyebrow { color: var(--color-lime); } /* wireframe: lime display eyebrow */
+  .project__title { overflow-wrap: anywhere; }
+
+  /* Collapsible "My Role" / "Skills Used" */
+  .facet summary {
+    display: inline-flex; align-items: center; gap: var(--space-2);
+    list-style: none; cursor: pointer; user-select: none;
+    font-weight: var(--fw-semibold); color: var(--color-forest); font-size: var(--fs-body);
+  }
+  .facet summary::-webkit-details-marker { display: none; }
+  .facet__dash { position: relative; width: 10px; height: 2px; background: var(--accent); border-radius: 2px; }
+  .facet__dash::after {
+    content: ""; position: absolute; inset: 0; background: inherit; border-radius: inherit;
+    transform: rotate(90deg); transition: transform var(--dur-base) var(--ease-out);
+  }
+  .facet[open] .facet__dash::after { transform: rotate(0deg); }
+  .facet summary:hover .facet__dash { background: var(--color-forest); }
+  .chips { display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-2); padding: var(--space-3) 0 0 var(--space-4); }
+  .chip {
+    display: inline-flex; align-items: center; gap: 0.45em;
+    padding: 0.2em 0.7em 0.2em 0.3em; border-radius: var(--radius-pill);
+    background: var(--bg-alt); color: var(--color-forest); font-size: var(--fs-small); line-height: 1.35;
+  }
+  .chip__icon {
+    display: grid; place-items: center; flex: none;
+    width: 1.15em; height: 1.15em; border-radius: 50%;
+    background: var(--accent); color: var(--color-forest);
+  }
+  .chip__icon :global(svg) { width: 72%; height: 72%; }
+  .chip--link { transition: background-color var(--dur-fast) linear, transform var(--dur-base) var(--ease-out); }
+  .chip--link:hover { background: var(--accent); transform: translateX(3px); }
+
+  /* Intro */
+  .project__intro { display: grid; gap: 0.8em; color: var(--text); }
+
+  /* Write-up card (markdown body) */
+  .story {
+    background: var(--bg-alt); border-radius: var(--radius-lg);
+    padding: clamp(1.25rem, 1rem + 1vw, 1.75rem);
+    font-size: var(--fs-small); line-height: var(--lh-body);
+  }
+  .story :global(h2) { font-size: var(--fs-h4); line-height: var(--lh-snug); margin: var(--space-5) 0 var(--space-1); }
+  .story :global(h2:first-child) { margin-top: 0; }
+  .story :global(h3) { font-family: var(--font-body); font-weight: var(--fw-semibold); letter-spacing: 0; font-size: var(--fs-small); margin: var(--space-3) 0 0; }
+  .story :global(p + p), .story :global(ul + p), .story :global(blockquote + p) { margin-top: 0.6em; }
+  .story :global(ul) { list-style: none; padding: 0; margin-top: 0.35em; display: grid; gap: 0.2em; }
+  .story :global(li) { position: relative; padding-left: 1em; }
+  .story :global(li)::before {
+    content: ""; position: absolute; left: 0.1em; top: 0.6em;
+    width: 0.32em; height: 0.32em; border-radius: 50%; background: var(--accent);
+  }
+  [data-theme="2026"] .story :global(li)::before { background: var(--color-moss); }
+  .story :global(blockquote) {
+    margin: 0.6em 0; padding-left: var(--space-3); border-left: 3px solid var(--accent);
+    font-family: var(--font-heading, var(--font-display)); color: var(--color-forest); font-size: var(--fs-body); line-height: 1.3;
+  }
+
+  /* Image column */
+  .project__media { display: grid; gap: 10px; }
+  .row { display: grid; grid-template-columns: repeat(var(--n, 1), minmax(0, 1fr)); gap: 10px; }
+  .row--2 { --n: 2; }
+  .row--3 { --n: 3; }
+  .tile {
+    display: block; aspect-ratio: var(--ar); overflow: hidden;
+    border-radius: var(--radius-md); background: #e3e3e3;
+    cursor: zoom-in;
+  }
+  [data-theme="2026"] .tile { background: var(--bg-alt); }
+  .tile img { width: 100%; height: 100%; object-fit: cover; transition: transform 900ms var(--ease-out); }
+  .tile--contain img { object-fit: contain; }
+  .tile:hover img { transform: scale(1.04); }
+  .tile:focus-visible { outline-offset: 2px; }
+
+  /* Prev / next band */
+  .pager { background: var(--color-lime); padding-block: var(--space-5); }
+  .pager__inner { display: flex; justify-content: space-between; gap: var(--space-4); }
+  .pager__btn {
+    display: inline-flex; align-items: center; gap: 0.6em;
+    min-height: 45px; padding: 0 var(--space-5);
+    border: 2px solid var(--color-forest); border-radius: var(--radius-pill);
+    font-family: var(--font-label, var(--font-display)); font-size: var(--fs-button); font-weight: var(--label-weight, 400);
+    text-transform: var(--label-case, none); letter-spacing: var(--label-tracking, 0em); color: var(--color-forest);
+    transition: transform var(--dur-base) var(--ease-out), background-color var(--dur-fast) linear, box-shadow var(--dur-base) var(--ease-out);
+  }
+  .pager__btn :global(.pager__arrow) { width: 1.6em; display: inline-flex; transition: transform var(--dur-base) var(--ease-out); }
+  .pager__btn :global(.pager__arrow svg) { width: 100%; height: auto; }
+  .pager__btn:hover, .pager__btn:focus-visible { background: var(--color-lime-soft); transform: scale(var(--hover-scale)); box-shadow: var(--shadow-lift); }
+  .pager__btn[rel="prev"]:hover :global(.pager__arrow) { transform: translateX(-3px); }
+  .pager__btn[rel="next"]:hover :global(.pager__arrow) { transform: translateX(3px); }
+
+  /* Lightbox */
+  .lightbox {
+    width: 100vw; height: 100dvh; max-width: none; max-height: none; margin: 0; padding: 0; border: 0;
+    background: rgb(12 20 12 / 0.94); color: var(--color-white);
+  }
+  .lightbox[open] { display: grid; place-items: center; }
+  .lightbox::backdrop { background: transparent; }
+  .lightbox__img { max-width: min(92vw, 1600px); max-height: 86dvh; width: auto; height: auto; object-fit: contain; border-radius: var(--radius-sm); }
+  .lightbox__count { position: absolute; bottom: var(--space-4); left: 50%; translate: -50% 0; color: var(--color-sage); }
+  .lightbox__btn {
+    position: absolute; display: grid; place-items: center;
+    width: 48px; height: 48px; border-radius: 50%;
+    background: var(--color-lime); color: var(--color-forest);
+    font-size: 28px; line-height: 1;
     transition: transform var(--dur-base) var(--ease-out), background-color var(--dur-fast) linear;
   }
-  .back:hover { background: var(--accent); transform: translateX(-4px); }
-  .project__summary { max-width: 38rem; }
-  .meta {
-    width: 100%; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: var(--space-5);
-    border-top: 2px solid var(--accent); padding-top: var(--space-5); margin-top: var(--space-3);
+  .lightbox__btn:hover { background: var(--color-lime-soft); transform: scale(var(--hover-scale)); }
+  .lightbox__btn :global(svg) { width: 26px; height: auto; }
+  .lightbox__close { top: var(--space-4); right: var(--space-4); }
+  .lightbox__prev { left: var(--space-4); top: 50%; translate: 0 -50%; }
+  .lightbox__next { right: var(--space-4); top: 50%; translate: 0 -50%; }
+
+  @media (max-width: 900px) {
+    .project__grid { grid-template-columns: 1fr; }
+    .project__text { max-width: 40rem; }
   }
-  .meta dt { font-family: var(--font-display); font-size: var(--fs-xs); color: var(--color-forest); }
-  .meta dd { font-size: var(--fs-small); margin-top: var(--space-1); }
-
-  .project__cover { margin-top: var(--space-8); border-radius: var(--radius-lg); overflow: hidden; }
-  .project__cover img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; }
-
-  .results { margin-top: var(--space-9); padding-block: var(--space-8); }
-  .results__list { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-6); text-align: center; }
-  .results__list li { display: grid; gap: var(--space-1); }
-  .results__list strong { font-family: var(--font-display); font-weight: 400; font-size: clamp(2.5rem, 2rem + 2.5vw, 3.75rem); color: var(--color-forest); line-height: 1; }
-  .results__list span { font-size: var(--fs-body); }
-
-  .prose { padding-block: var(--space-9); font-size: var(--fs-body-lg); line-height: var(--lh-relaxed); }
-  .prose :global(h2) { font-size: var(--fs-h2); margin-top: var(--space-8); margin-bottom: var(--space-3); }
-  .prose :global(h2:first-child) { margin-top: 0; }
-  .prose :global(h3) { font-size: var(--fs-h3); margin-top: var(--space-6); margin-bottom: var(--space-2); }
-  .prose :global(p + p) { margin-top: 1em; }
-  .prose :global(ul), .prose :global(ol) { padding-left: 1.2em; margin-top: 1em; }
-  .prose :global(li::marker) { color: var(--accent); }
-  .prose :global(a) { text-decoration: underline; text-decoration-color: var(--accent); text-decoration-thickness: 2px; text-underline-offset: 3px; }
-  .prose :global(img) { border-radius: var(--radius-md); margin-block: var(--space-6); }
-  .prose :global(blockquote) { border-left: 4px solid var(--accent); padding-left: var(--space-5); font-family: var(--font-display); color: var(--color-forest); font-size: var(--fs-h3); line-height: 1.25; margin-block: var(--space-6); }
-
-  .gallery { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-5); }
-  .gallery__item { border-radius: var(--radius-lg); overflow: hidden; }
-  .gallery__item--full { grid-column: 1 / -1; }
-  .gallery__item img { width: 100%; height: 100%; object-fit: cover; transition: transform 900ms var(--ease-out); }
-  .gallery__item:hover img { transform: scale(1.03); }
-  .gallery__item figcaption { padding-top: var(--space-2); font-size: var(--fs-xs); color: var(--text-muted); }
-
-  .next { padding-block: var(--section-pad); }
-  .next__link { display: grid; gap: var(--space-2); justify-items: center; text-align: center; }
-  .next__label { font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-muted); }
-  .next__arrow { display: inline-block; color: var(--accent); transition: transform var(--dur-base) var(--ease-out); }
-  .next__link:hover .next__arrow { transform: translateX(10px); }
-  .next__summary { max-width: 34rem; }
-
-  @media (max-width: 760px) {
-    .gallery { grid-template-columns: 1fr; }
-    .project__cover { width: 100%; border-radius: 0; }
+  @media (max-width: 520px) {
+    .project__media, .row { gap: 6px; }
+    .tile { border-radius: var(--radius-sm); }
+    .pager__btn { padding: 0 var(--space-4); }
+    .lightbox__prev, .lightbox__next { top: auto; bottom: var(--space-4); translate: none; }
+    .lightbox__count { bottom: calc(var(--space-4) + 14px); }
   }
 </style>

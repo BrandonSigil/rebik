@@ -140,3 +140,16 @@ Motion should feel **quick, confident, never bouncy for its own sake.**
 ## 7. Voice
 
 Clear, warm, confident. Short sentences. Lead with outcomes, and use numbers when you have them (“Reduced design time by ~30%”).
+
+---
+
+## 8. Project page (`/work/[slug]`)
+
+From Peter's project wireframe.
+
+- **Layout:** 2 : 3 columns in `.container` (text left, images right), stacked below 900px. The text column is sticky: it scrolls until its bottom is in view, then holds while the images continue.
+- **Title block:** employer eyebrow (`t-h4`, lime), then the `t-display` title.
+- **My Role / Skills Used:** native `<details open>` toggles. The lime dash turns into a plus when collapsed. Chips are mint pills with a lime icon dot. Skill chips use the homepage skill icons and link back to `/#help`, labelled in lowercase with `&` written as `+`.
+- **Write-up card:** mint panel, `--radius-lg`. Headings are `--fs-h4`, body is `--fs-small`, and list bullets are lime dots.
+- **Images:** rows of 1, 2 or 3 tiles with a 10px gap and `--radius-md`. Each row's tiles share one aspect ratio, based on the average of their images, so the row lines up. An image whose shape is far off the row's shape is letterboxed (`contain`) instead of cropped. Every tile opens the lightbox (arrow keys, Esc).
+- **Prev / next band:** lime band with forest outline pills (“See Prev”, “See Next”) and long arrows. Hover: `#ade04b` fill, ×1.1, lift shadow.
