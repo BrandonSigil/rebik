@@ -1,21 +1,25 @@
 ---
 import Base from '../layouts/Base.astro';
 import Hero from '../components/Hero.astro';
+import HeroBold from '../components/HeroBold.astro';
+import Intro from '../components/Intro.astro';
 import Marquee from '../components/Marquee.astro';
 import Skills from '../components/Skills.astro';
 import SkillsReel from '../components/SkillsReel.astro';
 import { site } from '../data/site';
 import WorkCarousel from '../components/WorkCarousel.astro';
+import WorkDrag from '../components/WorkDrag.astro';
 import Reviews from '../components/Reviews.astro';
+import ReviewsSlider from '../components/ReviewsSlider.astro';
 import About from '../components/About.astro';
+import AboutSplit from '../components/AboutSplit.astro';
 import ContactCTA from '../components/ContactCTA.astro';
 ---
 <Base>
-  <Hero />
-  <Marquee />
-  {site.theme === '2026' ? <SkillsReel /> : <Skills />}
-  <WorkCarousel />
-  <Reviews />
-  <About />
+  {site.theme === '2026' ? <><HeroBold /><Intro /></> : <Hero />}
+  {site.theme !== '2026' && <Marquee />}
+  {site.theme === '2026' ? <><WorkDrag /><SkillsReel /></> : <><Skills /><WorkCarousel /></>}
+  {site.theme === '2026' ? <ReviewsSlider /> : <Reviews />}
+  {site.theme === '2026' ? <AboutSplit /> : <About />}
   <ContactCTA />
 </Base>

@@ -9,7 +9,9 @@ intro: |
   As Senior Designer, I developed and launched a multi-channel campaign to clarify Pierce Transit’s role and reposition it as a vital contributor to community well-being.
 cover: ../../assets/work/perception-campaign.png
 coverAlt: "Billboard reading “Because Opportunity Matters” with a graduate celebrating"
-order: 4
+feature: ../../assets/work/perception-campaign/01-public-perception-billboard-mockup.webp
+featurePosition: "30% 50%"
+order: 1
 featured: true
 roles: [graphic-designer, art-director]
 skills: [creative-direction, messaging-story, brand-strategy, digital-experiences]
@@ -18,12 +20,12 @@ results:
   - { value: "17,000+", label: "landing page visits" }
 # Images: each "-" is one row of 1, 2 or 3 images (same height across the row).
 gallery:
-  - - { src: ../../assets/work/perception-campaign/01-public-perception-billboard-mockup.webp, alt: "Public Perception - Billboard mockup" }
-  - - { src: ../../assets/work/perception-campaign/02-perception-1.webp, alt: "Public Perception Campaign, image 2" }
-  - - { src: ../../assets/work/perception-campaign/03-perception-2.webp, alt: "Public Perception Campaign, image 3" }
-  - - { src: ../../assets/work/perception-campaign/04-26-city-billboard-mockups.webp, alt: "26-City-Billboard-Mockups" }
-    - { src: ../../assets/work/perception-campaign/05-01-urban-bus-stop-poster-mockup.webp, alt: "01. Urban Bus Stop Poster Mockup" }
-    - { src: ../../assets/work/perception-campaign/06-rack-card-mockup.webp, alt: "Rack Card mockup" }
+  - - { src: ../../assets/work/perception-campaign/01-public-perception-billboard-mockup.webp, alt: "Roadside billboard for the Pierce Transit perception campaign: a laughing graduate in cap and gown beside the line 'Because Opportunity Matters.'" }
+  - - { src: ../../assets/work/perception-campaign/02-perception-1.webp, alt: "Two bus shelter posters, by day and night, reading 'Because Local Business Matters.' and 'Because Getting Out Matters.' with lifestyle photography" }
+  - - { src: ../../assets/work/perception-campaign/03-perception-2.webp, alt: "Pierce Transit bus with a side advertisement reading 'Because Family Time Matters' alongside a photo of a smiling family" }
+  - - { src: ../../assets/work/perception-campaign/04-26-city-billboard-mockups.webp, alt: "Daytime bus shelter poster showing a young man working at a laptop under the headline 'Because Local Business Matters.'" }
+    - { src: ../../assets/work/perception-campaign/05-01-urban-bus-stop-poster-mockup.webp, alt: "Illuminated night-time bus shelter poster of two friends walking together, headed 'Helping Friends Meet Up' and 'Because Getting Out Matters.'" }
+    - { src: ../../assets/work/perception-campaign/06-rack-card-mockup.webp, alt: "Hand holding a rack card headed 'Because Pierce County Matters.' with a collage of a family, graduate, cyclist and young professional" }
 ---
 
 ## The Challenge

@@ -1,47 +1,48 @@
-# "Don't just take my word for it" cards. Order = grid order.
-# Replace "Should have soon." quotes as new reviews come in.
+# Reviews. `order` = slide order (2026 theme) / grid order (original theme).
+# Keep clients spread out so the same organisation doesn't appear twice in a row.
+# Quotes that still read "Should have soon." are hidden from the 2026 slider until filled in.
 - id: pt-chief-planning
   order: 1
   quote: Peter's work is regularly the best part of my events or presentations. His work never disappoints.
   org: Pierce Transit
   role: Chief Planning Officer
-- id: beautiful-day
+- id: smith-kandal
   order: 2
-  quote: Should have soon.
+  quote: Peter really thinks about the client and what their needs are. I consider him a critical part of what we do.
   org: Freelance
-  role: Beautiful Day Cleaning Co.
-- id: pt-planning-manager
+  role: Smith-Kandal Insurance + Real Estate
+- id: pt-marketing-manager
   order: 3
-  quote: Peter always has great communication. He listens to our needs and promptly delivers.
+  quote: Peter carefully checks the details, ensuring the highest level of quality for the Pierce Transit brand!
   org: Pierce Transit
-  role: Planning Manager
+  role: Marketing Manager
 - id: windsor
   order: 4
   quote: Should have soon.
   org: Freelance
   role: Windsor Christian Church + Academy
-- id: smith-kandal
+- id: pt-community-engagement
   order: 5
-  quote: Peter really thinks about the client and what their needs are. I consider him a critical part of what we do.
-  org: Freelance
-  role: Smith-Kandal Insurance + Real Estate
-- id: pt-strategic-initiatives
+  quote: I’m so thankful for Peter’s leadership; for his vision and the thoughtfulness he uses to execute creative direction.
+  org: Pierce Transit
+  role: Strategic Community Engagement Admin.
+- id: beautiful-day
   order: 6
+  quote: Should have soon.
+  org: Freelance
+  role: Beautiful Day Cleaning Co.
+- id: pt-planning-manager
+  order: 7
+  quote: Peter always has great communication. He listens to our needs and promptly delivers.
+  org: Pierce Transit
+  role: Planning Manager
+- id: pt-strategic-initiatives
+  order: 8
   quote: Peter consistently produces a fantastic end product. I’m so appreciative of his help!
   org: Pierce Transit
   role: Strategic Initiatives Administrator
 - id: pt-marketing-intern
-  order: 7
+  order: 9
   quote: Should have soon.
   org: Pierce Transit
   role: Marketing Intern
-- id: pt-marketing-manager
-  order: 8
-  quote: Peter carefully checks the details, ensuring the highest level of quality for the Pierce Transit brand!
-  org: Pierce Transit
-  role: Marketing Manager
-- id: pt-community-engagement
-  order: 9
-  quote: I’m so thankful for Peter’s leadership; for his vision and the thoughtfulness he uses to execute creative direction.
-  org: Pierce Transit
-  role: Strategic Community Engagement Admin.

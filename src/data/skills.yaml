@@ -3,42 +3,42 @@
 # image: file name in src/assets/skills — used by the reel (swap for any photo, ~4:5 portrait)
 # tags: pills shown on the reel card
 - id: brand-strategy
-  image: brand-strategy.jpg
+  image: brand-strategy-bg.jpg
   tags: [Visual Identity, Typography, Guidelines, Scalable Systems]
   order: 1
   title: "Brand\nStrategy"
   icon: icon-brand-strategy
   description: I build brands that are clear, consistent and built to last. From visual identity and typography to guidelines, templates and scalable systems, I create frameworks that help organisations communicate with confidence.
 - id: creative-direction
-  image: creative-direction.jpg
+  image: creative-direction-bg.jpg
   tags: [Campaigns, Art Direction, Concepting, Multi-channel]
   order: 2
   title: "Creative\nDirection"
   icon: icon-creative-direction
   description: I develop campaigns that connect strategy, audience insight and creative execution. From concept and messaging through art direction and multi-channel delivery, I create work designed to engage audiences and deliver measurable results.
 - id: messaging-story
-  image: messaging-story.jpg
+  image: messaging-story-bg.jpg
   tags: [Narrative, Positioning, Copy Strategy]
   order: 3
   title: "Messaging\n& Story"
   icon: icon-messaging
   description: I make complex ideas easier to understand and act on. I help organisations find the right message, shape compelling narratives and translate strategy into clear communications that resonate with audiences.
 - id: systems-processes
-  image: systems-processes.jpg
+  image: systems-processes-bg.jpg
   tags: [Asset Libraries, Templates, Brand Guidance, Workflows]
   order: 4
   title: "Systems &\nProcesses"
   icon: icon-systems
   description: I create the systems behind good design. From asset libraries and reusable templates to brand guidance and streamlined workflows, I help teams work more consistently, efficiently and independently.
 - id: digital-experiences
-  image: digital-experiences.jpg
+  image: digital-experiences-bg.jpg
   tags: [UX, Wireframes, Web Design, Research]
   order: 5
   title: "Digital\nExperiences"
   icon: icon-digital
   description: I design digital experiences around user needs. Through content structure, user journeys, wireframes, web design and research, I turn complex information into straightforward, accessible experiences.
 - id: alignment-collaboration
-  image: alignment-collaboration.jpg
+  image: alignment-collaboration-bg.jpg
   tags: [Leadership, Mentoring, Stakeholders, Cross-functional]
   order: 6
   title: "Alignment &\nCollaboration"

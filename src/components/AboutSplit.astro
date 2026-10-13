@@ -1,0 +1,72 @@
+---
+/**
+ * About (tinker / 2026 theme): bio on the left, UK sponsorship card on the right.
+ * The Intro section above already says hello and shows the portrait, so this one skips both.
+ * About.astro (centred, with portrait) is kept for the original theme.
+ */
+import Icon from './Icon.astro';
+import { site } from '../data/site';
+import CopyEmail from './CopyEmail.astro';
+---
+<section class="section asplit" id="about" aria-labelledby="about-title">
+  <div class="container asplit__grid">
+    <div class="asplit__bio">
+      <p class="asplit__eyebrow" data-reveal>About</p>
+      <h2 id="about-title" class="t-display" data-reveal style="--i:1">More <span class="hl">about</span> me.</h2>
+      <div class="asplit__body" data-reveal style="--i:2">
+        <p>My work sits where strategy meets execution: helping organisations define what they’re saying, how they say it, and how it comes to life through brand systems, campaigns and communications.</p>
+        <p>I’ve led work that delivered measurable results across engagement, recruitment and audience reach. I’m drawn to projects with real-world impact, where clear communication can shift perception, support growth, and make something more useful or accessible.</p>
+      </div>
+    </div>
+
+    <aside class="visa" data-reveal style="--i:3" aria-labelledby="visa-title">
+      <div class="visa__flags">
+        <Icon name="flag-uk" label="United Kingdom flag" />
+        <Icon name="flag-scotland" label="Scotland flag" />
+      </div>
+      <h3 id="visa-title" class="visa__title">UK Skilled Worker Sponsorship</h3>
+      <p>I’m relocating to Glasgow with my wife (a UK citizen) to be closer to family as we welcome our first child in March 2027.</p>
+      <p>I’m looking for UK employers able to provide Skilled Worker visa sponsorship.</p>
+      <div class="visa__actions">
+        <a href={site.mailto} class="btn visa__btn">Let’s Talk</a>
+        <CopyEmail />
+      </div>
+    </aside>
+  </div>
+</section>
+
+<style>
+  .asplit__grid {
+    display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    gap: clamp(2rem, 1rem + 4vw, 5rem); align-items: start;
+  }
+  .asplit__eyebrow {
+    font-family: var(--font-label); text-transform: var(--label-case); letter-spacing: var(--label-tracking);
+    font-size: var(--fs-micro); color: var(--text-muted); margin-bottom: var(--space-4);
+  }
+  .asplit__body { margin-top: var(--space-6); display: grid; gap: 1.1em; font-size: var(--fs-body-lg); line-height: var(--lh-relaxed); max-width: 36rem; }
+
+  .visa {
+    background: var(--bg-alt); border-radius: var(--radius-lg);
+    padding: clamp(1.5rem, 1rem + 1.5vw, 2.25rem);
+    display: grid; justify-items: start; gap: var(--space-3);
+    transition: transform var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out);
+  }
+  .visa:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+  .visa__flags { display: flex; gap: var(--space-3); margin-bottom: var(--space-2); }
+  .visa__flags :global(.icon) { width: 52px; height: 44px; transform-origin: 0 50%; }
+  .visa:hover .visa__flags :global(.icon) { animation: wave 1.2s var(--ease-in-out); }
+  .visa:hover .visa__flags :global(.icon:last-child) { animation-delay: 120ms; }
+  @keyframes wave { 25% { transform: skewY(-4deg) rotate(-3deg); } 60% { transform: skewY(3deg) rotate(2deg); } }
+  .visa__title { font-size: var(--fs-h3); line-height: var(--lh-snug); }
+  .visa p { font-size: var(--fs-body); line-height: var(--lh-relaxed); }
+  .visa__actions { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: var(--space-4); }
+
+  @media (max-width: 900px) {
+    .asplit__grid { grid-template-columns: 1fr; }
+    .visa { max-width: 34rem; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .visa:hover .visa__flags :global(.icon) { animation: none; }
+  }
+</style>

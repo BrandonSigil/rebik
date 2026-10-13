@@ -1,0 +1,254 @@
+---
+/**
+ * Hero (tinker / 2026 theme) — inspired by Salient's "Signal" demo.
+ * Full-viewport volt panel with an oversized statement. Scrolling draws a circle around "clear";
+ * once the Intro section scrolls up past ~60% of the viewport the page (and header) fade back
+ * to the normal colours. The colour switch lives on <html class="hero-mode"> so the header can follow it.
+ * Moving the mouse over the hero leaves a trail of work images (Signal's "content trail"),
+ * using the photos from the original hero collage.
+ * Hero.astro is kept for the original theme.
+ */
+import { getImage } from 'astro:assets';
+import phone from '../assets/hero/website-phone.jpg';
+import billboard from '../assets/hero/billboard.png';
+import beautifulDay from '../assets/hero/beautiful-day.jpg';
+import guidelines from '../assets/hero/brand-guidelines.png';
+import report from '../assets/hero/annual-report.jpg';
+import market from '../assets/hero/farmers-market.jpg';
+
+const trail = await Promise.all(
+  [billboard, phone, guidelines, market, beautifulDay, report].map(async (src) => {
+    const img = await getImage({ src, width: Math.min(880, src.width), format: 'webp' });
+    return { src: img.src, ratio: (src.width / src.height).toFixed(4) };
+  }),
+);
+---
+<script is:inline>document.documentElement.classList.add('hero-mode');</script>
+<section class="bhero" id="intro" aria-labelledby="hero-title" data-bhero>
+  <div class="container bhero__inner">
+    <h1 id="hero-title" class="bhero__title">
+      <span class="bhero__line" style="--l:0"><span>I turn complex</span></span>
+      <span class="bhero__line bhero__line--indent" style="--l:1"><span>ideas into <span class="bhero__nowrap"><span class="bhero__clear">clear<svg class="bhero__circle" viewBox="556 187 126 60" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d="M648.50 239.08C648.50 239.08 557.50 244.53 557.50 215.47C557.50 189.13 615.50 190.04 615.50 190.04C615.50 190.04 679.50 190.04 678.50 214.56C678.50 214.56 679.50 241.80 597.50 237.26" fill="none" stroke="currentColor" stroke-linejoin="round" /></svg></span>,</span></span></span>
+      <span class="bhero__line" style="--l:2"><span><span class="bhero__under">visual solutions<svg class="bhero__swoosh" viewBox="0 0 400 34" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d="M6 21C92 10 214 6 393 12C306 15 190 21 74 28" fill="none" stroke="currentColor" stroke-linejoin="round" /></svg></span>.</span></span>
+    </h1>
+
+    <div class="bhero__meta">
+      <p class="bhero__meta-start">Graphic Designer + Art Director</p>
+      <a href="#about-intro" class="bhero__scroll" aria-label="Scroll to the next section"><span aria-hidden="true">↓</span></a>
+      <p class="bhero__meta-end"><span>Brand systems</span> <span><span class="bhero__sep" aria-hidden="true">|</span>Campaigns</span> <span><span class="bhero__sep" aria-hidden="true">|</span>Digital experiences</span></p>
+    </div>
+  </div>
+  <div class="bhero__trail" aria-hidden="true" data-trail={JSON.stringify(trail)}></div>
+</section>
+
+<style>
+  .bhero {
+    --ease-salient: cubic-bezier(0.2, 0.75, 0.5, 1);
+    position: relative; min-height: calc(100svh - var(--nav-h)); display: grid;
+    color: var(--color-forest);
+  }
+
+  /* ---------- Image trail ---------- */
+  .bhero__trail { position: absolute; inset: 0; z-index: 3; pointer-events: none; overflow: clip; }
+  .bhero__trail :global(img) {
+    position: absolute; left: 0; top: 0; height: auto; max-width: none;
+    border-radius: var(--radius-sm); box-shadow: 0 18px 40px -18px rgb(12 31 20 / 0.45);
+    transform-origin: 50% 50%; will-change: scale, opacity; pointer-events: none; user-select: none;
+  }
+  .bhero__inner { display: grid; grid-template-rows: 1fr auto; padding-block: clamp(2rem, 6vh, 4.5rem) var(--space-6); min-height: 100%; }
+
+  /* ---------- Statement ---------- */
+  .bhero__title {
+    align-self: center;
+    font-size: clamp(3rem, 1rem + 8.4vw, 9.75rem); /* capped so the longest line fits the 1140px container */
+    line-height: 0.9; letter-spacing: -0.045em; color: inherit;
+    text-wrap: initial;
+  }
+  .bhero__line { display: block; overflow: hidden; padding-block: 0.04em 0.1em; margin-block: -0.04em -0.1em; }
+  .bhero__line--indent { padding-left: 0.9em; }
+  .bhero__line > span { display: inline-block; isolation: isolate; }
+  .js .bhero__line > span { transform: translateY(105%); animation: bh-rise 1.1s var(--ease-salient) forwards; animation-delay: calc(150ms + var(--l) * 110ms); }
+  @keyframes bh-rise { to { transform: none; } }
+
+  .bhero__clear {
+    position: relative; display: inline-block;
+    font-family: var(--font-accent, inherit); font-style: var(--hl-style, normal); font-weight: 400; letter-spacing: -0.01em;
+    padding-inline: 0.06em;
+  }
+  .bhero__clear { margin-left: 0.03em; }
+  .bhero__nowrap { white-space: nowrap; } /* keep the comma with "clear" */
+  /* White circle sits behind the letters (z-index -1 within the line) */
+  .bhero__circle {
+    position: absolute; left: 1%; top: -2%; width: 120%; height: 112%; z-index: -1;
+    color: #fff; pointer-events: none; overflow: visible;
+  }
+  /* Hand-drawn white swoosh under "visual solutions" (drawn after the circle, also on scroll) */
+  .bhero__under { position: relative; display: inline-block; }
+  .bhero__swoosh {
+    position: absolute; left: -1%; top: 86%; width: 102%; height: 0.3em; z-index: -1;
+    color: #fff; pointer-events: none; overflow: visible;
+  }
+  .bhero__circle path, .bhero__swoosh path { stroke-width: 3.6; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+  @media (min-width: 761px) { .bhero__circle path, .bhero__swoosh path { stroke-width: 8; } }
+  /* Lines are masked for the rise-in, then unmasked so the circle can overflow them */
+  .bhero.is-ready .bhero__line { overflow: visible; }
+  .bhero.is-ready .bhero__line > span { transform: none; animation: none; }
+
+  /* ---------- Bottom meta row ---------- */
+  .bhero__meta {
+    position: relative; display: flex; justify-content: space-between; align-items: baseline; gap: var(--space-6);
+    border-top: 1.5px solid currentColor; padding-top: var(--space-4);
+    font-family: var(--font-label); font-size: var(--fs-xs); text-transform: var(--label-case); letter-spacing: var(--label-tracking); line-height: 1.45;
+  }
+  /* Bobbing arrow is pinned to the true centre, whatever the side labels' widths */
+  .bhero__scroll { position: absolute; left: 50%; translate: -50% 0; display: inline-flex; font-family: var(--font-body); font-size: 1.25rem; line-height: 1; }
+  .bhero__meta-start { max-width: 40%; }
+  .bhero__meta-end { max-width: 46%; text-align: right; }
+  .bhero__meta-end > span { white-space: nowrap; } /* wrap between items, never mid-item */
+  .bhero__sep { opacity: 0.45; margin-right: 0.6em; }
+  @media (min-width: 1000px) { .bhero__meta-start, .bhero__meta-end { white-space: nowrap; max-width: none; } }
+  .bhero__scroll span { display: inline-block; animation: bh-bob 1.8s var(--ease-in-out) infinite; }
+  @keyframes bh-bob { 50% { transform: translateY(4px); } }
+  .js .bhero__meta { opacity: 0; animation: bh-fade 0.9s linear 700ms forwards; }
+  @keyframes bh-fade { to { opacity: 1; } }
+
+  /* Phones: recruiters open portfolio links from LinkedIn on mobile, so get to the work sooner */
+  @media (max-width: 760px) { .bhero { min-height: min(calc(100svh - var(--nav-h)), 620px); } }
+  @media (max-width: 760px) {
+    .bhero__line--indent { padding-left: 0; }
+    .bhero__meta-start { max-width: none; }
+    .bhero__scroll { position: static; translate: none; }
+    .bhero__meta-end { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .js .bhero__line > span, .js .bhero__meta { transform: none; opacity: 1; animation: none; }
+    .bhero__scroll span { animation: none; }
+  }
+</style>
+
+<script>
+  const hero = document.querySelector<HTMLElement>('[data-bhero]');
+  const after = document.querySelector<HTMLElement>('[data-after-hero]');
+  const html = document.documentElement;
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (hero) {
+    // Scroll-drawn strokes, in order: the circle around "clear" first, then the swoosh under "visual solutions".
+    // [from, to] = the slice of the hero's height (as scrollY) over which each one draws.
+    const strokes = [
+      { path: hero.querySelector<SVGPathElement>('.bhero__circle path'), from: 0, to: 0.16 },
+      { path: hero.querySelector<SVGPathElement>('.bhero__swoosh path'), from: 0.18, to: 0.36 },
+    ].filter((s) => s.path).map((s) => ({ ...s, path: s.path!, len: 0, target: 0, shown: 0 }));
+
+    // With non-scaling-stroke, dashes are measured in screen pixels, so scale each path length by its SVG's stretch.
+    const measure = () => strokes.forEach((s) => {
+      const svg = s.path.ownerSVGElement!;
+      const b = svg.getBoundingClientRect(), vb = svg.viewBox.baseVal;
+      s.len = s.path.getTotalLength() * Math.max(b.width / vb.width, b.height / vb.height) * 1.05;
+      s.path.style.strokeDasharray = `${s.len}`;
+    });
+    const draw = () => strokes.forEach((s) => { s.path.style.strokeDashoffset = String(s.len * (1 - s.shown)); });
+    measure();
+    if (reduce) strokes.forEach((s) => { s.shown = s.target = 1; });
+    draw();
+
+    // Unmask the lines once the rise-in has finished (or straight away with reduced motion / on scroll).
+    const ready = () => hero.classList.add('is-ready');
+    const lines = hero.querySelectorAll('.bhero__line > span');
+    lines[lines.length - 1]?.addEventListener('animationend', ready, { once: true });
+    if (reduce) ready();
+    setTimeout(ready, 1800);
+    addEventListener('scroll', ready, { once: true, passive: true });
+    document.fonts?.ready.then(() => { measure(); draw(); onScroll(); });
+
+    // Progress follows scroll, but eased: scroll sets a target and each stroke glides toward it every frame
+    // (exponential smoothing, ~0.14s), so wheel "notches" become one smooth draw instead of steps.
+    let glide = 0, last = 0;
+    const step = (now: number) => {
+      const dt = Math.min(0.05, (now - (last || now)) / 1000);
+      last = now;
+      let moving = false;
+      strokes.forEach((s) => {
+        s.shown += (s.target - s.shown) * (1 - Math.exp(-dt / 0.14));
+        if (Math.abs(s.target - s.shown) < 0.001) s.shown = s.target;
+        else moving = true;
+      });
+      draw();
+      glide = moving ? requestAnimationFrame(step) : 0;
+      if (!glide) last = 0;
+    };
+
+    let ticking = false;
+    const update = () => {
+      ticking = false;
+      if (!reduce) {
+        const h = hero.offsetHeight;
+        strokes.forEach((s) => { s.target = Math.min(1, Math.max(0, (scrollY - h * s.from) / (h * (s.to - s.from)))); });
+        if (!glide) glide = requestAnimationFrame(step);
+      }
+      // Leave hero colours once the next section is well into view.
+      const anchor = after ? after.getBoundingClientRect().top : hero.getBoundingClientRect().bottom;
+      html.classList.toggle('hero-mode', anchor > innerHeight * 0.6);
+    };
+    const onScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } };
+    addEventListener('scroll', onScroll, { passive: true });
+    addEventListener('resize', () => { measure(); draw(); onScroll(); }, { passive: true });
+    update();
+  }
+
+  /* ---------- Image trail (mouse / pen only) ----------
+     Timing matches Salient's "scale" content trail: each image grows in over 0.9s on a long
+     ease-out tail (so it feels like it settles and holds), THEN shrinks away over 0.7s and fades
+     in the last 0.3s. Total life ≈ 1.6s, so several images overlap smoothly. */
+  const trailEl = hero?.querySelector<HTMLElement>('[data-trail]');
+  if (hero && trailEl && !reduce && matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    const items: { src: string; ratio: string }[] = JSON.parse(trailEl.dataset.trail || '[]');
+    items.forEach((it) => { const i = new Image(); i.src = it.src; }); // preload
+    const GAP = 110;                                   // px of mouse travel between images
+    const IN = 900;                                    // grow
+    const OUT = 700;                                   // shrink
+    const SETTLE = 'cubic-bezier(0, 0.2, 0.2, 1)';     // fast start, very long settle
+    const EASE_OUT_CUBIC = 'cubic-bezier(0.33, 1, 0.68, 1)';
+    const EASE_OUT_QUART = 'cubic-bezier(0.25, 1, 0.5, 1)';
+    let n = 0, z = 1, mx = 0, my = 0, lastX: number | null = null, lastY = 0, raf = 0;
+
+    const spawn = (x: number, y: number) => {
+      const it = items[n++ % items.length];
+      const w = Math.min(220, Math.max(150, innerWidth * 0.13));
+      const img = document.createElement('img');
+      img.src = it.src; img.alt = ''; img.decoding = 'async';
+      Object.assign(img.style, {
+        width: `${w}px`,
+        zIndex: String(z++),
+        translate: `calc(${x}px - 50%) calc(${y}px - 50%)`,
+        rotate: `${Math.random() * 40 - 20}deg`,
+        scale: '0', opacity: '0',
+      });
+      trailEl.append(img);
+      // Safety valve only — normally images remove themselves
+      if (trailEl.childElementCount > 40) trailEl.firstElementChild?.remove();
+
+      const grow = img.animate([{ scale: 0 }, { scale: 1 }], { duration: IN, easing: SETTLE, fill: 'forwards' });
+      img.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 300, easing: EASE_OUT_CUBIC, fill: 'forwards' });
+      grow.finished.then(() => {
+        const shrink = img.animate([{ scale: 1 }, { scale: 0 }], { duration: OUT, easing: EASE_OUT_QUART, fill: 'forwards' });
+        img.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 300, delay: OUT - 300, easing: EASE_OUT_CUBIC, fill: 'forwards' });
+        return shrink.finished;
+      }).then(() => img.remove()).catch(() => img.remove());
+    };
+
+    // Check distance once per frame (like Signal) rather than on every pointer event
+    const tick = () => {
+      raf = 0;
+      if (lastX === null) { lastX = mx; lastY = my; return; }
+      if (Math.hypot(mx - lastX, my - lastY) > GAP) { spawn(mx, my); lastX = mx; lastY = my; }
+    };
+    hero.addEventListener('pointermove', (e) => {
+      if (e.pointerType === 'touch' || !items.length) return;
+      const box = hero.getBoundingClientRect();
+      mx = e.clientX - box.left; my = e.clientY - box.top;
+      if (!raf) raf = requestAnimationFrame(tick);
+    }, { passive: true });
+    hero.addEventListener('pointerleave', () => { lastX = null; });
+  }
+</script>

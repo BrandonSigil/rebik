@@ -33,6 +33,10 @@ const work = defineCollection({
       /** Homepage carousel / work index image. */
       cover: image(),
       coverAlt: z.string(),
+      /** Large 4:5 image for the drag carousel on the homepage (tinker theme). Falls back to the first gallery image. */
+      feature: image().optional(),
+      /** Where to crop the feature image, as CSS object-position, e.g. "40% 50%". */
+      featurePosition: z.string().optional(),
       /** Lower numbers appear first (carousel, work index, prev/next order). */
       order: z.number().default(100),
       /** Show in the homepage carousel. */

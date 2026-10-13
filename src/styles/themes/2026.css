@@ -76,3 +76,7 @@
 
 /* Hero: give the scribbled word breathing room under tight tracking */
 [data-theme="2026"] .scribble { margin-left: 0.18em; }
+
+/* Bold hero colour mode (HeroBold.astro toggles html.hero-mode on scroll) */
+[data-theme="2026"] body { transition: background-color 0.8s linear; }
+html.hero-mode body { background-color: var(--color-lime); }

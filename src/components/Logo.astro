@@ -1,17 +1,25 @@
 ---
-import { Image } from 'astro:assets';
-import mark from '../assets/brand/logo-mark.png';
+import { getImage } from 'astro:assets';
+import markPng from '../assets/brand/logo-mark-2x.png';
+// WebP keeps the alpha the mask needs at a fraction of the PNG's 23 KB. Swap for Peter's SVG when it arrives.
+const mark = await getImage({ src: markPng, format: 'webp' });
 interface Props { size?: 'md' | 'sm'; href?: string }
 const { size = 'md', href = '/' } = Astro.props;
 ---
 <a href={href} class:list={['logo', `logo--${size}`]} aria-label="Peter Rebik — home">
-  <Image src={mark} alt="" width={96} height={96} loading="eager" class="logo__mark" />
+  <span class="logo__mark" aria-hidden="true" style={`--mark:url(${mark.src})`}></span>
   <span class="logo__word">Peter Rebik</span>
 </a>
 <style>
   .logo { display: inline-flex; align-items: center; gap: 0.55em; color: var(--accent); font-family: var(--font-heading); font-weight: var(--heading-weight); letter-spacing: var(--heading-tracking); line-height: 1; }
   .logo--md { font-size: clamp(1.375rem, 1rem + 1.2vw, 1.875rem); }
   .logo--sm { font-size: 1.25rem; }
-  .logo__mark { width: 1.6em; height: 1.6em; transition: transform var(--dur-base) var(--ease-spring); }
+  /* The mark is a one-colour PNG used as a mask, so it follows `color` (lets the header recolour it). */
+  .logo__mark {
+    flex: none; width: 1.6em; height: 1.6em; background: currentColor;
+    -webkit-mask: var(--mark) center / contain no-repeat; mask: var(--mark) center / contain no-repeat;
+    transition: transform var(--dur-base) var(--ease-spring);
+  }
+  .logo { transition: color 0.8s linear; }
   .logo:hover .logo__mark { transform: rotate(-12deg) scale(1.06); }
 </style>

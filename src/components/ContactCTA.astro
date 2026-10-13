@@ -1,11 +1,19 @@
 ---
 import { site } from '../data/site';
+import CopyEmail from './CopyEmail.astro';
+const bold = site.theme === '2026';
 ---
 <section class="section section--inverse cta" id="contact" aria-labelledby="cta-title">
   <div class="container-sm cta__inner" data-reveal>
     <h2 id="cta-title" class="t-display">Interested?<br /><span class="hl">Let’s talk!</span></h2>
-    <p>Looking for someone who can help bring clarity to complex ideas and turn strategy into thoughtful creative work? I’d love to hear about your team, your challenges, and what you’re looking to build.</p>
-    <a href={site.mailto} class="btn">Let’s Talk</a>
+    {bold
+      ? <p>Hiring a senior designer or art director in the UK? I’d love to hear about your team, the problems you’re solving, and what you’re looking to build.</p>
+      : <p>Looking for someone who can help bring clarity to complex ideas and turn strategy into thoughtful creative work? I’d love to hear about your team, your challenges, and what you’re looking to build.</p>}
+    <div class="cta__actions">
+      <a href={site.mailto} class="btn">Let’s Talk</a>
+      {bold && <CopyEmail tone="dark" />}
+    </div>
+    {bold && <p class="cta__email"><a href={site.mailto}>{site.email}</a></p>}
   </div>
 </section>
 <style>
@@ -13,6 +21,11 @@ import { site } from '../data/site';
   .cta__inner { display: grid; justify-items: center; text-align: center; gap: var(--space-6); max-width: 500px; }
   .cta h2 { color: var(--color-white); }
   .cta p { font-size: var(--fs-body-lg); text-align: justify; text-align-last: center; hyphens: auto; }
-  .cta .btn { margin-top: var(--space-5); }
+  .cta__actions { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--space-4); margin-top: var(--space-5); }
+  .cta .cta__email { font-size: var(--fs-small); margin-top: calc(-1 * var(--space-2)); }
+  .cta__email a { color: var(--color-sage); text-decoration: underline; text-underline-offset: 3px; }
+  .cta__email a:hover, .cta__email a:focus-visible { color: var(--color-white); }
+  /* 2026: justified copy opens wide rivers at this measure, so centre it */
+  :global([data-theme="2026"]) .cta p { text-align: center; hyphens: manual; }
   @media (max-width: 760px) { .cta p { text-align: center; } }
 </style>

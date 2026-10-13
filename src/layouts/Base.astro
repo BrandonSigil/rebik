@@ -12,7 +12,11 @@ import '../styles/themes/2026.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { site } from '../data/site';
-import ogImage from '../assets/hero/billboard.png';
+import ogBillboard from '../assets/hero/billboard.png';
+// 1200×630 share card (2026 theme). The billboard is only 532px wide, too small for large link previews.
+import ogCard from '../assets/brand/og-card.jpg';
+import portrait from '../assets/brand/peter-about.jpg';
+const ogImage = site.theme === '2026' ? ogCard : ogBillboard;
 import { getImage } from 'astro:assets';
 import delaWoff2 from '@fontsource/dela-gothic-one/files/dela-gothic-one-latin-400-normal.woff2?url';
 import epilogueWoff2 from '@fontsource/epilogue/files/epilogue-latin-400-normal.woff2?url';
@@ -20,10 +24,25 @@ import bricolageWoff2 from '@fontsource-variable/bricolage-grotesque/files/brico
 import geistWoff2 from '@fontsource-variable/geist/files/geist-latin-wght-normal.woff2?url';
 const preloads = site.theme === '2026' ? [bricolageWoff2, geistWoff2] : [delaWoff2, epilogueWoff2];
 
-interface Props { title?: string; description?: string; image?: ImageMetadata; noindex?: boolean }
-const { title, description = site.description, image = ogImage, noindex = false } = Astro.props;
+interface Props { title?: string; description?: string; image?: ImageMetadata; imageAlt?: string; noindex?: boolean }
+const { title, description = site.description, image = ogImage, imageAlt, noindex = false } = Astro.props;
 const fullTitle = title ? `${title} — ${site.name}` : site.title;
-const og = await getImage({ src: image, width: 1200, format: 'jpg' });
+const og = await getImage({ src: image, width: Math.min(1200, image.width), format: 'jpg' });
+const ogH = Math.round(Math.min(1200, image.width) * image.height / image.width);
+const ogAlt = imageAlt ?? (image === ogCard ? 'Peter Rebik, graphic designer and art director: “I turn complex ideas into clear, visual solutions.” Beside it, his portrait and two campaign pieces.' : `Work by ${site.name}`);
+const isHome = Astro.url.pathname === '/';
+const portraitImg = isHome ? await getImage({ src: portrait, width: 600, format: 'jpg' }) : undefined;
+const person = isHome && {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: site.name,
+  jobTitle: 'Graphic Designer and Art Director',
+  description: site.description,
+  url: new URL('/', Astro.site).href,
+  email: `mailto:${site.email}`,
+  image: portraitImg && new URL(portraitImg.src, Astro.site).href,
+  knowsAbout: ['Brand strategy', 'Art direction', 'Campaigns', 'Messaging', 'Design systems', 'Digital experiences'],
+};
 const canonical = new URL(Astro.url.pathname, Astro.site);
 ---
 <!doctype html>
@@ -34,16 +53,28 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     {noindex && <meta name="robots" content="noindex, nofollow" />}
-    <link rel="canonical" href={canonical} />
+    {!noindex && <link rel="canonical" href={canonical} />}
     {preloads.map((href) => <link rel="preload" href={href} as="font" type="font/woff2" crossorigin />)}
     <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
     <meta name="theme-color" content={site.theme === '2026' ? '#0c1f14' : '#162d16'} />
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:locale" content="en_GB" />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={new URL(og.src, Astro.site)} />
+    <meta property="og:image:width" content={String(Math.min(1200, image.width))} />
+    <meta property="og:image:height" content={String(ogH)} />
+    <meta property="og:image:alt" content={ogAlt} />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={new URL(og.src, Astro.site)} />
+    <meta name="twitter:image:alt" content={ogAlt} />
+    {person && <script type="application/ld+json" set:html={JSON.stringify(person)} />}
     <script is:inline>
       document.documentElement.classList.add('js');
       // Theme preview: ?theme=original | 2026 (remembered), ?theme=reset to clear

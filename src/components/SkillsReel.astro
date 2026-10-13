@@ -1,27 +1,30 @@
 ---
 /**
- * "How I can help" — auto-scrolling reel of image cards.
+ * "What I bring" (was "How I can help") — auto-scrolling reel of image cards (JS-driven so the arrows, trackpad and touch can move it).
  * Replaces the 3×2 grid (Skills.astro is kept for the original theme / easy revert).
  * Data: src/data/skills.yaml · Images: src/assets/skills/
  */
 import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
-import { site } from '../data/site';
+import Icon from './Icon.astro';
 
 const skills = (await getCollection('skills')).sort((a, b) => a.data.order - b.data.order);
 const images = import.meta.glob<{ default: ImageMetadata }>('../assets/skills/*.{jpg,jpeg,png,webp,avif}', { eager: true });
 const imageFor = (file?: string) => (file ? images[`../assets/skills/${file}`]?.default : undefined);
+// "<name>-bg.jpg" pairs with an inline "<name>-icon.svg" illustration layered on top (its parts animate on hover)
+const icons = import.meta.glob<string>('../assets/skills/*-icon.svg', { query: '?raw', import: 'default', eager: true });
+const iconName = (file?: string) => file?.replace(/-bg\.\w+$/, '');
+const iconFor = (file?: string) => (file ? icons[`../assets/skills/${iconName(file)}-icon.svg`] : undefined);
 const pad = (n: number) => String(n).padStart(2, '0');
+// Design-export provenance (C2PA) adds ~15 KB of base64 per icon, and the reel inlines every icon twice.
+// Strip it from the page; the source files keep it.
+const lean = (svg: string) => svg.replace(/<metadata>[\s\S]*?<\/metadata>/g, '').replace(/\s+xmlns:c2pa="[^"]*"/g, '');
 ---
-<section class="section section--alt reel-section" id="help" aria-labelledby="help-title">
+<section class="section reel-section" id="help" aria-labelledby="help-title">
   <div class="container reel-head">
     <div data-reveal>
-      <p class="reel-eyebrow">Skills — {pad(skills.length)} disciplines</p>
-      <h2 id="help-title" class="t-display">How I can <span class="hl">help</span>.</h2>
-    </div>
-    <div class="reel-head__aside" data-reveal style="--i:1">
-      <p>With over 13 years of design experience, I’m able to help organisations better understand the problem, develop a creative approach, build systems and lead the work through delivery.</p>
-      <a href={site.mailto} class="reel-link">Let’s Talk <span aria-hidden="true">↗</span></a>
+      <p class="reel-eyebrow">Skills</p>
+      <h2 id="help-title" class="t-display">What I <span class="hl">bring</span>.</h2>
     </div>
   </div>
 
@@ -31,16 +34,18 @@ const pad = (n: number) => String(n).padStart(2, '0');
         <ul class="reel__group" role="list" aria-hidden={copy === 1 ? 'true' : undefined} inert={copy === 1 ? true : undefined}>
           {skills.map(({ data }, i) => {
             const img = imageFor(data.image);
+            const icon = iconFor(data.image);
             return (
-              <li class="rcard" tabindex={copy === 0 ? 0 : undefined} data-rcard>
+              <li class="rcard" tabindex={copy === 0 ? 0 : undefined} aria-labelledby={copy === 0 ? `rcard-${i}-title` : undefined} aria-describedby={copy === 0 ? `rcard-${i}-desc` : undefined} data-rcard>
                 {img && <Image src={img} alt="" widths={[360, 540, 760]} sizes="(max-width: 760px) 72vw, 380px" loading="lazy" class="rcard__img" />}
                 <div class="rcard__scrim" aria-hidden="true" />
+                {icon && <div class="rcard__icon" data-icon={iconName(data.image)} aria-hidden="true" set:html={lean(icon).replaceAll('{uid}', `${copy}-${i}`)} />}
                 <div class="rcard__top">
-                  <h3 class="rcard__title" set:html={data.title.replace('\n', '<br/>')} />
+                  <h3 class="rcard__title" id={copy === 0 ? `rcard-${i}-title` : undefined} set:html={data.title.replace('\n', '<br/>')} />
                   <span class="rcard__num" aria-hidden="true">{pad(i + 1)}</span>
                 </div>
                 <div class="rcard__bottom">
-                  <p class="rcard__desc">{data.description}</p>
+                  <p class="rcard__desc" id={copy === 0 ? `rcard-${i}-desc` : undefined}>{data.description}</p>
                   <ul class="rcard__tags" role="list">
                     {data.tags.map((t) => <li>{t}</li>)}
                   </ul>
@@ -54,47 +59,38 @@ const pad = (n: number) => String(n).padStart(2, '0');
   </div>
 
   <div class="container reel-controls">
-    <p class="reel-hint">Hover or tap a card to read more</p>
-    <button class="reel-toggle" data-reel-toggle aria-pressed="false">
-      <span class="reel-toggle__icon" aria-hidden="true"></span>
-      <span data-reel-label>Pause</span>
-    </button>
+    <button type="button" class="reel-arrow" data-reel-prev aria-label="Previous skills"><Icon name="chevron-left" /></button>
+    <button type="button" class="reel-arrow" data-reel-next aria-label="Next skills"><Icon name="chevron-right" /></button>
   </div>
 </section>
 
 <style>
   .reel-section { overflow: hidden; }
+  /* Same background as the work section above, so don't double up the section padding */
+  :global(.work-drag) ~ .reel-section { padding-top: 0; }
   .reel-head {
     display: grid; grid-template-columns: 1.2fr 1fr; gap: var(--space-8); align-items: end;
     margin-bottom: var(--space-8);
   }
-  .reel-eyebrow, .reel-hint, .reel-toggle, .rcard__num, .rcard__tags, .reel-link {
+  .reel-eyebrow, .rcard__num, .rcard__tags {
     font-family: var(--font-label); text-transform: var(--label-case); letter-spacing: var(--label-tracking);
   }
   .reel-eyebrow { font-size: var(--fs-micro); color: var(--text-muted); margin-bottom: var(--space-4); }
-  .reel-head__aside { display: grid; gap: var(--space-4); justify-items: start; }
-  .reel-head__aside p { font-size: var(--fs-body-lg); color: var(--text); max-width: 34rem; }
-  .reel-link {
-    font-size: var(--fs-xs); color: var(--color-forest);
-    border-bottom: 1.5px solid currentColor; padding-bottom: 2px;
-    transition: color var(--dur-fast) linear, gap var(--dur-base) var(--ease-out);
-    display: inline-flex; gap: 0.4em;
-  }
-  .reel-link:hover { color: var(--accent-text); gap: 0.7em; }
 
   /* ---------- Track ---------- */
-  .reel { --card-w: clamp(260px, 26vw, 380px); --gap: 16px; --speed: 70s; }
-  .reel__track { display: flex; width: max-content; animation: reel var(--speed) linear infinite; }
+  .reel { --card-w: clamp(260px, 26vw, 380px); --gap: 16px; --speed: 100s; }
+  /* Hover timing: every icon move, the icon fade and the description reveal share one duration */
+  .rcard { --reveal: 0.65s; --fade: cubic-bezier(0.37, 0, 0.63, 1); }
+  .reel { touch-action: pan-y; }
+  .reel__track { display: flex; width: max-content; will-change: transform; }
   .reel__group { display: flex; gap: var(--gap); padding-right: var(--gap); }
-  .reel:is(:hover, :focus-within) .reel__track,
-  .reel.is-paused .reel__track { animation-play-state: paused; }
-  @keyframes reel { to { transform: translateX(-50%); } }
+  /* Auto-scroll pauses on hover/focus, while a card is open and off-screen (handled in the script below) */
 
   /* ---------- Card ---------- */
   .rcard {
     position: relative; flex: none; width: var(--card-w); aspect-ratio: 4 / 5;
     border-radius: var(--radius-lg); overflow: hidden; isolation: isolate;
-    background: var(--color-forest); color: #fff; outline-offset: 4px;
+    background: var(--color-lime); color: var(--color-forest); outline-offset: 4px;
     transition: transform var(--dur-slow) var(--ease-out), opacity var(--dur-base) linear, filter var(--dur-base) linear;
   }
   .rcard__img {
@@ -104,104 +100,256 @@ const pad = (n: number) => String(n).padStart(2, '0');
   .rcard__scrim {
     position: absolute; inset: 0; z-index: -1;
     background:
-      linear-gradient(180deg, rgb(12 31 20 / 0.55) 0%, rgb(12 31 20 / 0) 30%),
-      linear-gradient(0deg, rgb(12 31 20 / 0.7) 0%, rgb(12 31 20 / 0) 42%);
+      linear-gradient(180deg, rgb(213 247 127 / 0.45) 0%, rgb(213 247 127 / 0) 28%),
+      linear-gradient(0deg, rgb(213 247 127 / 0.5) 0%, rgb(213 247 127 / 0) 34%);
     transition: background-color var(--dur-slow) var(--ease-out);
   }
   .rcard__top { position: absolute; inset: var(--space-5) var(--space-5) auto; display: flex; justify-content: space-between; align-items: start; gap: var(--space-4); }
   .rcard__title {
-    color: #fff; font-size: var(--fs-h2); line-height: 0.98;
-    text-shadow: 0 1px 18px rgb(0 0 0 / 0.25);
+    color: var(--color-forest); font-size: var(--fs-h2); line-height: 0.98;
   }
   .rcard__num { font-size: var(--fs-micro); opacity: 0.85; padding-top: 0.35em; }
   .rcard__bottom { position: absolute; inset: auto var(--space-4) var(--space-4); display: grid; gap: var(--space-3); }
   .rcard__desc {
-    font-size: var(--fs-small); line-height: 1.4; color: #fff;
+    font-size: var(--fs-small); line-height: 1.4; color: var(--color-forest);
     max-height: 0; opacity: 0; transform: translateY(12px); overflow: hidden;
-    transition: max-height var(--dur-slow) var(--ease-out), opacity var(--dur-base) linear, transform var(--dur-slow) var(--ease-out);
+    transition: max-height 0.4s var(--ease-out), margin-bottom 0.4s var(--ease-out), opacity 0.2s linear, transform 0.4s var(--ease-out);
   }
   .rcard__tags { display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.6875rem; }
   .rcard__tags li {
     padding: 0.5em 0.9em; border-radius: var(--radius-pill);
-    background: rgb(255 255 255 / 0.16); color: #fff;
+    background: rgb(244 243 238 / 0.42); color: var(--color-forest);
     -webkit-backdrop-filter: blur(10px) saturate(1.4); backdrop-filter: blur(10px) saturate(1.4);
-    border: 1px solid rgb(255 255 255 / 0.18);
+    border: 1px solid rgb(12 31 20 / 0.16);
   }
 
   /* Hover / focus / tap-open */
   .reel:has(.rcard:is(:hover, :focus-visible, .is-open)) .rcard:not(:is(:hover, :focus-visible, .is-open)) { opacity: 0.55; filter: saturate(0.6); }
   .rcard:is(:hover, :focus-visible, .is-open) { transform: translateY(-6px); }
-  .rcard:is(:hover, :focus-visible, .is-open) .rcard__img { transform: scale(1.07); filter: blur(2px) brightness(0.7); }
-  .rcard:is(:hover, :focus-visible, .is-open) .rcard__scrim { background-color: rgb(12 31 20 / 0.35); }
-  .rcard:is(:hover, :focus-visible, .is-open) .rcard__desc { max-height: 12em; opacity: 1; transform: none; }
-  .rcard:is(:hover, :focus-visible, .is-open) .rcard__tags li { background: var(--color-lime); color: var(--color-forest); border-color: transparent; }
+  .rcard:is(:hover, :focus-visible, .is-open) .rcard__img { transform: scale(1.07); filter: blur(2px) brightness(1.05); }
+  .rcard:is(:hover, :focus-visible, .is-open) .rcard__scrim { background-color: rgb(213 247 127 / 0.7); }
 
-  /* ---------- Controls ---------- */
-  .reel-controls { display: flex; justify-content: space-between; align-items: center; margin-top: var(--space-6); gap: var(--space-4); }
-  .reel-hint { font-size: var(--fs-micro); color: var(--text-muted); }
-  .reel-toggle {
-    display: inline-flex; align-items: center; gap: var(--space-2);
-    font-size: var(--fs-micro); color: var(--color-forest);
-    padding: 0.7em 1.1em; border: 1.5px solid var(--color-forest); border-radius: var(--radius-pill);
-    transition: background-color var(--dur-fast) linear, color var(--dur-fast) linear;
+  /* Illustration: inline SVG on its own layer. On hover it plays its own move (all 0.65s) while it floats up a
+     touch and fades smoothly, so it's gone just as the description lands. On leave it settles back in. */
+  .rcard__icon {
+    position: absolute; inset: 0; z-index: -1; pointer-events: none;
+    transition: transform 0.6s var(--fade), opacity 0.5s var(--fade) 0.1s;
   }
-  .reel-toggle:hover { background: var(--color-forest); color: var(--bg-alt); }
-  .reel-toggle__icon { width: 10px; height: 10px; display: inline-block;
-    background: linear-gradient(90deg, currentColor 0 35%, transparent 35% 65%, currentColor 65%); }
-  .reel-toggle[aria-pressed="true"] .reel-toggle__icon { background: currentColor; clip-path: polygon(0 0, 100% 50%, 0 100%); }
+  .rcard__icon :global(svg) { display: block; width: 100%; height: 100%; overflow: visible; }
+  .rcard:is(:hover, :focus-visible, .is-open) .rcard__icon {
+    transform: translateY(-3%); opacity: 0;
+    transition: transform var(--reveal) var(--ease-out), opacity calc(var(--reveal) * 0.85) var(--fade);
+  }
+
+  /* Brand: each ring unwinds from a full circle to a dot, staggered; the centre pulses */
+    .rcard__icon :global(.ic-ring) { stroke-dasharray: 1 1; stroke-dashoffset: 0; }
+  .rcard__icon :global(.ic-dot) { transform-box: fill-box; transform-origin: center; }
+  .rcard:is(:hover, :focus-visible, .is-open) .rcard__icon :global(.ic-ring) { animation: ic-unwind 0.4s cubic-bezier(0.65, 0, 0.35, 1) calc(var(--n) * 0.06s) forwards; }
+  .rcard:is(:hover, :focus-visible, .is-open) .rcard__icon :global(.ic-ring--rev) { animation-name: ic-unwind-rev; }
+  .rcard:is(:hover, :focus-visible, .is-open) .rcard__icon :global(.ic-dot) { animation: ic-pop 0.35s ease 0.3s; }
+  @keyframes ic-unwind { to { stroke-dashoffset: 0.99; } }
+  @keyframes ic-unwind-rev { to { stroke-dashoffset: -0.99; } }
+
+  /* Creative: the eye blinks shut, the upper lid sweeping down over the iris (0.4s SMIL morph + clip, see script) */
+
+  /* Messaging: the back bubble types two lines, then both bubbles shrink away (front first) */
+    .rcard__icon :global(.ic-type) { transform-box: fill-box; transform-origin: 0 50%; transform: scaleX(0); }
+  .rcard:is(:hover, :focus-visible, .is-open) .rcard__icon :global(.ic-type) { animation: ic-type 0.25s cubic-bezier(0.3, 0, 0.2, 1) calc(0.05s + var(--n) * 0.12s) forwards; }
+  .rcard:is(:hover, :focus-visible, .is-open) .rcard__icon :global(.ic-b2) { animation: ic-shrink 0.33s var(--fade) 0.3s forwards; }
+  .rcard:is(:hover, :focus-visible, .is-open) .rcard__icon :global(.ic-b1) { animation: ic-shrink 0.27s var(--fade) 0.38s forwards; }
+  @keyframes ic-type { to { transform: scaleX(1); } }
+  @keyframes ic-shrink { to { transform: scale(0.8); } }
+
+  /* Systems: the empty modules fill one by one up to the solid one, which pops */
+    .rcard__icon :global(.ic-fill) { opacity: 0; }
+  .rcard__icon :global(.ic-target) { transform-box: fill-box; transform-origin: center; }
+  .rcard:is(:hover, :focus-visible, .is-open) .rcard__icon :global(.ic-fill) { animation: ic-fill-in 0.15s ease calc(var(--n) * 0.05s) forwards; }
+  .rcard:is(:hover, :focus-visible, .is-open) .rcard__icon :global(.ic-target) { animation: ic-pop 0.23s ease 0.42s; }
+  @keyframes ic-fill-in { to { opacity: 1; } }
+  @keyframes ic-pop { 50% { transform: scale(1.08); } }
+
+  /* Digital: the pointer glides to the button and clicks; the button grows to fill the window (SMIL) */
+    .rcard:is(:hover, :focus-visible, .is-open) .rcard__icon :global(.ic-cursor) { animation: ic-click 0.4s cubic-bezier(0.45, 0, 0.2, 1) forwards; }
+  @keyframes ic-click {
+    0% { transform: translate(0, 0); }
+    65% { transform: translate(var(--dx), var(--dy)) scale(1); }
+    80% { transform: translate(var(--dx), var(--dy)) scale(0.82); }
+    100% { transform: translate(var(--dx), var(--dy)) scale(1); }
+  }
+
+  /* Alignment: the squiggly lines ease straight (0.65s SMIL morph, started by the script below) */
+
+  @media (prefers-reduced-motion: reduce) {
+    .rcard__icon, .rcard:is(:hover, :focus-visible, .is-open) .rcard__icon { transform: none; transition: opacity 0.3s linear; }
+    .rcard:is(:hover, :focus-visible, .is-open) .rcard__icon :global(*) { animation: none !important; }
+  }
+  /* The text waits until the icon is mostly faded, then lands as the icon's move finishes */
+  .rcard:is(:hover, :focus-visible, .is-open) .rcard__desc {
+    max-height: 12em; opacity: 1; transform: none; margin-bottom: var(--space-3); /* extra room above the tags */
+    transition: max-height var(--reveal) var(--ease-out), margin-bottom var(--reveal) var(--ease-out), opacity 0.38s ease-out calc(var(--reveal) * 0.5), transform 0.38s var(--ease-out) calc(var(--reveal) * 0.5);
+  }
+  .rcard:is(:hover, :focus-visible, .is-open) .rcard__tags li { background: var(--color-forest); color: var(--color-lime); border-color: transparent; }
+
+  /* Subtle arrows, bottom right: nudge the reel one card */
+  .reel-controls { display: flex; justify-content: flex-end; gap: var(--space-2); margin-top: var(--space-5); }
+  .reel-arrow {
+    width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center;
+    border: 1px solid rgb(12 31 20 / 0.18); color: var(--color-forest); opacity: 0.7;
+    transition: background-color var(--dur-fast) linear, border-color var(--dur-fast) linear, opacity var(--dur-fast) linear, transform var(--dur-base) var(--ease-out);
+  }
+  .reel-arrow :global(svg) { width: 16px; height: 16px; }
+  .reel-arrow:hover, .reel-arrow:focus-visible { opacity: 1; background: var(--color-lime); border-color: var(--color-lime); transform: scale(var(--hover-scale, 1.05)); }
 
   @media (max-width: 860px) {
     .reel-head { grid-template-columns: 1fr; gap: var(--space-5); }
-    .reel { --card-w: 72vw; --speed: 55s; }
-    .reel-hint { display: none; }
-    .reel-controls { justify-content: flex-end; }
+    .reel { --card-w: 72vw; --speed: 80s; }
   }
 
-  /* Reduced motion: no auto-scroll — a swipeable row instead */
+  /* Reduced motion: no auto-scroll, a swipeable row instead */
   @media (prefers-reduced-motion: reduce) {
     .reel { overflow-x: auto; scroll-snap-type: x mandatory; padding-inline: var(--gutter); scrollbar-width: none; }
-    .reel__track { animation: none; }
+    .reel__track { transform: none !important; }
     .reel__group:nth-child(2) { display: none; }
     .rcard { scroll-snap-align: start; }
-    .reel-toggle { display: none; }
   }
 </style>
 
 <script>
+  // Tap a card to open it (touch); the reel pauses while one is open, and whenever it's off-screen.
   document.querySelectorAll<HTMLElement>('[data-reel]').forEach((reel) => {
-    const section = reel.closest('section')!;
-    const toggle = section.querySelector<HTMLButtonElement>('[data-reel-toggle]')!;
-    const label = section.querySelector<HTMLElement>('[data-reel-label]')!;
     const cards = reel.querySelectorAll<HTMLElement>('[data-rcard]');
-
-    // Paused when the user pressed Pause OR a card is tapped open.
-    let userPaused = false;
     const sync = () => {
-      const anyOpen = reel.querySelector('.rcard.is-open') !== null;
-      reel.classList.toggle('is-paused', userPaused || anyOpen);
-      toggle.setAttribute('aria-pressed', String(userPaused));
-      label.textContent = userPaused ? 'Play' : 'Pause';
+      reel.classList.toggle('is-paused', reel.querySelector('.rcard.is-open') !== null);
     };
-    toggle.addEventListener('click', () => { userPaused = !userPaused; sync(); });
-    cards.forEach((card) =>
-      card.addEventListener('click', () => {
-        const open = !card.classList.contains('is-open');
-        cards.forEach((c) => c.classList.remove('is-open'));
-        card.classList.toggle('is-open', open);
-        sync();
-      }),
-    );
+    const toggle = (card: HTMLElement) => {
+      const open = !card.classList.contains('is-open');
+      cards.forEach((c) => c.classList.remove('is-open'));
+      card.classList.toggle('is-open', open);
+      sync();
+    };
+    cards.forEach((card) => {
+      card.addEventListener('click', () => toggle(card));
+      // Keyboard: Enter / Space pin a card open, like a tap
+      card.addEventListener('keydown', (e) => {
+        if (e.key !== 'Enter' && e.key !== ' ') return;
+        e.preventDefault();
+        toggle(card);
+      });
+    });
     document.addEventListener('click', (e) => {
       if (reel.contains(e.target as Node)) return;
       cards.forEach((c) => c.classList.remove('is-open'));
       sync();
     });
+    let onScreen = true;
+    new IntersectionObserver(([e]) => { onScreen = e.isIntersecting; }).observe(reel);
 
-    // Save battery: stop animating when off-screen.
-    new IntersectionObserver(([e]) => reel.classList.toggle('is-offscreen', !e.isIntersecting)).observe(reel);
+    // ---- Motion: slow auto-scroll + arrow nudges + trackpad / touch drag (one looping offset, x) ----
+    const section = reel.closest('section')!;
+    const track = reel.querySelector<HTMLElement>('[data-reel-track]')!;
+    const group = track.querySelector<HTMLElement>('.reel__group')!;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let loopW = 0;   // one copy of the cards (incl. trailing gap)
+    let step = 0;    // one card + gap
+    let secs = 100;  // seconds per loop (--speed)
+    const measure = () => {
+      loopW = group.offsetWidth;
+      step = cards[0].offsetWidth + (parseFloat(getComputedStyle(group).columnGap) || 16);
+      secs = parseFloat(getComputedStyle(reel).getPropertyValue('--speed')) || 100;
+    };
+    measure();
+    new ResizeObserver(measure).observe(group);
+
+    let x = 0;
+    let nudge: { from: number; to: number; t0: number; dur: number } | null = null;
+    const ease = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+    let dragging = false;
+    let moved = 0;
+    let lastX = 0;
+    const paused = () => dragging || reel.matches(':hover, :focus-within') || reel.classList.contains('is-paused');
+
+    let last = performance.now();
+    const frame = (now: number) => {
+      const dt = Math.min(0.05, (now - last) / 1000);
+      last = now;
+      if (onScreen && !reduce.matches) {
+        if (nudge) {
+          const t = Math.min(1, (now - nudge.t0) / nudge.dur);
+          x = nudge.from + (nudge.to - nudge.from) * ease(t);
+          if (t === 1) nudge = null;
+        } else if (!paused()) {
+          x += (loopW / secs) * dt;
+        }
+        const off = ((x % loopW) + loopW) % loopW;
+        track.style.transform = `translate3d(${-off}px, 0, 0)`;
+      }
+      requestAnimationFrame(frame);
+    };
+    requestAnimationFrame(frame);
+
+    const go = (dir: 1 | -1) => {
+      if (reduce.matches) { reel.scrollBy({ left: dir * step }); return; }
+      const from = nudge ? nudge.to : x;          // rapid clicks stack up
+      const to = Math.round((from + dir * step) / step) * step; // land on a card edge
+      nudge = { from: x, to, t0: performance.now(), dur: 650 };
+    };
+    section.querySelector('[data-reel-prev]')?.addEventListener('click', () => go(-1));
+    section.querySelector('[data-reel-next]')?.addEventListener('click', () => go(1));
+
+    // Trackpad / shift-wheel: horizontal scroll moves the reel directly
+    reel.addEventListener('wheel', (e) => {
+      if (reduce.matches || Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;
+      e.preventDefault();
+      nudge = null;
+      x += e.deltaX;
+    }, { passive: false });
+
+    // Touch / pen drag (mouse keeps hover + click); a real drag cancels the tap-to-open click
+    reel.addEventListener('pointerdown', (e) => {
+      if (e.pointerType === 'mouse' || reduce.matches) return;
+      dragging = true; moved = 0; lastX = e.clientX; nudge = null;
+    });
+    reel.addEventListener('pointermove', (e) => {
+      if (!dragging) return;
+      const dx = e.clientX - lastX;
+      lastX = e.clientX; moved += Math.abs(dx); x -= dx;
+    });
+    const end = () => { dragging = false; };
+    reel.addEventListener('pointerup', end);
+    reel.addEventListener('pointercancel', end);
+    reel.addEventListener('click', (e) => { if (moved > 8) { e.stopPropagation(); e.preventDefault(); moved = 0; } }, true);
+  });
+
+  // SMIL parts of the icons (Creative eyelid closing, Alignment lines straightening, Digital button growing): run the "in" animations on
+  // hover/focus (after their data-delay), and the "out" ones on leave. Delays use timers so a quick leave cancels them.
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  document.querySelectorAll<HTMLElement>('[data-rcard]').forEach((card) => {
+    const ins = [...card.querySelectorAll<SVGAnimationElement>('animate[data-morph="in"]')];
+    const outs = [...card.querySelectorAll<SVGAnimationElement>('animate[data-morph="out"]')];
+    if (!ins.length) return;
+    let active = false;
+    let timers: number[] = [];
+    const started = ins.map(() => false); // ins[i] and outs[i] are a pair; only reverse what actually ran
+    const set = (on: boolean) => {
+      if (on === active) return;
+      active = on;
+      timers.forEach(clearTimeout);
+      timers = [];
+      if (reduce.matches) return;
+      if (on) {
+        ins.forEach((a, i) => {
+          const run = () => { a.beginElement(); started[i] = true; };
+          const delay = parseFloat(a.dataset.delay || '0') * 1000;
+          if (delay) timers.push(window.setTimeout(run, delay));
+          else run();
+        });
+      } else {
+        outs.forEach((a, i) => { if (started[i]) a.beginElement(); started[i] = false; });
+      }
+    };
+    card.addEventListener('pointerenter', () => set(true));
+    card.addEventListener('pointerleave', () => set(card.matches(':focus-visible')));
+    card.addEventListener('focusin', () => set(true));
+    card.addEventListener('focusout', () => set(card.matches(':hover')));
   });
 </script>
-
-<style is:global>
-  .reel.is-offscreen .reel__track { animation-play-state: paused; }
-</style>

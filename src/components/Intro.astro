@@ -1,0 +1,107 @@
+---
+/**
+ * Intro (tinker / 2026 theme) — sits right under HeroBold.
+ * A big statement whose words light up as you scroll, then a three-column row:
+ * supporting copy + links · portrait.
+ */
+import { Image } from 'astro:assets';
+import { site } from '../data/site';
+import portrait from '../assets/brand/peter-about.jpg';
+
+const parts: { t: string; hl?: boolean }[] = [
+  { t: 'Hi, my name’s' },
+  { t: 'Peter Rebik.', hl: true },
+  { t: 'I’m a designer and art director who bridges strategy and execution. I help organisations define their visual presence across every touchpoint.' },
+];
+let n = 0;
+const words = parts.map((p) => ({ ...p, words: p.t.split(' ').map((w) => ({ w, i: n++ })) }));
+---
+<section class="intro" id="about-intro" aria-labelledby="intro-title" data-after-hero>
+  <div class="container">
+    <h2 id="intro-title" class="intro__statement" data-intro-statement style={`--n:${n}`}>
+      {words.map((p) =>
+        p.hl
+          ? <span class="hl">{p.words.map(({ w, i }) => <><span class="w" style={`--w:${i}`}>{w}</span>{' '}</>)}</span>
+          : p.words.map(({ w, i }) => <><span class="w" style={`--w:${i}`}>{w}</span>{' '}</>)
+      )}
+    </h2>
+
+    <div class="intro__row">
+      <div class="intro__copy" data-reveal style="--i:1">
+        <p>From brand systems and multi-channel campaigns to messaging and digital experiences, I help teams turn what they need to say into work people understand and remember.</p>
+        <div class="intro__links">
+          <a href={site.mailto} class="intro__link">Let’s Talk <span aria-hidden="true">↗</span></a>
+          <a href="#work" class="intro__link">See My Work <span aria-hidden="true">↓</span></a>
+        </div>
+      </div>
+      <figure class="intro__portrait" data-reveal style="--i:2">
+        <Image src={portrait} alt="Portrait of Peter Rebik" widths={[280, 560, 840]} sizes="(max-width: 760px) 60vw, 280px" />
+      </figure>
+    </div>
+  </div>
+</section>
+
+<style>
+  .intro { padding-block: clamp(5rem, 3rem + 7vw, 10rem) var(--section-pad); }
+
+  .intro__statement {
+    font-family: var(--font-body); font-weight: 400; color: var(--color-forest);
+    font-size: clamp(1.75rem, 0.9rem + 3.4vw, 4.25rem); line-height: 1.12; letter-spacing: -0.035em;
+    max-width: 22ch; text-wrap: initial;
+  }
+  .intro__statement .hl { font-weight: 400; }
+  .w { transition: opacity 0.35s linear; }
+  .js .intro__statement .w { opacity: var(--o, 0.38); } /* was 0.16: unlit words must still be legible to a fast skim */
+  .js .intro__statement .w.on { --o: 1; }
+
+  .intro__row {
+    display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--space-6);
+    margin-top: clamp(3.5rem, 2rem + 5vw, 6.5rem); align-items: start;
+  }
+  .intro__copy { grid-column: 6 / span 4; display: grid; gap: 1.1em; font-size: var(--fs-body); line-height: var(--lh-relaxed); }
+  .intro__links { display: flex; flex-wrap: wrap; gap: var(--space-6); margin-top: var(--space-3); }
+  .intro__link {
+    font-family: var(--font-label); font-size: var(--fs-xs); text-transform: var(--label-case); letter-spacing: var(--label-tracking);
+    color: var(--color-forest); border-bottom: 1.5px solid currentColor; padding-bottom: 2px;
+    display: inline-flex; gap: 0.4em; transition: gap var(--dur-base) var(--ease-out), color var(--dur-fast) linear;
+  }
+  .intro__link:hover { gap: 0.75em; color: var(--accent-text); }
+  .intro__portrait {
+    grid-column: 10 / span 3; justify-self: end; width: 100%; max-width: 280px;
+    aspect-ratio: 4 / 5; border-radius: var(--radius-lg); overflow: hidden; background: var(--color-lime);
+  }
+  .intro__portrait img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 20%; transition: transform 0.9s var(--ease-out); }
+  .intro__portrait:hover img { transform: scale(1.04); }
+
+  @media (max-width: 900px) {
+    .intro__copy { grid-column: 1 / span 7; }
+    .intro__portrait { grid-column: 8 / -1; }
+  }
+  @media (max-width: 600px) {
+    .intro__row { grid-template-columns: 1fr; gap: var(--space-5); }
+    .intro__copy, .intro__portrait { grid-column: auto; }
+    .intro__portrait { justify-self: start; max-width: 220px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .js .intro__statement .w { opacity: 1; } }
+</style>
+
+<script>
+  const el = document.querySelector<HTMLElement>('[data-intro-statement]');
+  if (el && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const words = [...el.querySelectorAll<HTMLElement>('.w')];
+    let ticking = false;
+    const update = () => {
+      ticking = false;
+      const r = el.getBoundingClientRect();
+      // Words light up as the statement travels from 85% to 35% of the viewport height.
+      const start = innerHeight * 0.85, end = innerHeight * 0.35;
+      const p = Math.min(1, Math.max(0, (start - r.top) / (start - end + r.height * 0.6)));
+      const lit = Math.round(p * words.length);
+      words.forEach((w, i) => w.classList.toggle('on', i < lit));
+    };
+    const onScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } };
+    addEventListener('scroll', onScroll, { passive: true });
+    addEventListener('resize', onScroll, { passive: true });
+    update();
+  }
+</script>

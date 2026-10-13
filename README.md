@@ -31,13 +31,16 @@ Node 22+.
 | Source wireframe | `docs/wireframe-landing.pdf` |
 | Theme switch (`original` / `2026`) | `theme` in `src/data/site.ts` · preview with `?theme=original` |
 | 2026 theme overrides | `src/styles/themes/2026.css` |
-| Skills reel art (placeholder) | `src/assets/skills/` · regenerate with `python3 scripts/generate-skill-art.py` |
+| About split + sponsorship card (2026 theme) | `src/components/AboutSplit.astro` |
+| Bold hero + intro (2026 theme) | `src/components/HeroBold.astro`, `src/components/Intro.astro` |
+| Work drag carousel (2026 theme) | `src/components/WorkDrag.astro` · image per project = `feature` in its `.md` |
+| Skills reel art (placeholder) | `src/assets/skills/` (`<name>-bg.jpg` + `<name>-icon.svg`) · regenerate with `python3 scripts/generate-skill-art.py` |
 
 ## Common edits
 
 **Add a project:** copy `src/content/work/_template.md` to `src/content/work/my-project.md`, drop images in `src/assets/work/my-project/`, and fill in the frontmatter. The file name becomes the URL (`/work/my-project`). `order` sets the order everywhere (carousel, work index, See Prev / See Next). Set `featured: false` to keep a project off the homepage carousel, or `draft: true` to hide it everywhere.
 
-**Project page layout:** `employer` is the lime line above the title, `roles` and `skills` become the collapsible chip lists (ids from `roles.yaml` / `skills.yaml`), `intro` is the paragraphs under them, and the Markdown body becomes the mint Challenge / Approach / Results card. `gallery` is the image column: each top-level `-` is one row of 1–3 images that share a height. Add `fit: contain` to an image to stop it being cropped. Click any image for the full-screen viewer.
+**Project page layout:** `employer` is the lime line above the title, `roles` and `skills` become the chip lists (ids from `roles.yaml` / `skills.yaml`), `intro` is the dark "Brief" card under them, and the Markdown body becomes the mint write-up cards, one per `## ` heading (Challenge / Approach / Results). The last word of each heading gets the volt highlight. `gallery` is the image column: each top-level `-` is one row of 1–3 images that share a height. Add `fit: contain` to an image to stop it being cropped. Click any image for the full-screen viewer.
 
 **Project images from the old site:** `npm run images` downloads Peter's originals from Squarespace into `src/assets/work/<project>/` (replacing the grey placeholders) as WebP. The list lives in `scripts/work-images.json`.
 
@@ -54,7 +57,7 @@ Node 22+.
 ## Open TODOs
 
 - [ ] Replace extracted wireframe images with Peter's full-res originals (`src/assets/`)
-- [ ] Swap `logo-mark.png` for the SVG logo
+- [ ] Swap `logo-mark-2x.png` for the SVG logo
 - [ ] Run `npm run images` to swap the grey gallery placeholders for Peter's real images, then commit
 - [ ] Review image alt text in `src/content/work/*.md` (auto-generated from file names)
 - [ ] Remaining reviews (“Should have soon.”)

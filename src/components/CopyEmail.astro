@@ -1,0 +1,60 @@
+---
+/**
+ * "Copy email" button. mailto links do nothing for people on webmail (most recruiters),
+ * so every "Let's Talk" gets one of these beside it.
+ * variant: 'btn' = outline pill (pair with a .btn), 'link' = small underlined text link (footer).
+ * tone: 'dark' when it sits on a pine / forest background.
+ */
+import { site } from '../data/site';
+interface Props { variant?: 'btn' | 'link'; tone?: 'light' | 'dark'; class?: string }
+const { variant = 'btn', tone = 'light', class: cls = '' } = Astro.props;
+---
+<button
+  type="button"
+  class:list={[variant === 'btn' ? 'btn btn--outline copy-email' : 'copy-email copy-email--link', tone === 'dark' && 'copy-email--dark', cls]}
+  data-copy-email={site.email}
+>
+  <span class="copy-email__label" data-copy-label>Copy email</span>
+  <span class="sr-only" aria-live="polite" data-copy-status></span>
+</button>
+
+<script>
+  // One delegated listener for every copy button on the page.
+  const DONE_MS = 1800;
+  document.addEventListener('click', async (e) => {
+    const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-copy-email]');
+    if (!btn) return;
+    const email = btn.dataset.copyEmail!;
+    const label = btn.querySelector<HTMLElement>('[data-copy-label]')!;
+    const status = btn.querySelector<HTMLElement>('[data-copy-status]')!;
+    let ok = false;
+    try { await navigator.clipboard.writeText(email); ok = true; } catch {
+      // Older browsers / insecure contexts: fall back to a hidden textarea.
+      const ta = Object.assign(document.createElement('textarea'), { value: email });
+      ta.setAttribute('readonly', ''); ta.style.cssText = 'position:fixed;opacity:0';
+      document.body.append(ta); ta.select();
+      try { ok = document.execCommand('copy'); } catch {}
+      ta.remove();
+    }
+    const original = 'Copy email';
+    label.textContent = ok ? 'Copied ✓' : email;
+    status.textContent = ok ? `Copied ${email} to the clipboard` : `Email address: ${email}`;
+    btn.classList.add('is-copied');
+    clearTimeout(Number(btn.dataset.t));
+    btn.dataset.t = String(window.setTimeout(() => {
+      label.textContent = original; status.textContent = ''; btn.classList.remove('is-copied');
+    }, ok ? DONE_MS : 6000));
+  });
+</script>
+
+<style>
+  .copy-email { cursor: pointer; }
+  .copy-email--dark.btn { --btn-fg: var(--accent); --btn-border: var(--accent); }
+  .copy-email--dark.btn:hover, .copy-email--dark.btn:focus-visible { --btn-fg: var(--color-forest); --btn-bg: var(--accent-hover); }
+  .copy-email--link {
+    font: inherit; color: inherit; background: none; border: 0; padding: 4px 0;
+    text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px;
+  }
+  .copy-email--link:hover, .copy-email--link:focus-visible { color: var(--color-white); }
+  .copy-email.is-copied .copy-email__label { font-variant-numeric: tabular-nums; }
+</style>

@@ -1,0 +1,327 @@
+---
+/**
+ * "A few real world examples" — drag carousel (tinker / 2026 theme).
+ * Inspired by Salient's "Architect" demo: big 4:5 feature images that bleed off the right edge,
+ * a custom drag cursor, momentum + snap, a slight scale-down while dragging, image zoom and a
+ * drawn title underline on hover, and cards that slide in from the right.
+ * Mouse: drag (or use the arrows). Touch / trackpad / keyboard: native horizontal scroll with snap.
+ * WorkCarousel.astro is kept for the original theme.
+ * Data: every published project in src/content/work, by `order`. Image: `feature` → first gallery image → cover.
+ */
+import { Image } from 'astro:assets';
+import Icon from './Icon.astro';
+import { getAllWork } from '../lib/work';
+
+const projects = await getAllWork();
+const pad = (n: number) => String(n).padStart(2, '0');
+const featureOf = (p: (typeof projects)[number]) => {
+  const g = p.data.gallery[0]?.[0];
+  if (p.data.feature) return { src: p.data.feature, alt: g?.alt ?? p.data.coverAlt };
+  if (g) return { src: g.src, alt: g.alt };
+  return { src: p.data.cover, alt: p.data.coverAlt };
+};
+---
+<section class="section work-drag" id="work" aria-labelledby="work-title">
+  <div class="container wd-head">
+    <div data-reveal>
+      <p class="wd-eyebrow">Selected work</p>
+      <h2 id="work-title" class="t-display">A few <span class="hl">real world</span> examples.</h2>
+    </div>
+    <div class="wd-head__aside" data-reveal style="--i:1">
+      <p>A closer look at the design challenges behind each project, the thinking that shaped the solutions, and the outcomes that followed.</p>
+      <a href="/work/" class="wd-link">All work <span aria-hidden="true">↗</span></a>
+    </div>
+  </div>
+
+  <div class="wd" data-wd>
+    <ul class="wd__track" role="list" data-wd-track tabindex="0" aria-label="Work examples. Scroll sideways or use the arrow buttons below.">
+      {projects.map((p, i) => {
+        const f = featureOf(p);
+        return (
+          <li class="wcard" style={`--i:${i}`} data-wd-card>
+            <a href={`/work/${p.id}/`} class="wcard__link" draggable="false">
+              <div class="wcard__media">
+                <Image
+                  src={f.src}
+                  alt={f.alt}
+                  widths={[360, 560, 800, 1100]}
+                  sizes="(max-width: 760px) 78vw, 400px"
+                  loading="lazy"
+                  draggable="false"
+                  style={p.data.featurePosition ? `object-position:${p.data.featurePosition}` : undefined}
+                />
+              </div>
+              <p class="wcard__meta"><span>{pad(i + 1)}</span>{p.data.employer && <span>{p.data.employer}</span>}</p>
+              <h3 class="wcard__title"><span>{p.data.title}</span></h3>
+              <p class="wcard__summary">{p.data.summary}</p>
+            </a>
+          </li>
+        );
+      })}
+    </ul>
+    <div class="wd__cursor" aria-hidden="true" data-wd-cursor>
+      <span class="wd__cursor-dot">
+        <span class="wd__chev wd__chev--l">‹</span><span class="wd__chev wd__chev--r">›</span>
+      </span>
+    </div>
+  </div>
+
+  <div class="container wd-controls">
+    <div class="wd-progress" aria-hidden="true"><span data-wd-progress></span></div>
+    <div class="wd-arrows">
+      <button type="button" class="wd-arrow" data-wd-prev aria-label="Previous projects"><Icon name="arrow-long-left" /></button>
+      <button type="button" class="wd-arrow" data-wd-next aria-label="Next projects"><Icon name="arrow-long-right" /></button>
+    </div>
+  </div>
+</section>
+
+<style>
+  .work-drag { overflow: hidden; }
+  /* Same background as the Intro above, so don't double up the section padding */
+  :global(.intro) ~ .work-drag { padding-top: 0; }
+
+  /* ---------- Head (matches the skills reel) ---------- */
+  .wd-head { display: grid; grid-template-columns: 1.2fr 1fr; gap: var(--space-8); align-items: end; margin-bottom: var(--space-8); }
+  .wd-eyebrow, .wd-link, .wcard__meta {
+    font-family: var(--font-label); text-transform: var(--label-case); letter-spacing: var(--label-tracking);
+  }
+  .wd-eyebrow { font-size: var(--fs-micro); color: var(--text-muted); margin-bottom: var(--space-4); }
+  .wd-head__aside { display: grid; gap: var(--space-4); justify-items: start; }
+  .wd-head__aside p { font-size: var(--fs-body); line-height: var(--lh-relaxed); max-width: 24rem; } /* matches the Intro copy */
+  .wd-link {
+    font-size: var(--fs-xs); color: var(--color-forest); border-bottom: 1.5px solid currentColor; padding-bottom: 2px;
+    display: inline-flex; gap: 0.4em; transition: color var(--dur-fast) linear, gap var(--dur-base) var(--ease-out);
+  }
+  .wd-link:hover { color: var(--accent-text); gap: 0.7em; }
+
+  /* ---------- Track: starts on the container edge, bleeds off the right ---------- */
+  .wd {
+    --card-w: clamp(260px, 27vw, 400px);
+    --gap: clamp(14px, 1.4vw, 22px);
+    --edge: max(var(--gutter), calc((100vw - var(--container)) / 2)); /* JS refines this */
+    --ease-salient: cubic-bezier(0.2, 0.75, 0.5, 1);
+    position: relative;
+  }
+  .wd__track {
+    display: flex; gap: var(--gap);
+    overflow-x: auto; overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory; scroll-padding-inline: var(--edge);
+    padding: 6px var(--edge) var(--space-2);
+    scrollbar-width: none; outline: none;
+  }
+  .wd__track::-webkit-scrollbar { display: none; }
+  .wd__track::after { content: ""; flex: 0 0 calc(var(--edge) - var(--gap)); } /* trailing space so the last card can line up */
+  .wd__track:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: -3px; }
+
+  /* ---------- Card ---------- */
+  .wcard { flex: 0 0 var(--card-w); scroll-snap-align: start; }
+  .js .wcard { opacity: 0; transform: translateX(90px); transition: opacity 0.8s var(--ease-salient), transform 1s var(--ease-salient); transition-delay: calc(var(--i) * 90ms); }
+  .js .wd.is-in .wcard { opacity: 1; transform: none; }
+
+  .wcard__link {
+    display: grid; gap: var(--space-2); color: var(--text);
+    -webkit-user-drag: none; user-select: none;
+    transform-origin: 50% 40%;
+    transition: transform 0.55s var(--ease-salient);
+  }
+  .wcard__media { aspect-ratio: 4 / 5; overflow: hidden; border-radius: var(--radius-md); background: var(--bg-alt); margin-bottom: var(--space-3); }
+  .wcard__media img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.75s var(--ease-salient); pointer-events: none; }
+  .wcard__meta { display: flex; gap: var(--space-3); font-size: var(--fs-micro); color: var(--text-muted); }
+  .wcard__title { font-size: var(--fs-h3); line-height: var(--lh-snug); color: var(--color-forest); }
+  .wcard__title span {
+    background: linear-gradient(currentColor, currentColor) 0 100% / 0% 1.5px no-repeat;
+    transition: background-size 0.55s var(--ease-salient);
+    padding-bottom: 2px;
+  }
+  .wcard__summary { font-size: var(--fs-small); color: var(--text-muted); max-width: 34ch; }
+
+  /* Hover (not while dragging) */
+  .wd:not(.is-dragging) .wcard__link:is(:hover, :focus-visible) .wcard__media img { transform: scale(1.06); }
+  .wd:not(.is-dragging) .wcard__link:is(:hover, :focus-visible) .wcard__title span { background-size: 100% 1.5px; }
+  .wcard__link:focus-visible { outline-offset: 6px; }
+
+  /* Dragging: cards ease back slightly */
+  .wd.is-dragging .wcard__link { transform: scale(0.95); }
+
+  /* ---------- Custom drag cursor (mouse only) ---------- */
+  .wd__cursor {
+    position: fixed; left: 0; top: 0; z-index: 30; pointer-events: none;
+    transform: translate3d(var(--cx, -200px), var(--cy, -200px), 0);
+  }
+  .wd__cursor-dot {
+    position: absolute; left: -38px; top: -38px; width: 76px; height: 76px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; gap: 14px;
+    background: var(--color-lime); color: var(--color-forest);
+    font-family: var(--font-body); font-size: 22px; line-height: 1;
+    transform: scale(0); opacity: 0;
+    transition: transform 0.45s var(--ease-salient), opacity 0.3s linear;
+  }
+  .wd.has-cursor .wd__cursor-dot { transform: scale(1); opacity: 1; }
+  .wd.has-cursor.is-pressed .wd__cursor-dot { transform: scale(0.72); }
+  .wd__chev { display: inline-block; transition: transform 0.45s var(--ease-salient); }
+  .wd.is-pressed .wd__chev--l { transform: translateX(-5px); }
+  .wd.is-pressed .wd__chev--r { transform: translateX(5px); }
+  @media (hover: hover) and (pointer: fine) {
+    .wd.cursor-ready .wd__track, .wd.cursor-ready .wd__track * { cursor: none; }
+  }
+
+  /* ---------- Controls ---------- */
+  .wd-controls { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: var(--space-5); margin-top: var(--space-7); }
+  .wd-progress { position: relative; height: 2px; background: rgb(0 0 0 / 0.1); border-radius: 2px; overflow: hidden; }
+  .wd-progress span { position: absolute; inset: 0; background: var(--color-forest); transform-origin: 0 50%; transform: scaleX(var(--p, 0.1)); transition: transform 0.3s var(--ease-out); }
+  .wd-arrows { display: flex; gap: var(--space-2); }
+  .wd-arrow {
+    width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center;
+    border: 1.5px solid var(--color-forest); color: var(--color-forest);
+    transition: background-color var(--dur-fast) linear, transform var(--dur-base) var(--ease-out), opacity var(--dur-fast) linear;
+  }
+  .wd-arrow :global(svg) { width: 22px; height: auto; }
+  .wd-arrow:hover:not(:disabled) { background: var(--color-lime); border-color: var(--color-lime); transform: scale(var(--hover-scale)); }
+  .wd-arrow:disabled { opacity: 0.3; cursor: default; }
+
+  @media (max-width: 900px) {
+    .wd-head { grid-template-columns: 1fr; gap: var(--space-5); }
+  }
+  @media (max-width: 760px) {
+    .wd { --card-w: 78vw; }
+    .wd-controls { grid-template-columns: 1fr; }
+    .wd-arrows { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .js .wcard { opacity: 1; transform: none; transition: none; }
+    .wd.is-dragging .wcard__link { transform: none; }
+  }
+</style>
+
+<script>
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const finePointer = matchMedia('(hover: hover) and (pointer: fine)');
+
+  document.querySelectorAll<HTMLElement>('[data-wd]').forEach((root) => {
+    const track = root.querySelector<HTMLElement>('[data-wd-track]')!;
+    const cards = [...root.querySelectorAll<HTMLElement>('[data-wd-card]')];
+    const cursor = root.querySelector<HTMLElement>('[data-wd-cursor]')!;
+    const section = root.closest('section')!;
+    const progress = section.querySelector<HTMLElement>('[data-wd-progress]');
+    const prev = section.querySelector<HTMLButtonElement>('[data-wd-prev]');
+    const next = section.querySelector<HTMLButtonElement>('[data-wd-next]');
+
+    /* Align the first card with the page container. */
+    const edge = () => {
+      const c = section.querySelector<HTMLElement>('.container');
+      if (c) root.style.setProperty('--edge', `${Math.round(c.getBoundingClientRect().left)}px`);
+    };
+    edge();
+    addEventListener('resize', edge, { passive: true });
+
+    /* Entrance: slide in from the right once. */
+    new IntersectionObserver((entries, io) => {
+      if (entries[0].isIntersecting) { root.classList.add('is-in'); io.disconnect(); }
+    }, { threshold: 0.2 }).observe(track);
+
+    /* ---------- Counter + progress + arrows ---------- */
+    const step = () => (cards[1] ? cards[1].offsetLeft - cards[0].offsetLeft : track.clientWidth);
+    const max = () => track.scrollWidth - track.clientWidth;
+    const update = () => {
+      const visible = track.clientWidth / track.scrollWidth;
+      const p = max() > 0 ? track.scrollLeft / max() : 1;
+      progress?.style.setProperty('--p', String(Math.min(1, visible + (1 - visible) * p)));
+      if (prev) prev.disabled = track.scrollLeft <= 2;
+      if (next) next.disabled = track.scrollLeft >= max() - 2;
+    };
+    track.addEventListener('scroll', update, { passive: true });
+    addEventListener('resize', update, { passive: true });
+    update();
+    prev?.addEventListener('click', () => glide(track.scrollLeft - step()));
+    next?.addEventListener('click', () => glide(track.scrollLeft + step()));
+
+    /* ---------- Smooth scroll to a position, then re-enable snapping ---------- */
+    let raf = 0;
+    const nearest = (x: number) => {
+      const s = step();
+      return Math.max(0, Math.min(max(), Math.round(x / s) * s));
+    };
+    function glide(to: number) {
+      cancelAnimationFrame(raf);
+      const from = track.scrollLeft, target = nearest(to), dist = target - from;
+      track.style.scrollSnapType = 'none';
+      if (reduce || Math.abs(dist) < 1) { track.scrollLeft = target; track.style.scrollSnapType = ''; return; }
+      const dur = Math.min(900, 380 + Math.abs(dist) * 0.5), t0 = performance.now();
+      const ease = (t: number) => 1 - Math.pow(1 - t, 4);
+      const tick = (now: number) => {
+        const t = Math.min(1, (now - t0) / dur);
+        track.scrollLeft = from + dist * ease(t);
+        if (t < 1) raf = requestAnimationFrame(tick);
+        else track.style.scrollSnapType = '';
+      };
+      raf = requestAnimationFrame(tick);
+    }
+
+    /* ---------- Mouse drag with momentum (touch uses native scrolling) ---------- */
+    let down = false, moved = false, justDragged = false, startX = 0, startScroll = 0, lastX = 0, lastT = 0, v = 0;
+    track.addEventListener('pointerdown', (e) => {
+      if (e.pointerType !== 'mouse' || e.button !== 0) return;
+      e.preventDefault(); // no text selection / image ghost-drag
+      cancelAnimationFrame(raf);
+      down = true; moved = false;
+      startX = lastX = e.clientX; startScroll = track.scrollLeft; lastT = performance.now(); v = 0;
+      track.style.scrollSnapType = 'none';
+      root.classList.add('is-pressed');
+    });
+    addEventListener('pointermove', (e) => {
+      if (!down) return;
+      const dx = e.clientX - startX;
+      if (!moved && Math.abs(dx) > 5) { moved = true; root.classList.add('is-dragging'); }
+      if (!moved) return;
+      track.scrollLeft = startScroll - dx;
+      const now = performance.now(), dt = Math.max(1, now - lastT);
+      v = 0.8 * ((lastX - e.clientX) / dt) + 0.2 * v; // px per ms, smoothed
+      lastX = e.clientX; lastT = now;
+    });
+    addEventListener('pointerup', () => {
+      if (!down) return;
+      down = false;
+      root.classList.remove('is-pressed', 'is-dragging');
+      if (!moved) { track.style.scrollSnapType = ''; return; }
+      justDragged = true; setTimeout(() => (justDragged = false), 120);
+      // Throw: project where momentum would carry us, then glide + snap there.
+      const throwTo = track.scrollLeft + (reduce ? 0 : v * 260);
+      glide(throwTo);
+    });
+    // A drag shouldn't count as a click on the card under the mouse.
+    track.addEventListener('click', (e) => { if (justDragged) { e.preventDefault(); e.stopPropagation(); justDragged = false; } }, true);
+    track.addEventListener('dragstart', (e) => e.preventDefault());
+
+    /* ---------- Custom cursor that trails the mouse ---------- */
+    if (finePointer.matches) {
+      root.classList.add('cursor-ready');
+      let tx = -200, ty = -200, x = -200, y = -200, follow = 0;
+      const loop = () => {
+        x += (tx - x) * (reduce ? 1 : 0.22);
+        y += (ty - y) * (reduce ? 1 : 0.22);
+        cursor.style.setProperty('--cx', `${x}px`);
+        cursor.style.setProperty('--cy', `${y}px`);
+        follow = Math.abs(tx - x) + Math.abs(ty - y) > 0.3 ? requestAnimationFrame(loop) : 0;
+      };
+      const kick = () => { if (!follow) follow = requestAnimationFrame(loop); };
+      track.addEventListener('pointerenter', (e) => {
+        if (e.pointerType !== 'mouse') return;
+        if (!root.classList.contains('has-cursor')) { x = tx = e.clientX; y = ty = e.clientY; }
+        root.classList.add('has-cursor'); kick();
+      });
+      track.addEventListener('pointerleave', () => { if (!down) root.classList.remove('has-cursor'); });
+      addEventListener('pointermove', (e) => {
+        if (e.pointerType !== 'mouse') return;
+        tx = e.clientX; ty = e.clientY;
+        if (root.classList.contains('has-cursor')) kick();
+      }, { passive: true });
+      addEventListener('pointerup', (e) => {
+        const over = document.elementFromPoint(e.clientX, e.clientY);
+        if (!over || !track.contains(over)) root.classList.remove('has-cursor');
+      });
+      // Fixed-position cursor would drift on page scroll: hide it until the mouse moves again.
+      addEventListener('scroll', () => { if (!down) root.classList.remove('has-cursor'); }, { passive: true });
+      track.addEventListener('pointermove', (e) => { if (e.pointerType === 'mouse') root.classList.add('has-cursor'); });
+    }
+  });
+</script>

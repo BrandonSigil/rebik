@@ -28,8 +28,18 @@ import { nav, site } from '../data/site';
   .nav {
     position: sticky; top: 0; z-index: 50;
     background: var(--color-forest);
-    transition: box-shadow var(--dur-base) var(--ease-out);
+    transition: box-shadow var(--dur-base) var(--ease-out), background-color 0.8s linear;
   }
+  /* Over the bold hero (2026 theme): take on the hero's colours, then fade back (see HeroBold.astro). */
+  :global(html.hero-mode) .nav { background: var(--color-lime); box-shadow: none; }
+  :global(html.hero-mode) .nav :global(.logo) { color: var(--color-forest); }
+  :global(html.hero-mode) .nav__link { color: var(--color-forest); }
+  :global(html.hero-mode) .nav__link::after { background: var(--color-forest); }
+  :global(html.hero-mode) .nav__link:hover { color: var(--color-forest); }
+  :global(html.hero-mode) .nav :global(.btn--nav) { --btn-fg: var(--color-forest); --btn-border: var(--color-forest); }
+  :global(html.hero-mode) .nav :global(.btn--nav:hover), :global(html.hero-mode) .nav :global(.btn--nav:focus-visible) { --btn-bg: var(--color-forest); --btn-fg: var(--color-lime); --btn-border: var(--color-forest); }
+  :global(html.hero-mode) .nav__burger i { background: var(--color-forest); }
+  .nav :global(.btn--nav) { transition: color 0.8s linear, border-color 0.8s linear, background-color var(--dur-fast) linear, transform var(--dur-base) var(--ease-out); }
   .nav.is-scrolled { box-shadow: 0 6px 24px -10px rgb(0 0 0 / 0.45); }
   .nav__inner {
     height: var(--nav-h);
@@ -41,7 +51,7 @@ import { nav, site } from '../data/site';
   .nav__link {
     position: relative; color: var(--color-white); font-size: var(--fs-xs);
     padding-block: var(--space-2);
-    transition: color var(--dur-fast) linear;
+    transition: color 0.8s linear;
   }
   .nav__link::after {
     content: ""; position: absolute; left: 0; right: 0; bottom: 2px; height: 2px;
@@ -55,7 +65,7 @@ import { nav, site } from '../data/site';
   .nav__burger { position: relative; width: 26px; height: 20px; display: block; }
   .nav__burger i {
     position: absolute; left: 0; width: 100%; height: 2.5px; border-radius: 2px; background: var(--accent);
-    transition: transform var(--dur-base) var(--ease-out), opacity var(--dur-fast) linear;
+    transition: background-color 0.8s linear, transform var(--dur-base) var(--ease-out), opacity var(--dur-fast) linear;
   }
   .nav__burger i:nth-child(1) { top: 0; }
   .nav__burger i:nth-child(2) { top: 50%; translate: 0 -50%; }

@@ -1,0 +1,146 @@
+---
+/**
+ * Reviews — one large quote at a time (tinker / 2026 theme). Reviews.astro (card grid) is kept for the original theme.
+ * Data: src/data/reviews.yaml (order = slide order). Placeholder quotes ("Should have soon.") are skipped.
+ */
+import { getCollection } from 'astro:content';
+import Icon from './Icon.astro';
+
+const reviews = (await getCollection('reviews'))
+  .filter((r) => !/^should have soon/i.test(r.data.quote.trim()))
+  .sort((a, b) => a.data.order - b.data.order);
+const freelance = (org: string) => /freelance/i.test(org);
+const people = reviews.map(({ data }) => ({
+  ...data,
+  name: data.role,
+  sub: freelance(data.org) ? 'Freelance client' : data.org,
+}));
+---
+<section class="section section--alt rv-section" id="reviews" aria-labelledby="reviews-title">
+  <header class="container rv-head" data-reveal>
+    <p class="rv-eyebrow">Feedback</p>
+    <h2 id="reviews-title" class="t-display">Don’t just take <span class="hl">my word</span> for it.</h2>
+  </header>
+
+  <div class="rv container" data-rv role="region" aria-roledescription="carousel" aria-label="Reviews" tabindex="0">
+    <button type="button" class="rv__arrow rv__arrow--prev" data-rv-prev aria-label="Previous review"><Icon name="chevron-left" /></button>
+
+    <div class="rv__stage" data-rv-stage>
+      {people.map((p, i) => (
+        <figure class="rv__slide" data-rv-slide aria-roledescription="slide" aria-label={`${i + 1} of ${people.length}`} aria-hidden={i === 0 ? 'false' : 'true'} data-active={i === 0 ? '' : undefined}>
+          <blockquote class="rv__quote"><p>“{p.quote}”</p></blockquote>
+          <figcaption class="rv__by">
+            <span class="rv__name">{p.name}</span>
+            <span class="rv__sub">{p.sub}</span>
+          </figcaption>
+        </figure>
+      ))}
+    </div>
+
+    <button type="button" class="rv__arrow rv__arrow--next" data-rv-next aria-label="Next review"><Icon name="chevron-right" /></button>
+    <p class="rv__count"><span data-rv-current>1</span> <span aria-hidden="true">/</span><span class="sr-only">of</span> {people.length}</p>
+    <p class="sr-only" aria-live="polite" data-rv-live></p>
+  </div>
+</section>
+
+<style>
+  .rv-head { text-align: center; display: grid; justify-items: center; gap: var(--space-4); margin-bottom: var(--space-9); }
+  .rv-eyebrow, .rv__count {
+    font-family: var(--font-label); text-transform: var(--label-case); letter-spacing: var(--label-tracking);
+  }
+  .rv-eyebrow { font-size: var(--fs-micro); color: var(--text-muted); }
+
+  .rv {
+    --ease-salient: cubic-bezier(0.2, 0.75, 0.5, 1);
+    display: grid; grid-template-columns: auto 1fr auto; align-items: center; column-gap: var(--space-5);
+    outline: none; touch-action: pan-y;
+  }
+  .rv:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 8px; border-radius: var(--radius-lg); }
+
+  /* All slides share one cell, so the section is as tall as the longest quote (no jumping). */
+  .rv__stage { display: grid; max-width: 56rem; width: 100%; margin-inline: auto; }
+  .rv__slide {
+    grid-area: 1 / 1; display: grid; justify-items: center; align-content: center; text-align: center; gap: var(--space-6);
+    opacity: 0; visibility: hidden; transform: translateX(calc(var(--dir, 1) * 40px));
+    transition: opacity 0.5s linear, transform 0.8s var(--ease-salient), visibility 0s linear 0.8s;
+  }
+  .rv__slide[data-active] { opacity: 1; visibility: visible; transform: none; transition: opacity 0.6s linear 0.12s, transform 0.9s var(--ease-salient) 0.12s, visibility 0s; }
+  .rv__slide[data-leaving] { transform: translateX(calc(var(--dir, 1) * -40px)); }
+
+
+  .rv__quote p {
+    font-family: var(--font-body); font-weight: 400;
+    font-size: clamp(1.5rem, 1rem + 1.9vw, 2.6rem); line-height: 1.28; letter-spacing: -0.015em;
+    color: var(--color-forest); text-wrap: balance;
+  }
+  .rv__by { display: grid; gap: 4px; }
+  .rv__name { font-size: clamp(1.125rem, 1rem + 0.5vw, 1.4rem); color: var(--color-forest); }
+  .rv__sub { font-family: var(--font-accent, var(--font-body)); font-style: italic; font-size: 1.05rem; color: var(--text-muted); }
+
+  .rv__arrow {
+    width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center; color: var(--color-forest);
+    transition: background-color var(--dur-fast) linear, transform var(--dur-base) var(--ease-out);
+  }
+  .rv__arrow :global(svg) { width: 22px; height: 22px; }
+  .rv__arrow:hover { background: var(--color-lime); transform: scale(var(--hover-scale)); }
+  .rv__arrow--prev:hover :global(svg) { transform: translateX(-2px); }
+  .rv__arrow--next:hover :global(svg) { transform: translateX(2px); }
+  .rv__arrow :global(svg) { transition: transform var(--dur-base) var(--ease-out); }
+
+  .rv__count { grid-column: 1 / -1; justify-self: center; margin-top: var(--space-7); font-size: var(--fs-small); color: var(--color-forest); font-variant-numeric: tabular-nums; }
+
+  @media (max-width: 760px) {
+    .rv { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; row-gap: var(--space-6); }
+    .rv__stage { flex: 0 0 100%; order: 0; }
+    .rv__arrow--prev { order: 1; }
+    .rv__count { order: 2; margin-top: 0; }
+    .rv__arrow--next { order: 3; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .rv__slide, .rv__slide[data-active], .rv__slide[data-leaving] { transform: none; }
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-rv]').forEach((root) => {
+    const slides = [...root.querySelectorAll<HTMLElement>('[data-rv-slide]')];
+    const current = root.querySelector<HTMLElement>('[data-rv-current]')!;
+    const live = root.querySelector<HTMLElement>('[data-rv-live]')!;
+    let i = 0;
+    if (slides.length < 2) root.querySelectorAll<HTMLElement>('.rv__arrow, .rv__count').forEach((el) => (el.hidden = true));
+
+    const go = (n: number, dir: 1 | -1) => {
+      const next = (n + slides.length) % slides.length;
+      if (next === i) return;
+      const out = slides[i], inn = slides[next];
+      root.style.setProperty('--dir', String(dir));
+      // place the incoming slide on its entry side without animating, then animate in
+      inn.style.transition = 'none';
+      inn.removeAttribute('data-leaving');
+      void inn.offsetWidth;
+      inn.style.transition = '';
+      out.removeAttribute('data-active'); out.setAttribute('data-leaving', ''); out.setAttribute('aria-hidden', 'true');
+      inn.setAttribute('data-active', ''); inn.setAttribute('aria-hidden', 'false');
+      setTimeout(() => out.removeAttribute('data-leaving'), 900);
+      i = next;
+      current.textContent = String(i + 1);
+      const by = inn.querySelector('.rv__name')?.textContent ?? '';
+      live.textContent = `Review ${i + 1} of ${slides.length}, ${by}`;
+    };
+
+    root.querySelector('[data-rv-prev]')?.addEventListener('click', () => go(i - 1, -1));
+    root.querySelector('[data-rv-next]')?.addEventListener('click', () => go(i + 1, 1));
+    root.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') { e.preventDefault(); go(i - 1, -1); }
+      if (e.key === 'ArrowRight') { e.preventDefault(); go(i + 1, 1); }
+    });
+    // Swipe (touch / pen)
+    let x0: number | null = null, y0 = 0;
+    root.addEventListener('pointerdown', (e) => { if (e.pointerType !== 'mouse') { x0 = e.clientX; y0 = e.clientY; } });
+    root.addEventListener('pointerup', (e) => {
+      if (x0 === null) return;
+      const dx = e.clientX - x0, dy = e.clientY - y0; x0 = null;
+      if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) go(i + (dx < 0 ? 1 : -1), dx < 0 ? 1 : -1);
+    });
+  });
+</script>

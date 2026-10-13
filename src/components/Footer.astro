@@ -1,13 +1,14 @@
 ---
 import Logo from './Logo.astro';
 import { site, quickLinks } from '../data/site';
+import CopyEmail from './CopyEmail.astro';
 const year = new Date().getFullYear();
 ---
 <footer class="footer">
   <div class="container footer__inner">
     <div class="footer__brand">
       <Logo size="sm" href="/#intro" />
-      <p>{site.tagline}</p>
+      <p>{site.theme === '2026' ? site.footerLine : site.tagline}</p>
     </div>
     <nav class="footer__col" aria-label="Quick links">
       <h2 class="t-h5">Quick Links</h2>
@@ -16,6 +17,7 @@ const year = new Date().getFullYear();
     <div class="footer__col">
       <h2 class="t-h5">Let’s Talk</h2>
       <p>Interested in hiring me?<br />Email me at<br /><a href={site.mailto}>{site.email}</a></p>
+      {site.theme === '2026' && <CopyEmail variant="link" />}
     </div>
   </div>
   <p class="container footer__legal">© {year} Peter Rebik</p>
@@ -30,10 +32,12 @@ const year = new Date().getFullYear();
   .footer__brand { display: grid; gap: var(--space-2); max-width: 360px; align-content: start; }
   .footer__brand p { max-width: 34ch; }
   .footer h2 { color: var(--accent); margin-bottom: var(--space-2); }
-  .footer__col ul { display: grid; gap: 2px; }
+  .footer__col ul { display: grid; gap: 0; }
+  /* 24px+ tap targets (WCAG 2.5.8) */
+  .footer__col li a, .footer__col p a { display: inline-block; padding-block: 4px; }
   .footer a:not(.logo) { transition: color var(--dur-fast) linear; }
   .footer a:not(.logo):hover, .footer a:not(.logo):focus-visible { color: var(--color-white); }
-  .footer__legal { margin-top: var(--space-7); font-size: var(--fs-micro); opacity: 0.6; }
+  .footer__legal { margin-top: var(--space-7); font-size: var(--fs-micro); color: var(--color-sage); }
 
   @media (max-width: 760px) {
     .footer { color: var(--color-sage-dark); color: var(--color-sage); }

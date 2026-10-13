@@ -7,9 +7,11 @@ intro: |
   During the COVID-19 labor shortage, Pierce Transit faced critical staffing gaps that threatened service continuity. Competing against a saturated “Now Hiring” landscape, the challenge was to create a campaign that stood out and motivated action.
 
   As Senior Designer, I developed a differentiated recruitment campaign that reframed transit jobs as fulfilling, long-term careers.
-cover: ../../assets/work/hiring-campaign.png
+cover: ../../assets/work/hiring-campaign.jpg
 coverAlt: "Roadside billboard advertising careers above a highway"
-order: 5
+feature: ../../assets/work/recruitment-campaign/08-recruitment-brochure.webp
+featurePosition: "50% 50%"
+order: 3
 featured: true
 roles: [graphic-designer, art-director]
 skills: [creative-direction, messaging-story, systems-processes]
@@ -18,15 +20,15 @@ results:
   - { value: "~100%", label: "increase in hiring" }
 # Images: each "-" is one row of 1, 2 or 3 images (same height across the row).
 gallery:
-  - - { src: ../../assets/work/recruitment-campaign/01-semi-driving-by-recruitment-billboard.webp, alt: "Semi Driving by Recruitment Billboard" }
-  - - { src: ../../assets/work/recruitment-campaign/02-recruitment-1.webp, alt: "Recruitment Campaign, image 2" }
-  - - { src: ../../assets/work/recruitment-campaign/03-recruitment-2.webp, alt: "Recruitment Campaign, image 3" }
-  - - { src: ../../assets/work/recruitment-campaign/04-recruitment-3.webp, alt: "Recruitment Campaign, image 4" }
-  - - { src: ../../assets/work/recruitment-campaign/05-recruitment-4.webp, alt: "Recruitment Campaign, image 5" }
-  - - { src: ../../assets/work/recruitment-campaign/06-recruitment-day-ad-shelter.webp, alt: "Recruitment (day ad shelter)" }
-    - { src: ../../assets/work/recruitment-campaign/07-recruitment-night-ad-shelter.webp, alt: "Recruitment (night ad shelter)" }
-  - - { src: ../../assets/work/recruitment-campaign/08-recruitment-brochure.webp, alt: "Recruitment (brochure)" }
-    - { src: ../../assets/work/recruitment-campaign/09-recruitment-postcard.webp, alt: "Recruitment (postcard)" }
+  - - { src: ../../assets/work/recruitment-campaign/01-semi-driving-by-recruitment-billboard.webp, alt: "Lorry passing a motorway billboard for the Pierce Transit recruitment campaign, with two maintenance staff flanking 'Great Career. Happy You.'" }
+  - - { src: ../../assets/work/recruitment-campaign/02-recruitment-1.webp, alt: "Close-up of the recruitment billboard: a journey-level mechanic and a maintenance worker beside 'Great Career. Happy You. …the math checks out.'" }
+  - - { src: ../../assets/work/recruitment-campaign/03-recruitment-2.webp, alt: "Day and night bus shelter posters headed 'Build Your Future in Fleet Maintenance!' and 'Great Career. Happy You.' featuring real employees" }
+  - - { src: ../../assets/work/recruitment-campaign/04-recruitment-3.webp, alt: "Pierce Transit bus with a full-side recruitment wrap showing two maintenance employees and the headline 'Great Career. Happy You.'" }
+  - - { src: ../../assets/work/recruitment-campaign/05-recruitment-4.webp, alt: "Recruitment print pieces: a hand-held rack brochure and stacked double-sided postcards promoting fleet maintenance careers at Pierce Transit" }
+  - - { src: ../../assets/work/recruitment-campaign/06-recruitment-day-ad-shelter.webp, alt: "Daytime bus shelter poster with a road graphic, 'Great Career. Happy You.' and photos of a fleet manager and apprentice diesel mechanic" }
+    - { src: ../../assets/work/recruitment-campaign/07-recruitment-night-ad-shelter.webp, alt: "Illuminated night-time bus shelter poster reading 'Great Career. Happy You.' featuring two smiling journey-level mechanics" }
+  - - { src: ../../assets/work/recruitment-campaign/08-recruitment-brochure.webp, alt: "Hand holding a recruitment brochure: 'Build Your Future in Fleet Maintenance!', 'Great Career. Happy You.' and two uniformed maintenance employees" }
+    - { src: ../../assets/work/recruitment-campaign/09-recruitment-postcard.webp, alt: "Front and back of a recruitment postcard: employee portraits and headline on one side, job details, photos and contact information on the other" }
 ---
 
 ## The Challenge
