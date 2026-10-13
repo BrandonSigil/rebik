@@ -42,7 +42,8 @@
   org: Pierce Transit
   role: Strategic Initiatives Administrator
 - id: pt-marketing-intern
-  order: 9
-  quote: Should have soon.
+  # From Merriah K.'s LinkedIn recommendation (Sep 2026); she reported to Peter during her internship
+  order: 6.5
+  quote: He was generous with his knowledge and experience, and always willing to take the time to teach me new skills in marketing, design theory, and design software.
   org: Pierce Transit
   role: Marketing Intern

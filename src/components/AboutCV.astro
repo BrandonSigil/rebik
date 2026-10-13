@@ -1,0 +1,132 @@
+---
+/**
+ * Virtual CV (tinker / 2026 theme) — sits at the bottom of the About section (AboutSplit).
+ * Experience timeline on the left; education, tools and the LinkedIn link on the right.
+ * Data: src/data/cv.ts (kept in step with Peter's LinkedIn).
+ */
+import { experience, education, tools } from '../data/cv';
+import { site } from '../data/site';
+---
+<div class="cv container" aria-labelledby="cv-title">
+  <header class="cv__head" data-reveal>
+    <p class="cv__eyebrow">CV</p>
+    <h3 id="cv-title" class="cv__title">Experience</h3>
+  </header>
+
+  <div class="cv__grid">
+    <ol class="cv__jobs" role="list">
+      {experience.map((job, j) => (
+        <li class="job" data-reveal style={`--i:${j + 1}`}>
+          <div class="job__head">
+            <h4 class="job__org">{job.org}</h4>
+            <p class="job__meta">{[job.type, job.location].filter(Boolean).join(' · ')}</p>
+          </div>
+          <ol class:list={['job__roles', job.roles.length > 1 && 'job__roles--track']} role="list">
+            {job.roles.map((r) => (
+              <li class="role">
+                <p class="role__title">{r.title}</p>
+                <p class="role__when">
+                  <time>{r.start}</time> – <time>{r.end}</time>{r.mode && <span> · {r.mode}</span>}
+                </p>
+                <p class="role__summary">{r.summary}</p>
+              </li>
+            ))}
+          </ol>
+        </li>
+      ))}
+    </ol>
+
+    <aside class="cv__side">
+      <section class="cv__block" data-reveal style="--i:2" aria-labelledby="cv-edu">
+        <h4 id="cv-edu" class="cv__label">Education</h4>
+        {education.map((e) => (
+          <div class="edu">
+            <p class="edu__school">{e.school}</p>
+            <p class="edu__award">{e.award}</p>
+            <p class="role__when">{e.years}</p>
+          </div>
+        ))}
+      </section>
+
+      <section class="cv__block" data-reveal style="--i:3" aria-labelledby="cv-tools">
+        <h4 id="cv-tools" class="cv__label">Tools</h4>
+        <ul class="tools" role="list">
+          {tools.map((t) => <li>{t}</li>)}
+        </ul>
+      </section>
+
+      {site.linkedin && (
+        <a class="cv__link" href={site.linkedin} rel="me noopener" target="_blank" data-reveal style="--i:4">
+          Full profile on LinkedIn <span aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span>
+        </a>
+      )}
+    </aside>
+  </div>
+</div>
+
+<style>
+  .cv {
+    margin-top: clamp(3rem, 2rem + 4vw, 6rem);
+    padding-top: clamp(2rem, 1.5rem + 2vw, 3rem);
+    border-top: 1px solid color-mix(in srgb, var(--color-forest) 22%, transparent);
+  }
+  .cv__eyebrow, .job__meta, .role__when, .cv__label, .tools li, .cv__link {
+    font-family: var(--font-label); text-transform: var(--label-case); letter-spacing: var(--label-tracking);
+  }
+  .cv__eyebrow { font-size: var(--fs-micro); color: var(--text-muted); margin-bottom: var(--space-3); }
+  .cv__title {
+    font-family: var(--font-heading); font-weight: var(--heading-weight); letter-spacing: var(--heading-tracking);
+    font-size: clamp(1.75rem, 1.3rem + 1.6vw, 2.5rem); line-height: 1;
+  }
+
+  .cv__grid {
+    display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    gap: clamp(2rem, 1rem + 4vw, 5rem); align-items: start; margin-top: var(--space-7);
+  }
+
+  /* Experience */
+  .cv__jobs { display: grid; gap: var(--space-7); }
+  .job { display: grid; grid-template-columns: minmax(0, 13rem) minmax(0, 1fr); gap: var(--space-5); }
+  .job__org { font-family: var(--font-heading); font-weight: var(--heading-weight); letter-spacing: var(--heading-tracking); font-size: var(--fs-h3); line-height: 1.1; }
+  .job__meta { font-size: var(--fs-micro); color: var(--text-muted); margin-top: var(--space-2); line-height: 1.5; }
+  .job__roles { display: grid; gap: var(--space-5); }
+  /* A dot per role; several roles at one employer also get a LinkedIn-style track (shows the progression) */
+  .job__roles { position: relative; padding-left: var(--space-5); }
+  .job__roles--track::before {
+    content: ''; position: absolute; left: 4px; top: 0.6em; bottom: 0.6em; width: 1px;
+    background: color-mix(in srgb, var(--color-forest) 25%, transparent);
+  }
+  .role { position: relative; }
+  .role::before {
+    content: ''; position: absolute; left: calc(-1 * var(--space-5)); top: 0.42em; width: 9px; height: 9px; border-radius: 50%;
+    background: var(--bg, var(--color-white)); border: 1.5px solid var(--color-forest);
+  }
+  .role:first-child::before { background: var(--color-forest); }
+  .role__title { font-weight: var(--fw-semibold, 600); font-size: var(--fs-body-lg); line-height: 1.25; color: var(--color-forest); }
+  .role__when { font-size: var(--fs-micro); color: var(--text-muted); margin-top: var(--space-1); }
+  .role__summary { margin-top: var(--space-2); font-size: var(--fs-body); line-height: var(--lh-relaxed, 1.5); max-width: 38rem; }
+
+  /* Side column */
+  .cv__side { display: grid; gap: var(--space-6); align-content: start; }
+  .cv__label { font-size: var(--fs-micro); color: var(--text-muted); margin-bottom: var(--space-3); font-weight: var(--label-weight); }
+  .edu__school { font-weight: var(--fw-semibold, 600); font-size: var(--fs-body-lg); color: var(--color-forest); line-height: 1.25; }
+  .edu__award { margin-top: var(--space-1); }
+  .tools { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+  .tools li {
+    font-size: var(--fs-micro); line-height: 1; padding: 0.7em 0.95em; border-radius: var(--radius-pill);
+    border: 1px solid color-mix(in srgb, var(--color-forest) 30%, transparent); color: var(--color-forest);
+  }
+  .cv__link {
+    justify-self: start; display: inline-flex; gap: 0.4em; align-items: center; min-height: 24px;
+    font-size: var(--fs-xs); color: var(--color-forest);
+    text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px;
+  }
+  .cv__link:hover, .cv__link:focus-visible { text-decoration-thickness: 2px; }
+
+  @media (max-width: 900px) {
+    .cv__grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 600px) {
+    .job { grid-template-columns: 1fr; gap: var(--space-3); }
+  }
+</style>

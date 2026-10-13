@@ -12,6 +12,8 @@ export const site = {
   description:
     'Designer and art director bridging strategy and execution, helping organisations define their visual presence across every touchpoint.',
   email: 'peterrebik@gmail.com',
+  linkedin: 'https://www.linkedin.com/in/peterrebik/',
+  instagram: 'https://www.instagram.com/peterrebik/',
   get mailto() {
     return `mailto:${this.email}`;
   },

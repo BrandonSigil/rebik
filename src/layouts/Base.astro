@@ -41,6 +41,8 @@ const person = isHome && {
   url: new URL('/', Astro.site).href,
   email: `mailto:${site.email}`,
   image: portraitImg && new URL(portraitImg.src, Astro.site).href,
+  sameAs: [site.linkedin, site.instagram].filter(Boolean),
+  alumniOf: { '@type': 'CollegeOrUniversity', name: 'San Diego State University' },
   knowsAbout: ['Brand strategy', 'Art direction', 'Campaigns', 'Messaging', 'Design systems', 'Digital experiences'],
 };
 const canonical = new URL(Astro.url.pathname, Astro.site);

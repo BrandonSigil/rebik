@@ -14,7 +14,9 @@ const parts: { t: string; hl?: boolean }[] = [
   { t: 'I’m a designer and art director who bridges strategy and execution. I help organisations define their visual presence across every touchpoint.' },
 ];
 let n = 0;
-const words = parts.map((p) => ({ ...p, words: p.t.split(' ').map((w) => ({ w, i: n++ })) }));
+// Glue one-letter words ("I", "a") to the next word with a no-break space, so they never dangle at a line end
+const glue = (t: string) => t.replace(/(^|\s)([IAa]) (?=\S)/g, '$1$2\u00a0');
+const words = parts.map((p) => ({ ...p, words: glue(p.t).split(' ').map((w) => ({ w, i: n++ })) }));
 ---
 <section class="intro" id="about-intro" aria-labelledby="intro-title" data-after-hero>
   <div class="container">

@@ -1,12 +1,13 @@
 ---
 /**
- * About (tinker / 2026 theme): bio on the left, UK sponsorship card on the right.
+ * About (tinker / 2026 theme): bio on the left, UK sponsorship card on the right, virtual CV underneath (AboutCV).
  * The Intro section above already says hello and shows the portrait, so this one skips both.
  * About.astro (centred, with portrait) is kept for the original theme.
  */
 import Icon from './Icon.astro';
 import { site } from '../data/site';
 import CopyEmail from './CopyEmail.astro';
+import AboutCV from './AboutCV.astro';
 ---
 <section class="section asplit" id="about" aria-labelledby="about-title">
   <div class="container asplit__grid">
@@ -33,6 +34,8 @@ import CopyEmail from './CopyEmail.astro';
       </div>
     </aside>
   </div>
+
+  <AboutCV />
 </section>
 
 <style>

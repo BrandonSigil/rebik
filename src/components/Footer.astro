@@ -18,6 +18,13 @@ const year = new Date().getFullYear();
       <h2 class="t-h5">Let’s Talk</h2>
       <p>Interested in hiring me?<br />Email me at<br /><a href={site.mailto}>{site.email}</a></p>
       {site.theme === '2026' && <CopyEmail variant="link" />}
+      {site.theme === '2026' && (
+        <ul role="list" class="footer__social" aria-label="Elsewhere">
+          {[['LinkedIn', site.linkedin], ['Instagram', site.instagram]].filter(([, href]) => href).map(([label, href]) => (
+            <li><a href={href} rel="me noopener" target="_blank">{label} <span aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a></li>
+          ))}
+        </ul>
+      )}
     </div>
   </div>
   <p class="container footer__legal">© {year} Peter Rebik</p>
@@ -35,6 +42,7 @@ const year = new Date().getFullYear();
   .footer__col ul { display: grid; gap: 0; }
   /* 24px+ tap targets (WCAG 2.5.8) */
   .footer__col li a, .footer__col p a { display: inline-block; padding-block: 4px; }
+  .footer__col .footer__social { display: flex; flex-wrap: wrap; gap: 0 var(--space-4); margin-top: var(--space-1); }
   .footer a:not(.logo) { transition: color var(--dur-fast) linear; }
   .footer a:not(.logo):hover, .footer a:not(.logo):focus-visible { color: var(--color-white); }
   .footer__legal { margin-top: var(--space-7); font-size: var(--fs-micro); color: var(--color-sage); }

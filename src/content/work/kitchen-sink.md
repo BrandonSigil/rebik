@@ -5,8 +5,6 @@ employer: "Various clients"
 summary: "Side projects, one-offs and favourite pieces that didn’t fit neatly into a case study."
 intro: |
   Not everything fits neatly into a case study. This is a collection of side projects, one-off pieces and favourites from across my work: websites, packaging, social, signage and print.
-
-  Select any image to view it full size.
 cover: ../../assets/work/kitchen-sink/01-speak-listen.webp
 coverAlt: "Assorted design work by Peter Rebik"
 feature: ../../assets/work/kitchen-sink/01-speak-listen.webp
