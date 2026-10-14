@@ -29,7 +29,7 @@ const trail = await Promise.all(
     <h1 id="hero-title" class="bhero__title">
       <span class="bhero__line" style="--l:0"><span>I turn complex</span></span>
       <span class="bhero__line bhero__line--indent" style="--l:1"><span>ideas into <span class="bhero__nowrap"><span class="bhero__clear">clear<svg class="bhero__circle" viewBox="556 187 126 60" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d="M648.50 239.08C648.50 239.08 557.50 244.53 557.50 215.47C557.50 189.13 615.50 190.04 615.50 190.04C615.50 190.04 679.50 190.04 678.50 214.56C678.50 214.56 679.50 241.80 597.50 237.26" fill="none" stroke="currentColor" stroke-linejoin="round" /></svg></span>,</span></span></span>
-      <span class="bhero__line" style="--l:2"><span><span class="bhero__under">visual solutions<svg class="bhero__swoosh" viewBox="0 0 400 34" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d="M6 21C92 10 214 6 393 12C306 15 190 21 74 28" fill="none" stroke="currentColor" stroke-linejoin="round" /></svg></span>.</span></span>
+      <span class="bhero__line" style="--l:2"><span>visual solutions.</span></span>
     </h1>
 
     <div class="bhero__meta">
@@ -82,14 +82,8 @@ const trail = await Promise.all(
     position: absolute; left: 1%; top: -2%; width: 120%; height: 112%; z-index: -1;
     color: #fff; pointer-events: none; overflow: visible;
   }
-  /* Hand-drawn white swoosh under "visual solutions" (drawn after the circle, also on scroll) */
-  .bhero__under { position: relative; display: inline-block; }
-  .bhero__swoosh {
-    position: absolute; left: -1%; top: 86%; width: 102%; height: 0.3em; z-index: -1;
-    color: #fff; pointer-events: none; overflow: visible;
-  }
-  .bhero__circle path, .bhero__swoosh path { stroke-width: 3.6; stroke-linecap: round; vector-effect: non-scaling-stroke; }
-  @media (min-width: 761px) { .bhero__circle path, .bhero__swoosh path { stroke-width: 8; } }
+  .bhero__circle path { stroke-width: 2.2; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+  @media (min-width: 761px) { .bhero__circle path { stroke-width: 4.5; } }
   /* Lines are masked for the rise-in, then unmasked so the circle can overflow them */
   .bhero.is-ready .bhero__line { overflow: visible; }
   .bhero.is-ready .bhero__line > span { transform: none; animation: none; }
@@ -128,30 +122,22 @@ const trail = await Promise.all(
 
 <script>
   const hero = document.querySelector<HTMLElement>('[data-bhero]');
+  const path = hero?.querySelector<SVGPathElement>('.bhero__circle path');
   const after = document.querySelector<HTMLElement>('[data-after-hero]');
   const html = document.documentElement;
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  if (hero) {
-    // Scroll-drawn strokes, in order: the circle around "clear" first, then the swoosh under "visual solutions".
-    // [from, to] = the slice of the hero's height (as scrollY) over which each one draws.
-    const strokes = [
-      { path: hero.querySelector<SVGPathElement>('.bhero__circle path'), from: 0, to: 0.16 },
-      { path: hero.querySelector<SVGPathElement>('.bhero__swoosh path'), from: 0.18, to: 0.36 },
-    ].filter((s) => s.path).map((s) => ({ ...s, path: s.path!, len: 0, target: 0, shown: 0 }));
-
-    // With non-scaling-stroke, dashes are measured in screen pixels, so scale each path length by its SVG's stretch.
-    const measure = () => strokes.forEach((s) => {
-      const svg = s.path.ownerSVGElement!;
+  if (hero && path) {
+    // With non-scaling-stroke, dashes are measured in screen pixels, so scale the path length by the SVG's stretch.
+    const svg = path.ownerSVGElement!;
+    let len = 0;
+    const measure = () => {
       const b = svg.getBoundingClientRect(), vb = svg.viewBox.baseVal;
-      s.len = s.path.getTotalLength() * Math.max(b.width / vb.width, b.height / vb.height) * 1.05;
-      s.path.style.strokeDasharray = `${s.len}`;
-    });
-    const draw = () => strokes.forEach((s) => { s.path.style.strokeDashoffset = String(s.len * (1 - s.shown)); });
+      const sx = b.width / vb.width, sy = b.height / vb.height;
+      len = path.getTotalLength() * Math.max(sx, sy) * 1.05;
+      path.style.strokeDasharray = `${len}`;
+    };
     measure();
-    if (reduce) strokes.forEach((s) => { s.shown = s.target = 1; });
-    draw();
-
     // Unmask the lines once the rise-in has finished (or straight away with reduced motion / on scroll).
     const ready = () => hero.classList.add('is-ready');
     const lines = hero.querySelectorAll('.bhero__line > span');
@@ -159,31 +145,30 @@ const trail = await Promise.all(
     if (reduce) ready();
     setTimeout(ready, 1800);
     addEventListener('scroll', ready, { once: true, passive: true });
-    document.fonts?.ready.then(() => { measure(); draw(); onScroll(); });
+    document.fonts?.ready.then(() => { measure(); if (!reduce) draw(); onScroll(); });
+    path.style.strokeDashoffset = reduce ? '0' : `${len}`;
 
-    // Progress follows scroll, but eased: scroll sets a target and each stroke glides toward it every frame
-    // (exponential smoothing, ~0.14s), so wheel "notches" become one smooth draw instead of steps.
-    let glide = 0, last = 0;
+    // Circle progress follows scroll, but eased: scroll sets a target and the stroke glides toward it every
+    // frame (exponential smoothing, ~0.14s), so wheel "notches" become one smooth draw instead of steps.
+    let target = 0, shown = 0, glide = 0, last = 0;
+    const draw = () => { path.style.strokeDashoffset = String(len * (1 - shown)); };
     const step = (now: number) => {
       const dt = Math.min(0.05, (now - (last || now)) / 1000);
       last = now;
-      let moving = false;
-      strokes.forEach((s) => {
-        s.shown += (s.target - s.shown) * (1 - Math.exp(-dt / 0.14));
-        if (Math.abs(s.target - s.shown) < 0.001) s.shown = s.target;
-        else moving = true;
-      });
+      shown += (target - shown) * (1 - Math.exp(-dt / 0.14));
+      if (Math.abs(target - shown) < 0.001) shown = target;
       draw();
-      glide = moving ? requestAnimationFrame(step) : 0;
+      glide = shown === target ? 0 : requestAnimationFrame(step);
       if (!glide) last = 0;
     };
 
     let ticking = false;
     const update = () => {
       ticking = false;
+      const h = hero.offsetHeight;
+      // Draw the circle over the first ~40% of the hero's scroll.
       if (!reduce) {
-        const h = hero.offsetHeight;
-        strokes.forEach((s) => { s.target = Math.min(1, Math.max(0, (scrollY - h * s.from) / (h * (s.to - s.from)))); });
+        target = Math.min(1, Math.max(0, scrollY / (h * 0.4)));
         if (!glide) glide = requestAnimationFrame(step);
       }
       // Leave hero colours once the next section is well into view.
@@ -192,7 +177,7 @@ const trail = await Promise.all(
     };
     const onScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } };
     addEventListener('scroll', onScroll, { passive: true });
-    addEventListener('resize', () => { measure(); draw(); onScroll(); }, { passive: true });
+    addEventListener('resize', () => { measure(); if (!reduce) draw(); onScroll(); }, { passive: true });
     update();
   }
 

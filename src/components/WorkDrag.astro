@@ -50,6 +50,9 @@ const featureOf = (p: (typeof projects)[number]) => {
                   draggable="false"
                   style={p.data.featurePosition ? `object-position:${p.data.featurePosition}` : undefined}
                 />
+                {p.data.results[0] && (
+                  <p class="wstat"><strong>{p.data.results[0].value}</strong> {p.data.results[0].label}</p>
+                )}
               </div>
               <p class="wcard__meta"><span>{pad(i + 1)}</span>{p.data.employer && <span>{p.data.employer}</span>}</p>
               <h3 class="wcard__title"><span>{p.data.title}</span></h3>
@@ -124,8 +127,16 @@ const featureOf = (p: (typeof projects)[number]) => {
     transform-origin: 50% 40%;
     transition: transform 0.55s var(--ease-salient);
   }
-  .wcard__media { aspect-ratio: 4 / 5; overflow: hidden; border-radius: var(--radius-md); background: var(--bg-alt); margin-bottom: var(--space-3); }
+  .wcard__media { position: relative; aspect-ratio: 4 / 5; overflow: hidden; border-radius: var(--radius-md); background: var(--bg-alt); margin-bottom: var(--space-3); }
   .wcard__media img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.75s var(--ease-salient); pointer-events: none; }
+  /* Headline result pinned to the image */
+  .wstat {
+    position: absolute; left: var(--space-3); bottom: var(--space-3); max-width: calc(100% - 2 * var(--space-3));
+    display: inline-flex; align-items: baseline; gap: 0.5em; padding: 0.45em 0.85em; border-radius: var(--radius-pill);
+    background: var(--color-lime); color: var(--color-forest);
+    font-family: var(--font-label); font-size: var(--fs-micro); text-transform: uppercase; letter-spacing: 0.06em; line-height: 1.2;
+  }
+  .wstat strong { font-family: var(--font-heading); font-weight: var(--heading-weight); font-size: 1.35em; letter-spacing: -0.02em; text-transform: none; }
   .wcard__meta { display: flex; gap: var(--space-3); font-size: var(--fs-micro); color: var(--text-muted); }
   .wcard__title { font-size: var(--fs-h3); line-height: var(--lh-snug); color: var(--color-forest); }
   .wcard__title span {
