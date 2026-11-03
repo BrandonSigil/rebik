@@ -64,6 +64,9 @@ const people = reviews.map(({ data }) => ({
   }
   .rv:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 8px; border-radius: var(--radius-lg); }
 
+  /* Off-stage slides sit 40px to the side; clip them so they can't widen the page on phones. */
+  .rv-section { overflow-x: clip; }
+
   /* All slides share one cell, so the section is as tall as the longest quote (no jumping). */
   .rv__stage { display: grid; max-width: 56rem; width: 100%; margin-inline: auto; }
   .rv__slide {
