@@ -1,49 +1,76 @@
 # Reviews. `order` = slide order (2026 theme) / grid order (original theme).
+# `quote` is the pull quote shown large (verbatim, trimmed with … where needed); `full` is the whole review,
+# shown under "Read the full review". Source: Peter's "Portfolio Testimonials.pdf" (Oct 2026).
 # Keep clients spread out so the same organisation doesn't appear twice in a row.
-# Quotes that still read "Should have soon." are hidden from the 2026 slider until filled in.
-- id: pt-chief-planning
+# Quotes that read "Should have soon." are hidden from the 2026 slider until filled in.
+- id: ryan-wheaton
   order: 1
-  quote: Peter's work is regularly the best part of my events or presentations. His work never disappoints.
-  org: Pierce Transit
+  name: Ryan Wheaton
   role: Chief Planning Officer
-- id: smith-kandal
+  org: Pierce Transit
+  quote: Peter is one of the best hires I've ever been a part of making. … I can't recommend him highly enough to anyone looking for an exceptional graphic designer or art director.
+  full: |
+    Peter is one of the best hires I've ever been a part of making. His ability to take an idea, understand the underlying goals, and translate them into impactful messaging is unmatched in my experience working with marketing and design professionals.
+
+    Peter brings a rare combination of creativity, strategic thinking, and technical talent to his work. He doesn't just make things look great. He understands what we're trying to accomplish and finds ways to communicate it more effectively.
+
+    Beyond his talent, Peter is easy to work with, collaborative, and a genuinely great teammate. I can't recommend him highly enough to anyone looking for an exceptional graphic designer or art director.
+- id: melissa-smith
   order: 2
-  quote: Peter really thinks about the client and what their needs are. I consider him a critical part of what we do.
-  org: Freelance
-  role: Smith-Kandal Insurance + Real Estate
-- id: pt-marketing-manager
+  name: Melissa Smith
+  role: Co-Owner and Partner
+  org: Smith-Kandal Insurance & Real Estate
+  quote: We highly value Peter’s expertise, collaborative approach, and commitment to bringing our brand to life, which ultimately produced an increase in revenue for our agency.
+  full: |
+    Peter has been an invaluable partner in shaping and elevating our brand over the years. From developing our website branding to guiding us through a full logo rebrand, he consistently brings creativity, strategic thinking, and a clear vision to every project. His work on our video campaign further strengthened our company's identity and presence in the community. It helped us communicate our story compellingly and engagingly. We highly value Peter’s expertise, collaborative approach, and commitment to bringing our brand to life, which ultimately produced an increase in revenue for our agency.
+- id: merriah-kubista
   order: 3
-  quote: Peter carefully checks the details, ensuring the highest level of quality for the Pierce Transit brand!
-  org: Pierce Transit
-  role: Marketing Manager
-- id: windsor
-  order: 4
-  quote: Should have soon.
-  org: Freelance
-  role: Windsor Christian Church + Academy
-- id: pt-community-engagement
-  order: 5
-  quote: I’m so thankful for Peter’s leadership; for his vision and the thoughtfulness he uses to execute creative direction.
-  org: Pierce Transit
-  role: Strategic Community Engagement Admin.
-- id: beautiful-day
-  order: 6
-  quote: Should have soon.
-  org: Freelance
-  role: Beautiful Day Cleaning Co.
-- id: pt-planning-manager
-  order: 7
-  quote: Peter always has great communication. He listens to our needs and promptly delivers.
-  org: Pierce Transit
-  role: Planning Manager
-- id: pt-strategic-initiatives
-  order: 8
-  quote: Peter consistently produces a fantastic end product. I’m so appreciative of his help!
-  org: Pierce Transit
-  role: Strategic Initiatives Administrator
-- id: pt-marketing-intern
-  # From Merriah K.'s LinkedIn recommendation (Sep 2026); she reported to Peter during her internship
-  order: 6.5
-  quote: He was generous with his knowledge and experience, and always willing to take the time to teach me new skills in marketing, design theory, and design software.
-  org: Pierce Transit
+  name: Merriah Kubista
   role: Marketing Intern
+  org: Pierce Transit
+  quote: He was generous with his knowledge and experience, and always willing to take the time to teach me new skills in marketing, design theory, and design software.
+  full: |
+    I had the pleasure of working with Peter during my internship at Pierce Transit, where he was a great mentor and coworker. He was generous with his knowledge and experience, and always willing to take the time to teach me new skills in marketing, design theory, and design software.
+
+    Peter was patient and approachable, and I never felt uncomfortable asking questions or admitting when I didn’t understand something. He made it easy to learn through trial and error without making me feel defensive about my work. His feedback was consistently comprehensive, thoughtful, and constructive, giving me practical ways to improve my work while still recognizing what was working well.
+
+    I really valued the opportunity to learn from someone with his experience, and his guidance contributed meaningfully to my growth during my internship. Peter is very knowledgeable, passionate about his work, and easy to work with, and I believe he would be a great addition to any team!
+- id: michael-porter
+  order: 4
+  name: Michael Porter
+  role: Associate Pastor
+  org: Windsor Christian Church & Academy
+  quote: He transformed an outdated and complicated brand and website into something clear, cohesive, and easy to navigate.
+  full: |
+    Peter Rebik of Rebik Design was a tremendous help to us at Windsor Christian Church and Academy. He did far more than redesign our logos and websites. He helped us clarify our message, particularly how our church and school relate to and complement one another, and communicate that relationship consistently across both websites.
+
+    From the beginning, Peter involved our team, listened carefully, and responded to feedback quickly and graciously. He transformed an outdated and complicated brand and website into something clear, cohesive, and easy to navigate.
+
+    I would gladly recommend Peter to anyone looking for a true partner, not just a developer.
+- id: chelsea-talbert
+  order: 5
+  name: Chelsea Talbert
+  role: Strategic Community Engagement Administrator
+  org: Pierce Transit
+  quote: Peter is an incredible thought-partner and executor of the work. He identifies gaps and things that I don't see while staying true to the north star of the work.
+  full: |
+    Peter is an incredible thought-partner and executor of the work. He identifies gaps and things that I don't see while staying true to the north star of the work. He ensures accuracy and alignment and works quickly to pivot as needs rapidly evolve.
+# NOTE: the testimonials PDF lists this one under "Merriah Kubista" too (a copy-paste slip?). Shown by role only
+# until Peter confirms the second intern's name; add `name:` here when he does.
+- id: pt-marketing-intern-2
+  order: 6
+  role: Marketing Intern
+  org: Pierce Transit
+  quote: Whether he was walking me through his suggestions or leaving detailed comments on ways to make a design clearer and more visually engaging, he helped me understand not just what could be improved, but why.
+  full: |
+    I had the opportunity to work with Peter for a year during my time as a Marketing Intern at Pierce Transit. As I learned to work in InDesign and apply the company's brand guidelines, I had a lot to learn, and Peter played a significant role in my growth and development as a designer.
+
+    Peter was always welcoming and willing to offer constructive feedback on the designs I created. Whether he was walking me through his suggestions or leaving detailed comments on ways to make a design clearer and more visually engaging, he helped me understand not just what could be improved, but why. My projects spanned a wide range of print, digital, and out-of-home materials. Each project went through a thorough review process, with collaborative feedback and multiple rounds of proofs to ensure every design met the brief and delivered the best possible final product.
+
+    One of the most valuable parts of working with Peter was learning how he approached design with the audience in mind and considered how viewers would perceive and interact with each piece. I am grateful for the opportunity to learn from him, and I know the skills and perspective he shared with me will continue to benefit me throughout my marketing career. He's a great person and helped me when I needed it on more than a handful of occasions.
+- id: curt-kohlwes
+  order: 7
+  name: Curt Kohlwes
+  role: Government Relations Manager
+  org: Pierce Transit
+  quote: Should have soon.

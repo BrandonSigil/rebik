@@ -156,6 +156,7 @@ From Peter's project wireframe.
 - **Nav:** "Work" in the header (desktop and mobile) goes to the `/work` index page, on both themes. The footer quick links and the "See My Work" buttons still jump to the homepage section.
 - **Write-up card:** mint panel, `--radius-lg`. Headings are `--fs-h4`, body is `--fs-small`, and list bullets are lime dots.
 - **Images:** rows of 1, 2 or 3 tiles with a 10px gap and `--radius-md`. Each row's tiles share one aspect ratio, based on the average of their images, so the row lines up. An image whose shape is far off the row's shape is letterboxed (`contain`) instead of cropped. Every tile opens the lightbox (arrow keys, Esc).
+- **Gallery rows (Oct 2026):** see “Project galleries” under Theme B. The row types (image row, mosaic, heading, booklet) are shared template code.
 - **Prev / next band:** lime band with forest outline pills (“See Prev”, “See Next”) and long arrows. Hover: `#ade04b` fill, ×1.1, lift shadow.
 
 ---
@@ -215,7 +216,7 @@ All four are SIL Open Font License, self-hosted via `@fontsource`.
 
 ## Reviews (B)
 - `ReviewsSlider.astro` replaces the card grid when `site.theme` is `'2026'`. The original `Reviews.astro` is kept for the original theme.
-- **Layout:** one large quote at a time, in the body font at 24–42px. Below it is the role, with the organisation in serif italic underneath. Then a “1 / 6” counter and chevron arrows. There are no stars or avatars.
+- **Layout:** one large pull quote at a time, in the body font at 22–34px. Below it is the reviewer's name, with “role, organisation” in serif italic underneath (no name → the role leads and the organisation sits underneath). A “Read the full review ↓” toggle (`<details>`) opens the whole testimonial. Then a “1 / 6” counter and chevron arrows. There are no stars or avatars.
 - **Motion:** slides cross-fade and drift 40px in the direction of travel. Arrows, the ← → keys and swipe all move it. There is no autoplay.
 - Quotes that still read “Should have soon.” are hidden. `order` in `reviews.yaml` alternates clients so the same organisation doesn't appear twice in a row.
 
@@ -283,9 +284,35 @@ From the site audit. This pass covers everything that didn't need input from Pet
   - **Left:** experience, newest first. The employer and a mono meta line (type · location) sit on the left of each entry, with the roles beside them. Every role gets a dot: the current role's is filled, the rest are outlined. Pierce Transit's three roles are joined by a thin track, LinkedIn-style, so the progression reads at a glance. Each role shows a semibold title, mono dates · work mode, and a one-line summary.
   - **Right:** Education (SDSU), Tools as outline pills (Adobe InDesign, Illustrator, Photoshop, Premiere Pro, Figma, WordPress, HubSpot, Microsoft 365), and a "Full profile on LinkedIn ↗" link. The tools come from the old site's Programs list. The proficiency line graph is gone, by request.
 - **Social:** `site.linkedin` and `site.instagram` feed a small "LinkedIn ↗ · Instagram ↗" row under Copy email in the footer's Let's Talk column (2026 only; they open in a new tab with `rel="me"`). Both also go into `sameAs` in the Person JSON-LD, which now carries `alumniOf` too.
-- **Reviews:** the empty Marketing Intern slot now quotes Merriah K.'s LinkedIn recommendation. It's about mentoring, and it sits at order 6.5.
+- **Reviews:** (superseded Oct 25 2026: the reviews were replaced by Peter's testimonials PDF, see below.)
 
 ## Peter's second-pass fixes (B, Oct 13 2026)
 - **Skills reel bug:** the loop copy of the cards was `inert`, which blocks hover and tap. After one full pass of auto-scroll the copy is what's on screen, so the cards "stopped working." The copy is now only `aria-hidden` and has no tabindex, so it's still hidden from screen readers and out of the tab order.
 - **Reviews eyebrow:** "Feedback" is now "Reviews", to match the nav and footer.
 - **/work title:** "A few *real world* examples." replaces "All *work*." because it isn't all of Peter's work. The homepage link under the work heading now reads "Browse projects ↗" (was "All work ↗").
+
+## Drive drop: project pages, booklets, reviews, logo (B, Oct 25 2026)
+Source: Peter's Drive folder, downloaded to `incoming/Rebik Site/` (not committed). Each project folder has an InDesign layout (PDF + IDML) and a `Links/` folder.
+- **Project galleries** follow Peter's layouts. `gallery` in each `src/content/work/*.md` is a list of rows:
+  - **Image row:** 1–4 items side by side: `- [ { src, alt, ratio? , video?, controls? }, … ]`. `ratio` is the frame's shape in the layout (w/h). When every item in a row has one, the row uses their average shape as-is, so it matches the layout. Otherwise the old rule applies (average of the images, clamped; outliers letterboxed).
+  - **Mosaic:** `- { cols: [[…], […]], widths: [198, 212] }`: 2–3 columns of stacked tiles, for layouts where tiles don't line up in rows (the annual report's ads).
+  - **Heading:** `- { heading: "Design examples", text: "…" }`: a hairline rule, a small title and an optional line of text, to group work inside one project (Kitchen Sink's clients, Brand Refresh's examples).
+  - **Booklet:** `- { booklet: pt-brand-guide, title: "Brand Guide (Sept 2025)", spreads: false }`: a flippable document. See below.
+  - **Video:** an item with `video: /video/<slug>/<file>.mp4` plays muted on a loop (website scrolls, logo animation) and pauses off-screen. With `controls: true` it's a normal player instead (Smith-Kandal's full-length spot). `src` is the poster. Reduced motion shows the poster only. Videos are skipped by the lightbox and never used as the OG image.
+  - Tiles are `GalleryTile.astro`; the page logic is in `work/[slug].astro`.
+- **Booklet (`Booklet.astro`):** page images live in `src/assets/booklets/<id>/01.webp, 02.webp…`. Make them with `python3 scripts/pdf-to-booklet.py <file.pdf> <id>` (`--split` for PDFs exported as spreads).
+  - `spreads: true`: the cover sits alone on the right, then two-page spreads, then the back cover alone on the left, like a printed book. `spreads: false`: one page at a time (landscape decks like the brand guide). Below 700px it's always one page at a time.
+  - Page turns are a 3D leaf flip (0.7s). Reduced motion crossfades instead. Controls: round prev/next arrows, a “Pages 2–3 of 20” count, ← → keys when focused, and swipe on touch. Clicking a page opens it in the project lightbox at full size.
+- **Asset pipeline:** `scripts/process-drive-drop.py` is the one-off script that built every image, video and booklet from the drop: WebP at ≤2400px, MP4 (H.264, ≤1600px, CRF 27, mid-frame poster) from GIF/MOV/MP4, composite tiles cut straight from the layout PDF at 288 dpi, and image crops taken from the IDML frames. Keep it for the next drop; its project table (`P`) lists each project's rows.
+- **Work cards:** a project can set `cardVideo: /video/<slug>/work-card.mp4` to loop a clip over its card image on the homepage carousel and `/work` (Select Logos uses Peter's animated logo reel). Muted, `aria-hidden`, hidden with reduced motion.
+- **Reviews:** `src/data/reviews.yaml` was replaced with Peter's testimonials PDF. Each entry has `name`, `role`, `org`, a verbatim pull `quote` (trimmed with … where needed) and the `full` text. Curt Kohlwes stays hidden until his quote arrives. The second intern review is shown by role only until Peter confirms the name (the PDF repeated Merriah's).
+- **Logo + portrait:** the header/footer mark is now Peter's SVG (`src/assets/brand/logo-mark.svg`, used as a CSS mask so it takes the theme color). Favicon, apple-touch and PWA icons were regenerated from it. The portrait everywhere (hero, intro, About, OG card) is `peter-portrait-2026.jpg`, B&W on volt.
+
+## Peter's final notes (B, Nov 2 2026)
+
+- **Logo:** name only. The swooping P mark is gone from the header and footer (it was a Pierce Transit rebrand concept). Favicon, touch and manifest icons are now a "PR" monogram in pine on volt, and the OG card's lockup is the name alone.
+- **About:** Peter's new, more personal copy (five paragraphs) on both themes, with only typo fixes ("in March 2027", "the size of several…").
+- **Kitchen Sink:** rebuilt from Peter's Nov 2026 folder and `Kitchen Sink.pdf`: 11 groups with his own titles and descriptions (verbatim), in his image order, including the new PT Swag, PT Rebrand Concept, Farmers Market and World Cup groups. Rebuild with `scripts/build-kitchen-sink.py "<folder>"`. DPC Students and the Known hoodies aren't in his layout, so they're off the page. Group breaks are a 3px lime rule (his design), none above the first group; descriptions run to 62ch. One lightbox sequence still runs across all groups.
+- **Hero image trail** pictures now live in `src/assets/hero/trail-*.webp`, so gallery rebuilds can't break the homepage.
+- Already in from the Oct 25 drop and confirmed: logos GIF as the Select Logos card video, testimonials from his PDF, project galleries in his PDF order.
+- **Work order (Brandon):** Select Logos moved up to 3rd: Perception, Smith-Kandal, Select Logos, Recruitment, Windsor, Gig Harbor, Brand Refresh, Annual Report, Kitchen Sink.

@@ -8,7 +8,7 @@ const projects = await getAllWork();
 <Base title="Work" description="Case studies by Peter Rebik: brand systems, campaigns and digital work for Pierce Transit and freelance clients, with the results behind each one.">
   <section class="section">
     <header class="section-head container-md" data-reveal>
-      <h1 class="t-display">All <span class="hl">work</span>.</h1>
+      <h1 class="t-display">A few <span class="hl">real world</span> examples.</h1>
       <p>A closer look at the design challenges behind each project, the thinking that shaped the solutions, and the outcomes that followed.</p>
     </header>
     <ul role="list" class="grid container">
@@ -17,6 +17,7 @@ const projects = await getAllWork();
           <a href={`/work/${p.id}/`} class="item">
             <div class="item__media">
               <Image src={p.data.cover} alt={p.data.coverAlt} widths={[400, 720]} sizes="(max-width: 760px) 100vw, 360px" loading={i < 3 ? 'eager' : 'lazy'} fetchpriority={i === 0 ? 'high' : undefined} />
+              {p.data.cardVideo && <video class="card-video" src={p.data.cardVideo} autoplay muted loop playsinline preload="none" aria-hidden="true" />}
               {p.data.results[0] && <p class="stat"><strong>{p.data.results[0].value}</strong> {p.data.results[0].label}</p>}
             </div>
             {p.data.employer && <p class="item__employer">{p.data.employer}</p>}
@@ -36,6 +37,8 @@ const projects = await getAllWork();
   .item__media img { width: 100%; height: 100%; object-fit: cover; transition: transform 900ms var(--ease-out); }
   .item__employer { font-family: var(--font-label); font-size: var(--fs-micro); text-transform: var(--label-case); letter-spacing: var(--label-tracking); color: var(--accent-text); margin-bottom: calc(-1 * var(--space-2)); }
   :global([data-theme="original"]) .item__employer { font-size: var(--fs-small); color: var(--color-forest); }
+  .card-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+  @media (prefers-reduced-motion: reduce) { .card-video { display: none; } }
   .stat {
     position: absolute; left: var(--space-3); bottom: var(--space-3); max-width: calc(100% - 2 * var(--space-3));
     display: inline-flex; align-items: baseline; gap: 0.5em; padding: 0.4em 0.8em; border-radius: var(--radius-pill);

@@ -11,7 +11,7 @@ cover: ../../assets/work/gig-harbor-connector/01-gig-harbor-connector-magazine-a
 coverAlt: "Gig Harbor Connector magazine ad"
 feature: ../../assets/work/gig-harbor-connector/01-gig-harbor-connector-magazine-ad-final.webp
 featurePosition: "58% 50%"
-order: 5
+order: 6
 featured: false
 roles: [art-director, graphic-designer]
 skills: [brand-strategy, systems-processes, creative-direction, alignment-collaboration]
@@ -20,19 +20,15 @@ results:
   - { value: "2 weeks", label: "concept to rollout" }
 # Images: each "-" is one row of 1, 2 or 3 images (same height across the row).
 gallery:
-  - - { src: ../../assets/work/gig-harbor-connector/01-gig-harbor-connector-magazine-ad-final.webp, alt: "Connector-branded Pierce Transit shuttle arriving at a Gig Harbor waterfront stop as people walk over, forested hills and marina behind" }
-  - - { src: ../../assets/work/gig-harbor-connector/02-connector-1.webp, alt: "Connector pattern system: tonal blue icons of buses, trees, whales, bridges, mountains, waves and location pins tiled across a wide banner" }
-  - - { src: ../../assets/work/gig-harbor-connector/03-connector-6.webp, alt: "Gig Harbor Waterfront Connector brandmark on white and on blue, with looping green arrows forming the 'o's, above the Pierce Transit logo" }
-  - - { src: ../../assets/work/gig-harbor-connector/04-connector-5.webp, alt: "Fleet decal elevations for the repurposed shuttle: driver side, rear and passenger side in a white-to-blue gradient with the Connector logo" }
-  - - { src: ../../assets/work/gig-harbor-connector/05-connector-7.webp, alt: "Two-sided Connector rider flyer: 'Ride the Gig Harbor Waterfront Connector' with schedule on the front, fares and redesigned route map on the back" }
-    - { src: ../../assets/work/gig-harbor-connector/06-connector-pattern.webp, alt: "Close-up of the Connector icon pattern: blue-on-blue pictograms of shuttles, buses, whales, bridges, trees, houses, food and landmarks" }
-    - { src: ../../assets/work/gig-harbor-connector/07-connector-logo-on-white-alt.webp, alt: "Gig Harbor Waterfront Connector logo in blue and green on white, with circular arrows looping through the wordmark above the Pierce Transit logo" }
-  - - { src: ../../assets/work/gig-harbor-connector/08-connector-logo-on-blue.webp, alt: "Reversed Gig Harbor Waterfront Connector logo in white and green on a solid blue background, with the Pierce Transit logo beneath" }
-    - { src: ../../assets/work/gig-harbor-connector/09-connector-vehicle-drivers.webp, alt: "Driver-side decal illustration of the Connector shuttle: white cab fading into a patterned blue body, green roof band and Connector wordmark" }
-    - { src: ../../assets/work/gig-harbor-connector/10-connector-vehicle-back-alt.webp, alt: "Rear decal illustration of the Connector shuttle: full blue icon-pattern wrap with 'Gig Harbor Waterfront' roof band and Connector and Pierce Transit logos" }
-  - - { src: ../../assets/work/gig-harbor-connector/11-connector-vehicle-passenger.webp, alt: "Passenger-side decal illustration of the Connector shuttle with boarding doors, a blue patterned gradient wrap, green roof band and Connector logo" }
-    - { src: ../../assets/work/gig-harbor-connector/12-connector-ad.webp, alt: "Magazine advert headed 'Ride the Gig Harbor Waterfront Connector, June 7 – August 28, 2025', with the shuttle at the waterfront and service times" }
-    - { src: ../../assets/work/gig-harbor-connector/13-2025-gig-harbor-waterfront-connector-midis.webp, alt: "Connector rider information poster for summer 2025 with live-info options, fare table and a redesigned route map of downtown and uptown Gig Harbor" }
+  - - { src: ../../assets/projects/gig-harbor-connector/01-gig-harbor-connector-magazine-ad-final.webp, alt: "Photo from the Gig Harbor Connector magazine ad: the branded shuttle at a waterfront crossing, with pedestrians and an icon-patterned sky.", ratio: 1.9 }
+  - - { src: ../../assets/projects/gig-harbor-connector/02-background-pattern-rgb-gradient-icons-horizontal-gradient-co.webp, alt: "Connector background pattern of tonal blue icons, including buses, trees, houses, bridges, whales and cutlery, repeated across a wide banner.", ratio: 1.9 }
+  - - { src: ../../assets/projects/gig-harbor-connector/03-connector-logo-on-white-alt.webp, alt: "Gig Harbor Waterfront Connector logo on white: blue 'connector' wordmark looped by green arrows, above the Pierce Transit logo.", ratio: 1.2118 }
+    - { src: ../../assets/projects/gig-harbor-connector/04-connector-logo-on-blue.webp, alt: "Reversed Gig Harbor Waterfront Connector logo on blue: white 'connector' wordmark with green looping arrows and the Pierce Transit logo.", ratio: 1.2118 }
+  - - { src: ../../assets/projects/gig-harbor-connector/05-connector-vehicle-drivers.webp, alt: "Driver-side livery drawing for the Connector shuttle: white cab fading into a blue icon pattern, with a green roof band.", ratio: 1.9 }
+  - - { src: ../../assets/projects/gig-harbor-connector/06-connector-vehicle-passenger.webp, alt: "Passenger-side livery drawing for the Connector shuttle, showing the blue gradient pattern, green roof band and 'connector' wordmark by the doors.", ratio: 1.9 }
+  - - { src: ../../assets/projects/gig-harbor-connector/07-gig-harbor-waterfront-connector-stop-1.webp, alt: "Bus stop sign for the Gig Harbor Waterfront Connector with dates, route map, fares and three ways to get live information.", ratio: 1.7787 }
+  - - { src: ../../assets/projects/gig-harbor-connector/08-gig-harbor-waterfront-connector-ad-1.webp, alt: "Magazine ad inviting readers to 'Ride the Gig Harbor Waterfront Connector', June 7 – August 28, 2025, with the shuttle and timetable.", ratio: 1.7787 }
+  - - { src: ../../assets/projects/gig-harbor-connector/09-gig-harbor-waterfront-connector-brochure.webp, alt: "Gig Harbor Waterfront Connector tri-fold brochure, front and inside, showing fares, route map, service hours and rider information.", ratio: 1.3355 }
 ---
 
 ## The Challenge

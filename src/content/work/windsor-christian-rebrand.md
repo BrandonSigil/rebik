@@ -7,11 +7,11 @@ intro: |
   Windsor Christian needed a cohesive brand system to connect its church and academy, along with a modern, user-friendly website to replace an outdated and difficult-to-navigate experience.
 
   As a Freelance Designer, I led a research-driven rebrand and website redesign to improve clarity, usability, and onboarding for key audiences.
-cover: ../../assets/work/website-rebrand.jpg
+cover: ../../assets/work/website-rebrand.webp
 coverAlt: "Hand holding a phone showing the redesigned Windsor Christian website"
 feature: ../../assets/work/windsor-christian-rebrand/01-17.webp
 featurePosition: "42% 50%"
-order: 4
+order: 5
 featured: true
 roles: [graphic-designer]
 skills: [digital-experiences, brand-strategy, systems-processes, alignment-collaboration]
@@ -19,20 +19,28 @@ results:
   - { value: "2x", label: "faster user flows" }
 # Images: each "-" is one row of 1, 2 or 3 images (same height across the row).
 gallery:
-  - - { src: ../../assets/work/windsor-christian-rebrand/01-17.webp, alt: "Hand holding a phone showing the redesigned Windsor Christian Church mobile site, open on a “Get Connected” page with Adults and Students groups" }
-  - - { src: ../../assets/work/windsor-christian-rebrand/02-windsor-christian-1.webp, alt: "Horizontal Windsor Christian Church + Academy logo in white and bright blue over a blue-toned photo of a family gathered around a laptop" }
-  - - { src: ../../assets/work/windsor-christian-rebrand/03-windsor-christian-2.webp, alt: "Stacked Windsor Christian logos side by side: the “Church” version in navy on white and the “Academy” version in white on navy" }
-  - - { src: ../../assets/work/windsor-christian-rebrand/04-windsor-christian-3.webp, alt: "Windsor Christian circular badges: a bright blue Church badge on navy and a navy Academy badge on white, each centred on the W emblem" }
-  - - { src: ../../assets/work/windsor-christian-rebrand/05-windsor-christian-4.webp, alt: "Annotated Windsor Christian Church logo explaining that three lines for “Glory, Gospel, and Goodness” form a W, paired with a sans serif and flourish script" }
-  - - { src: ../../assets/work/windsor-christian-rebrand/06-windsor-christian-5.webp, alt: "Merchandise mock-ups for Windsor Christian: a navy T-shirt with the stacked Church logo and a navy trucker cap with a blue circular badge" }
-  - - { src: ../../assets/work/windsor-christian-rebrand/07-windsor-christian-8.webp, alt: "Windsor Christian Academy mobile website design across five phone screens, covering the homepage, enrolment steps, curriculum highlights and K–8 staff" }
-  - - { src: ../../assets/work/windsor-christian-rebrand/08-windsor-christian-9.webp, alt: "Isometric grid of phones displaying many Windsor Christian mobile web pages in navy and bright blue, showing the breadth of the redesigned site" }
-  - - { src: ../../assets/work/windsor-christian-rebrand/09-windsor-christian-church-logo-white.webp, alt: "Windsor Christian Church stacked logo on white: the bright blue circular W emblem above a navy wordmark and blue “Church” script" }
-    - { src: ../../assets/work/windsor-christian-rebrand/10-windsor-christian-church-logo-blue.webp, alt: "Windsor Christian Academy stacked logo reversed on navy: the bright blue W emblem above a white wordmark and blue “Academy” script" }
-    - { src: ../../assets/work/windsor-christian-rebrand/11-windsor-christian-church-badge-blue.webp, alt: "Windsor Christian Church circular badge in bright blue on navy, with the name arcing around the central W emblem" }
-  - - { src: ../../assets/work/windsor-christian-rebrand/12-windsor-christian-academy-badge-white.webp, alt: "Windsor Christian Academy circular badge in navy and white on a white background, with the bright blue W emblem at its centre" }
-    - { src: ../../assets/work/windsor-christian-rebrand/13-windsor-christian-shirt.webp, alt: "Navy T-shirt mock-up printed with the stacked Windsor Christian Church logo in white and bright blue" }
-    - { src: ../../assets/work/windsor-christian-rebrand/14-windsor-christian-hat.webp, alt: "Navy trucker cap mock-up with white mesh back and a bright blue circular Windsor Christian Academy badge on the front" }
+  - - { src: ../../assets/projects/windsor-christian-rebrand/01-windsor-christian-1.webp, alt: "Windsor Christian Church + Academy logo in white over a blue-tinted photo of a family smiling at a laptop", ratio: 1.7563 }
+  - - { src: ../../assets/projects/windsor-christian-rebrand/02-windsor-logo-before-and-after.webp, alt: "Before and after: the old First Baptist Church Windsor cross logo above the new blue Windsor Christian Church logo", ratio: 1.1875 }
+  - - { src: ../../assets/projects/windsor-christian-rebrand/03-windsor-logo-roughs-all.webp, alt: "Four black rough logo concepts for Windsor Christian: a cross in a circle, a crown, a sunrise over fields and a W mark", ratio: 1.7563 }
+  - - { src: ../../assets/projects/windsor-christian-rebrand/04-windsor-christian-4.webp, alt: "Annotated Windsor Christian Church logo explaining three lines for 'Glory, Gospel, and Goodness' forming a W, and the type pairing", ratio: 1.2941 }
+  - - { src: ../../assets/projects/windsor-christian-rebrand/05-windsor-christian-church-logo-white.webp, alt: "Stacked Windsor Christian Church logo with the blue W emblem and script 'Church' on a white background", ratio: 1.03 }
+    - { src: ../../assets/projects/windsor-christian-rebrand/06-windsor-christian-church-logo-blue.webp, alt: "Stacked Windsor Christian Academy logo in white and bright blue, with script 'Academy', on a navy background", ratio: 1.03 }
+  - - { src: ../../assets/projects/windsor-christian-rebrand/07-windsor-christian-church-badge-blue.webp, alt: "Circular Windsor Christian Church badge in bright blue on navy, the W emblem ringed by lettering", ratio: 1.03 }
+    - { src: ../../assets/projects/windsor-christian-rebrand/08-windsor-christian-academy-logo-white.webp, alt: "Circular navy Windsor Christian Academy badge with the blue W emblem, on a white background", ratio: 1.03 }
+  - - { src: ../../assets/projects/windsor-christian-rebrand/09-windsor-christian-church-logos-digital-30.webp, alt: "Horizontal Windsor Christian logo in white on bright blue, the W emblem breaking a rectangular frame around the name", ratio: 2.75 }
+  - - { src: ../../assets/projects/windsor-christian-rebrand/10-windsor-christian-church-logos-digital-31.webp, alt: "Hexagonal Windsor Christian Church badge reading 'Estd 1970' in white and blue on a bright blue background", ratio: 1.9 }
+  - - { src: ../../assets/projects/windsor-christian-rebrand/11-windsor-academy-uniform-concept.webp, alt: "Uniform concept: a navy polo shirt with an embroidered white Windsor Christian Academy badge on the chest", ratio: 1.03 }
+    - { src: ../../assets/projects/windsor-christian-rebrand/12-windsor-church-hat-concept.webp, alt: "Hat concept: a cream rope cap with a black and white Windsor Christian Church circular patch", ratio: 1.03 }
+  - widths: [206, 206]
+    cols:
+      - - { src: ../../assets/projects/windsor-christian-rebrand/13-portfolio-presentation-wcc-home-original-03.webp, alt: "Full-length screenshot of the original First Baptist Church Windsor homepage, with a Family Camp graphic and dated layout", ratio: 0.3428 }
+        - { src: ../../assets/projects/windsor-christian-rebrand/14-onboarding-task-flow.webp, alt: "Onboarding task flow diagram: Home page, Plan A Visit page, I'm Visiting form, then Confirmation", ratio: 0.7384 }
+      - - { src: ../../assets/projects/windsor-christian-rebrand/15-wireframe-and-nav.webp, alt: "Greyscale homepage wireframe for Windsor Christian, headed 'A Church for Windsor', with repeated 'Plan a visit' buttons", ratio: 0.2328 }
+  - - { src: ../../assets/projects/windsor-christian-rebrand/16-event-search-user-flow.webp, alt: "Event search user flow chart for the Windsor Christian site, tracing pages, interactions and decisions to find a family camping event", ratio: 1.8744 }
+  - - { src: ../../assets/projects/windsor-christian-rebrand/17-windsor-website-scroll.webp, alt: "Scrolling recording of the redesigned Windsor Christian website on a laptop, from 'Are you looking for…' to FAQs and a contact form", ratio: 1.4982, video: /video/windsor-christian-rebrand/17-windsor-website-scroll.mp4 }
+  - - { src: ../../assets/projects/windsor-christian-rebrand/18-man-holding-iphone-mockup-alt.webp, alt: "Man holding an iPhone showing the Windsor Christian Church mobile site's 'Get Connected' page", ratio: 1.7344 }
+  - - { src: ../../assets/projects/windsor-christian-rebrand/19-windsor-christian-8.webp, alt: "Five phone screens of the Windsor Christian Academy mobile site, including enrolment steps, academic progress and staff pages", ratio: 1.7344 }
+  - - { src: ../../assets/projects/windsor-christian-rebrand/20-windsor-christian-9.webp, alt: "Isometric grid of phones displaying pages from the Windsor Christian Church and Academy mobile websites", ratio: 1.7344 }
 ---
 
 ## The Challenge
