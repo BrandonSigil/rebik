@@ -29,7 +29,7 @@ gallery:
   - - { src: ../../assets/projects/kitchen-sink/08-pt-swag-your-world-in-motion-mock-up-white.webp, alt: "White \"Your World In Motion\" T-shirts with a blue and green globe badge on the front and blue transit facts on the back", ratio: 1.3746 }
     - { src: ../../assets/projects/kitchen-sink/09-pt-swag-your-world-in-motion-v4.webp, alt: "\"Your World In Motion\" artwork: a white globe-and-bus badge beside a list of facts on the benefits of public transit", ratio: 1.6474 }
   - heading: "Pierce Transit Rebrand Concept"
-    text: "I explored a Pierce Transit rebrand, simplifying the logo, clarifying service names, and introducing distinct, accessible color palettes to strengthen brand recognition and unify the service experience."
+    text: "I explored a Pierce Transit rebrand, simplifying the logo, clarifying service names, and introducing distinct, accessible colour palettes to strengthen brand recognition and unify the service experience."
   - - { src: ../../assets/projects/kitchen-sink/10-pt-proposed-rebrand-rebrand-presentation-current-vs-proposed.webp, alt: "Current Pierce Transit logos beside the proposed set: a swooping P-road icon with horizontal, stacked, badge and split lockups", ratio: 1.7730 }
   - - { src: ../../assets/projects/kitchen-sink/11-pt-proposed-rebrand-rebrand-presentation-v6-page-2.webp, alt: "Three icons explaining the concept: Letter P made of simplified roads, We Listen, and We Help", ratio: 1.7730 }
   - - { src: ../../assets/projects/kitchen-sink/12-pt-proposed-rebrand-rebrand-presentation-logo-on-white.webp, alt: "Proposed Pierce Transit logo in green on white", ratio: 1.4720 }
@@ -44,7 +44,7 @@ gallery:
   - - { src: ../../assets/projects/kitchen-sink/21-pt-proposed-rebrand-gemini-generated-image-ygdg51ygdg51ygdg.webp, alt: "Concept render of a magenta Events bus at a stop outside the Tacoma Dome", ratio: 1.6158 }
   - - { src: ../../assets/projects/kitchen-sink/22-pt-proposed-rebrand-pierce-transit-headquarters-at-night.webp, alt: "Pierce Transit headquarters at dusk with the proposed logo lit in green on the building", ratio: 1.5000 }
   - heading: "Pierce Transit x Broadway Farmers Market Street Banners"
-    text: "I designed colorful, evergreen street banners to promote the Broadway Farmers Market, using bold typography and photography to highlight its diverse offerings, attract visitors, and encourage community engagement."
+    text: "I designed colourful, evergreen street banners to promote the Broadway Farmers Market, using bold typography and photography to highlight its diverse offerings, attract visitors, and encourage community engagement."
   - - { src: ../../assets/projects/kitchen-sink/23-pt-farmers-market-collab-img-1828.webp, alt: "Worker in a hard hat in a bucket lift hanging a blue Broadway Farmers Market banner beside a Visitor Info sign", ratio: 0.8009 }
   - - { src: ../../assets/projects/kitchen-sink/24-pt-farmers-market-collab-farmers-market-30x60-banners-page-3.webp, alt: "Red Broadway Farmers Market street banner with a heap of fresh cherries and \"Fresh food access\", at 9th & Broadway", ratio: 0.5075 }
     - { src: ../../assets/projects/kitchen-sink/25-pt-farmers-market-collab-farmers-market-30x60-banners-page-2.webp, alt: "Green Broadway Farmers Market street banner showing four smiling women, \"Make community connections\", at 9th & Broadway", ratio: 0.5075 }
@@ -65,7 +65,7 @@ gallery:
   - - { src: ../../assets/projects/kitchen-sink/36-beautiful-day-beautiful-day-shirts.webp, alt: "Navy Beautiful Day Cleaning Company T-shirts showing the large back print and small circular chest logo", ratio: 1.0000 }
     - { src: ../../assets/projects/kitchen-sink/37-beautiful-day-bd-new-website-instagram.webp, alt: "Beautiful Day social post, \"Explore Our New Website!\", showing the homepage on laptop, tablet and phone", ratio: 1.0000 }
   - heading: "Coastline Family Farms Label Redesign"
-    text: "I redesigned Coastline Family Farms’ produce labels with a vibrant, cohesive system and crop-specific colors to improve shelf recognition, distinguish products, and celebrate its family-farming heritage."
+    text: "I redesigned Coastline Family Farms’ produce labels with a vibrant, cohesive system and crop-specific colours to improve shelf recognition, distinguish products, and celebrate its family-farming heritage."
   - - { src: ../../assets/projects/kitchen-sink/38-coastline-family-farms-1-coastline-label-before-and-after-15.webp, alt: "Before and after of the Coastline Family Farms onion label: dark green-trimmed design replaced by a navy and purple oval \"Red Onions\" label", ratio: 1.0005 }
     - { src: ../../assets/projects/kitchen-sink/39-coastline-family-farms-2-coastline-label-variety-03.webp, alt: "Coastline Family Farms label variants for red onions, lettuce and tomatoes, each with a different coloured ribbon", ratio: 1.0006 }
   - - { src: ../../assets/projects/kitchen-sink/40-coastline-family-farms-coastline-family-farms-red-onions.webp, alt: "Purple mesh sack of red onions wearing the redesigned Coastline Family Farms \"Red Onions\" label", ratio: 0.9842 }
@@ -94,7 +94,7 @@ gallery:
     - { src: ../../assets/projects/kitchen-sink/55-taylor-taylor-farms-peter-rebik-portfolio-taylor-taylor-business-ca.webp, alt: "Taylor & Taylor guide \"Maximize Your Profit. Minimize Your Loss.\", cover and spreads", ratio: 2.0471 }
   - - { src: ../../assets/projects/kitchen-sink/56-taylor-taylor-farms-peter-rebik-portfolio-taylor-taylor-website-mob.webp, alt: "Taylor & Taylor mobile website screens in gold and cream, offering fair, competitive land leasing and purchasing", ratio: 2.0471 }
   - heading: "Chambers Bay Baseball Uniform"
-    text: "I designed custom uniforms for the Chambers Bay Vikings travel baseball team, combining bold typography, vibrant colors, and a Chambers Bay-inspired crest to build team identity and pride."
+    text: "I designed custom uniforms for the Chambers Bay Vikings travel baseball team, combining bold typography, vibrant colours, and a Chambers Bay-inspired crest to build team identity and pride."
   - - { src: ../../assets/projects/kitchen-sink/57-chambers-bay-vikings-baseball-jerseys-chambers-baseball-jersey-mock.webp, alt: "Front and back mock-up of a blue Chambers baseball jersey with light blue sleeves and a Chambers Bay Baseball sleeve patch", ratio: 1.3333 }
   - - { src: ../../assets/projects/kitchen-sink/58-chambers-bay-vikings-baseball-jerseys-up-viings-baseball-baseball-s.webp, alt: "Chambers Bay Baseball circular crest with a pine tree, ringed by \"University Place, Washington\"", ratio: 1.5004 }
     - { src: ../../assets/projects/kitchen-sink/59-chambers-bay-vikings-baseball-jerseys-up-viings-baseball-baseball-s.webp, alt: "Arched \"Chambers\" jersey lettering in white and light blue on royal blue", ratio: 1.5004 }

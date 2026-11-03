@@ -28,7 +28,7 @@ const style = `--ar:${g.aspect.toFixed(4)}` + (g.position ? `;--pos:${g.position
     {g.controls ? (
       <video src={g.video} poster={poster} controls preload="none" playsinline aria-label={g.alt} />
     ) : (
-      <video src={g.video} poster={poster} autoplay muted loop playsinline preload="metadata" aria-label={g.alt} />
+      <video src={g.video} poster={poster} data-autoplay muted loop playsinline preload="none" aria-label={g.alt} />
     )}
     <Image src={g.src} alt="" widths={size.widths} sizes={size.sizes} loading="lazy" class="tile__poster" aria-hidden="true" />
   </div>
@@ -56,16 +56,16 @@ const style = `--ar:${g.aspect.toFixed(4)}` + (g.position ? `;--pos:${g.position
   .tile__poster { position: absolute; inset: 0; }
   @media (max-width: 760px) { .tile { border-radius: var(--radius-sm); } }
   @media (prefers-reduced-motion: reduce) {
-    .tile--video video[autoplay] { visibility: hidden; }
+    .tile--video video[data-autoplay] { visibility: hidden; }
   }
 </style>
 
 <script>
-  // Autoplaying clips: pause off-screen (saves battery) and stay paused with reduced motion.
+  // Looping clips: nothing downloads until a clip nears the screen (they're several MB each), then it plays
+  // while visible and pauses off-screen. With reduced motion they never load and the poster still shows.
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const clips = document.querySelectorAll<HTMLVideoElement>('.tile--video video[autoplay]');
-  if (reduce) clips.forEach((v) => { v.pause(); v.removeAttribute('autoplay'); });
-  else {
+  const clips = document.querySelectorAll<HTMLVideoElement>('.tile--video video[data-autoplay]');
+  if (!reduce) {
     const io = new IntersectionObserver((es) => es.forEach((e) => {
       const v = e.target as HTMLVideoElement;
       if (e.isIntersecting) v.play().catch(() => {}); else v.pause();
