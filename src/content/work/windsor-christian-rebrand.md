@@ -11,7 +11,7 @@ cover: ../../assets/work/website-rebrand.webp
 coverAlt: "Hand holding a phone showing the redesigned Windsor Christian website"
 feature: ../../assets/work/windsor-christian-rebrand/01-17.webp
 featurePosition: "42% 50%"
-order: 4
+order: 5
 featured: true
 roles: [graphic-designer]
 skills: [digital-experiences, brand-strategy, systems-processes, alignment-collaboration]

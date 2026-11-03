@@ -11,7 +11,7 @@ cover: ../../assets/work/gig-harbor-connector/01-gig-harbor-connector-magazine-a
 coverAlt: "Gig Harbor Connector magazine ad"
 feature: ../../assets/work/gig-harbor-connector/01-gig-harbor-connector-magazine-ad-final.webp
 featurePosition: "58% 50%"
-order: 5
+order: 6
 featured: false
 roles: [art-director, graphic-designer]
 skills: [brand-strategy, systems-processes, creative-direction, alignment-collaboration]

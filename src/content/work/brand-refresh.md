@@ -11,7 +11,7 @@ cover: ../../assets/work/brand-refresh.webp
 coverAlt: "Open brand guidelines book showing graphic elements, fonts and icon set"
 feature: ../../assets/work/brand-refresh/01-brand-guide-mockup.webp
 featurePosition: "55% 50%"
-order: 6
+order: 7
 featured: true
 roles: [graphic-designer, art-director]
 skills: [brand-strategy, creative-direction, systems-processes, digital-experiences, alignment-collaboration]

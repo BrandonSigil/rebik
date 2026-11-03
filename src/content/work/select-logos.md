@@ -10,7 +10,7 @@ coverAlt: "Pierce Transit 45 Years of Local Transit logo in lime on dark green, 
 feature: ../../assets/projects/select-logos/00-work-card.webp
 cardVideo: /video/select-logos/work-card.mp4
 featurePosition: "50% 50%"
-order: 8
+order: 3
 featured: false
 roles: [graphic-designer]
 skills: [brand-strategy]

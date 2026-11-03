@@ -11,7 +11,7 @@ cover: ../../assets/work/hiring-campaign.webp
 coverAlt: "Roadside billboard advertising careers above a highway"
 feature: ../../assets/work/recruitment-campaign/08-recruitment-brochure.webp
 featurePosition: "50% 50%"
-order: 3
+order: 4
 featured: true
 roles: [graphic-designer, art-director]
 skills: [creative-direction, messaging-story, systems-processes]

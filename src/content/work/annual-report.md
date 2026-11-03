@@ -11,7 +11,7 @@ cover: ../../assets/work/annual-report/01-dsc-7190.webp
 coverAlt: "Printed Pierce Transit annual report"
 feature: ../../assets/work/annual-report/01-dsc-7190.webp
 featurePosition: "45% 50%"
-order: 7
+order: 8
 featured: false
 roles: [graphic-designer, art-director]
 skills: [messaging-story, creative-direction, alignment-collaboration]
