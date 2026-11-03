@@ -307,3 +307,9 @@ Source: Peter's Drive folder, downloaded to `incoming/Rebik Site/` (not committe
 - **Work cards:** a project can set `cardVideo: /video/<slug>/work-card.mp4` to loop a clip over its card image on the homepage carousel and `/work` (Select Logos uses Peter's animated logo reel). Muted, `aria-hidden`, hidden with reduced motion.
 - **Reviews:** `src/data/reviews.yaml` was replaced with Peter's testimonials PDF. Each entry has `name`, `role`, `org`, a verbatim pull `quote` (trimmed with … where needed) and the `full` text. Curt Kohlwes stays hidden until his quote arrives. The second intern review is shown by role only until Peter confirms the name (the PDF repeated Merriah's).
 - **Logo + portrait:** the header/footer mark is now Peter's SVG (`src/assets/brand/logo-mark.svg`, used as a CSS mask so it takes the theme color). Favicon, apple-touch and PWA icons were regenerated from it. The portrait everywhere (hero, intro, About, OG card) is `peter-portrait-2026.jpg`, B&W on volt.
+
+## Peter's final notes (B, Nov 2 2026)
+
+- **Logo:** name only. The swooping P mark is gone from the header and footer (it was a Pierce Transit rebrand concept). Favicon, touch and manifest icons are now a "PR" monogram in pine on volt, and the OG card's lockup is the name alone.
+- **About:** Peter's new, more personal copy (five paragraphs) on both themes, with only typo fixes ("in March 2027", "the size of several…").
+- Already in from the Oct 25 drop and confirmed: logos GIF as the Select Logos card video, testimonials from his PDF, project galleries in his PDF order, Kitchen Sink grouped under headings with hairline dividers and one lightbox sequence across all groups.
