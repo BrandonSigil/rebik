@@ -312,4 +312,6 @@ Source: Peter's Drive folder, downloaded to `incoming/Rebik Site/` (not committe
 
 - **Logo:** name only. The swooping P mark is gone from the header and footer (it was a Pierce Transit rebrand concept). Favicon, touch and manifest icons are now a "PR" monogram in pine on volt, and the OG card's lockup is the name alone.
 - **About:** Peter's new, more personal copy (five paragraphs) on both themes, with only typo fixes ("in March 2027", "the size of several…").
-- Already in from the Oct 25 drop and confirmed: logos GIF as the Select Logos card video, testimonials from his PDF, project galleries in his PDF order, Kitchen Sink grouped under headings with hairline dividers and one lightbox sequence across all groups.
+- **Kitchen Sink:** rebuilt from Peter's Nov 2026 folder and `Kitchen Sink.pdf`: 11 groups with his own titles and descriptions (verbatim), in his image order, including the new PT Swag, PT Rebrand Concept, Farmers Market and World Cup groups. Rebuild with `scripts/build-kitchen-sink.py "<folder>"`. DPC Students and the Known hoodies aren't in his layout, so they're off the page. Group breaks are a 3px lime rule (his design), none above the first group; descriptions run to 62ch. One lightbox sequence still runs across all groups.
+- **Hero image trail** pictures now live in `src/assets/hero/trail-*.webp`, so gallery rebuilds can't break the homepage.
+- Already in from the Oct 25 drop and confirmed: logos GIF as the Select Logos card video, testimonials from his PDF, project galleries in his PDF order.

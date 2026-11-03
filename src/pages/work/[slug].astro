@@ -365,9 +365,11 @@ const ogImage = (Array.isArray(firstRow) && firstRow.find((g) => !g.video)?.src)
   .row--cols { align-items: start; }
   .col { display: grid; gap: 10px; }
   /* Sub-heading between rows */
-  .media-head { padding-block: var(--space-6) var(--space-2); border-top: 1px solid color-mix(in srgb, var(--color-forest) 22%, transparent); margin-top: var(--space-4); }
+  .media-head { padding-block: var(--space-6) var(--space-2); border-top: 3px solid var(--color-lime); margin-top: var(--space-4); }
+  /* No rule above the first group */
+  .project__media > .media-head:first-child { border-top: 0; padding-top: 0; margin-top: 0; }
   .media-head__title { font-size: var(--fs-h3); line-height: 1.1; }
-  .media-head__text { margin-top: var(--space-2); font-size: var(--fs-small); color: var(--text-muted); max-width: 44ch; }
+  .media-head__text { margin-top: var(--space-2); font-size: var(--fs-small); color: var(--text-muted); max-width: 62ch; }
   .tile {
     display: block; aspect-ratio: var(--ar); overflow: hidden;
     border-radius: var(--radius-md); background: #e3e3e3;
