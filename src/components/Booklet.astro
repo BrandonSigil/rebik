@@ -278,5 +278,25 @@ const uid = `bk-${id}`;
     };
     NARROW.addEventListener('change', relayout);
     build(); render();
+
+    // Nudge: the first time the booklet is well in view, turn one page on its own so it reads as interactive.
+    // Once per booklet, only if the reader hasn't turned it yet, and never with reduced motion.
+    if (!REDUCE.matches && views.length > 1 && 'IntersectionObserver' in window) {
+      let timer = 0;
+      const io = new IntersectionObserver(([entry]) => {
+        clearTimeout(timer);
+        if (!entry.isIntersecting) return;
+        timer = window.setTimeout(() => {
+          io.disconnect();
+          if (at === 0 && !REDUCE.matches) turn(1);
+        }, 700); // let the scroll-in reveal settle first; cancelled if it leaves view before then
+      }, { threshold: 0.6 });
+      io.observe(stage);
+      // Any manual turn counts as "already found it"
+      const stop = () => { clearTimeout(timer); io.disconnect(); };
+      [prevBtn, nextBtn].forEach((b) => b.addEventListener('click', stop));
+      stage.addEventListener('keydown', stop);
+      stage.addEventListener('pointerdown', stop);
+    }
   });
 </script>
