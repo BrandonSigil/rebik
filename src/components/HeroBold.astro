@@ -5,7 +5,7 @@
  * once the Intro section scrolls up past ~60% of the viewport the page (and header) fade back
  * to the normal colours. The colour switch lives on <html class="hero-mode"> so the header can follow it.
  * Moving the mouse over the hero leaves a trail of work images (Signal's "content trail"),
- * using the photos from the original hero collage.
+ * using the original hero collage plus highlights from the project pages.
  * Hero.astro is kept for the original theme.
  */
 import { getImage } from 'astro:assets';
@@ -15,21 +15,42 @@ import beautifulDay from '../assets/hero/beautiful-day.jpg';
 import guidelines from '../assets/hero/brand-guidelines.png';
 import report from '../assets/hero/annual-report.jpg';
 import market from '../assets/hero/farmers-market.jpg';
+// More of Peter's work from the project pages, so the trail rarely repeats
+import skBillboard from '../assets/projects/smith-kandal-rebrand/12-smith-kandal-logo-85-billboard.webp';
+import skHat from '../assets/projects/smith-kandal-rebrand/10-smith-kandal-trucker-hat-embroidered-badge.webp';
+import skSign from '../assets/projects/smith-kandal-rebrand/16-01-sign-board-mockup.webp';
+import wcPolo from '../assets/projects/windsor-christian-rebrand/11-windsor-academy-uniform-concept.webp';
+import wcHat from '../assets/projects/windsor-christian-rebrand/12-windsor-church-hat-concept.webp';
+import recShelter from '../assets/projects/recruitment-campaign/03-recruitment-day-ad-shelter.webp';
+import recBus from '../assets/projects/recruitment-campaign/05-recruitment-bus-ad.webp';
+import ghStop from '../assets/projects/gig-harbor-connector/07-gig-harbor-waterfront-connector-stop-1.webp';
+import nightPoster from '../assets/projects/perception-campaign/03-01-urban-bus-stop-poster-mockup.webp';
+import bdVan from '../assets/projects/kitchen-sink/12-beautiful-day-beautiful-day-van-back.webp';
+import jersey from '../assets/projects/kitchen-sink/22-up-vikings-baseball-jerseys-chambers-baseball-jersey-mockup.webp';
+import hoodie from '../assets/projects/kitchen-sink/43-misc-known-burst-hoodie-navy.webp';
+import onions from '../assets/projects/kitchen-sink/10-coastline-family-farms-coastline-family-farms-red-onions.webp';
+import brickhouse from '../assets/projects/kitchen-sink/45-misc-brickhouse-window-logo.webp';
 
 const trail = await Promise.all(
-  [billboard, phone, guidelines, market, beautifulDay, report].map(async (src) => {
-    const img = await getImage({ src, width: Math.min(880, src.width), format: 'webp' });
+  // Order mixes clients and formats so neighbours look different
+  [billboard, skHat, phone, bdVan, recShelter, guidelines, jersey, skBillboard, market, wcPolo,
+   onions, recBus, beautifulDay, ghStop, hoodie, skSign, report, nightPoster, wcHat, brickhouse].map(async (src) => {
+    // Tiles show at ≤220px, so 480px wide covers 2× screens and keeps the preload light
+    const img = await getImage({ src, width: Math.min(480, src.width), format: 'webp', quality: 75 });
     return { src: img.src, ratio: (src.width / src.height).toFixed(4) };
   }),
 );
 ---
 <script is:inline>document.documentElement.classList.add('hero-mode');</script>
+<!-- Pin: the hero sticks under the header while the first stretch of scrolling draws the circle and the swoosh,
+     then the page scrolls on as normal. The wrapper's extra height is that scroll "runway". -->
+<div class="bhero-pin" data-bhero-pin>
 <section class="bhero" id="intro" aria-labelledby="hero-title" data-bhero>
   <div class="container bhero__inner">
     <h1 id="hero-title" class="bhero__title">
       <span class="bhero__line" style="--l:0"><span>I turn complex</span></span>
       <span class="bhero__line bhero__line--indent" style="--l:1"><span>ideas into <span class="bhero__nowrap"><span class="bhero__clear">clear<svg class="bhero__circle" viewBox="556 187 126 60" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d="M648.50 239.08C648.50 239.08 557.50 244.53 557.50 215.47C557.50 189.13 615.50 190.04 615.50 190.04C615.50 190.04 679.50 190.04 678.50 214.56C678.50 214.56 679.50 241.80 597.50 237.26" fill="none" stroke="currentColor" stroke-linejoin="round" /></svg></span>,</span></span></span>
-      <span class="bhero__line" style="--l:2"><span>visual solutions.</span></span>
+      <span class="bhero__line" style="--l:2"><span><span class="bhero__under">visual solutions<svg class="bhero__swoosh" viewBox="0 0 400 34" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d="M6 21C92 10 214 6 393 12C306 15 190 21 74 28" fill="none" stroke="currentColor" stroke-linejoin="round" /></svg></span>.</span></span>
     </h1>
 
     <div class="bhero__meta">
@@ -40,8 +61,16 @@ const trail = await Promise.all(
   </div>
   <div class="bhero__trail" aria-hidden="true" data-trail={JSON.stringify(trail)}></div>
 </section>
+</div>
 
 <style>
+  /* ---------- Scroll pin ---------- */
+  .bhero-pin { --runway: clamp(320px, 55svh, 560px); }
+  /* :global(.js) — the class lives on <html>, outside this component's scope */
+  /* A spacer, not padding: a sticky box can't travel into its parent's padding */
+  :global(.js) .bhero-pin::after { content: ''; display: block; height: var(--runway); }
+  :global(.js) .bhero-pin .bhero { position: sticky; top: var(--nav-h); }
+
   .bhero {
     --ease-salient: cubic-bezier(0.2, 0.75, 0.5, 1);
     position: relative; min-height: calc(100svh - var(--nav-h)); display: grid;
@@ -82,8 +111,14 @@ const trail = await Promise.all(
     position: absolute; left: 1%; top: -2%; width: 120%; height: 112%; z-index: -1;
     color: #fff; pointer-events: none; overflow: visible;
   }
-  .bhero__circle path { stroke-width: 2.2; stroke-linecap: round; vector-effect: non-scaling-stroke; }
-  @media (min-width: 761px) { .bhero__circle path { stroke-width: 4.5; } }
+  /* Hand-drawn white swoosh under "visual solutions" (drawn after the circle, also on scroll) */
+  .bhero__under { position: relative; display: inline-block; }
+  .bhero__swoosh {
+    position: absolute; left: -1%; top: 86%; width: 102%; height: 0.3em; z-index: -1;
+    color: #fff; pointer-events: none; overflow: visible;
+  }
+  .bhero__circle path, .bhero__swoosh path { stroke-width: 3.6; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+  @media (min-width: 761px) { .bhero__circle path, .bhero__swoosh path { stroke-width: 8; } }
   /* Lines are masked for the rise-in, then unmasked so the circle can overflow them */
   .bhero.is-ready .bhero__line { overflow: visible; }
   .bhero.is-ready .bhero__line > span { transform: none; animation: none; }
@@ -115,6 +150,8 @@ const trail = await Promise.all(
     .bhero__meta-end { display: none; }
   }
   @media (prefers-reduced-motion: reduce) {
+    :global(.js) .bhero-pin::after { display: none; } /* nothing to draw, so no pin */
+    :global(.js) .bhero-pin .bhero { position: relative; top: auto; }
     .js .bhero__line > span, .js .bhero__meta { transform: none; opacity: 1; animation: none; }
     .bhero__scroll span { animation: none; }
   }
@@ -122,22 +159,32 @@ const trail = await Promise.all(
 
 <script>
   const hero = document.querySelector<HTMLElement>('[data-bhero]');
-  const path = hero?.querySelector<SVGPathElement>('.bhero__circle path');
+  const pin = document.querySelector<HTMLElement>('[data-bhero-pin]');
   const after = document.querySelector<HTMLElement>('[data-after-hero]');
   const html = document.documentElement;
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  if (hero && path) {
-    // With non-scaling-stroke, dashes are measured in screen pixels, so scale the path length by the SVG's stretch.
-    const svg = path.ownerSVGElement!;
-    let len = 0;
-    const measure = () => {
+  if (hero) {
+    // Scroll-drawn strokes, in order: the circle around "clear" first, then the swoosh under "visual solutions".
+    // [from, to] = the slice of the pin's runway (the scrolling while the hero is stuck) over which each one draws.
+    // Both finish a little before the runway ends, so the finished hero holds for a beat before it scrolls away.
+    const strokes = [
+      { path: hero.querySelector<SVGPathElement>('.bhero__circle path'), from: 0, to: 0.42 },
+      { path: hero.querySelector<SVGPathElement>('.bhero__swoosh path'), from: 0.48, to: 0.88 },
+    ].filter((s) => s.path).map((s) => ({ ...s, path: s.path!, len: 0, target: 0, shown: 0 }));
+
+    // With non-scaling-stroke, dashes are measured in screen pixels, so scale each path length by its SVG's stretch.
+    const measure = () => strokes.forEach((s) => {
+      const svg = s.path.ownerSVGElement!;
       const b = svg.getBoundingClientRect(), vb = svg.viewBox.baseVal;
-      const sx = b.width / vb.width, sy = b.height / vb.height;
-      len = path.getTotalLength() * Math.max(sx, sy) * 1.05;
-      path.style.strokeDasharray = `${len}`;
-    };
+      s.len = s.path.getTotalLength() * Math.max(b.width / vb.width, b.height / vb.height) * 1.05;
+      s.path.style.strokeDasharray = `${s.len}`;
+    });
+    const draw = () => strokes.forEach((s) => { s.path.style.strokeDashoffset = String(s.len * (1 - s.shown)); });
     measure();
+    if (reduce) strokes.forEach((s) => { s.shown = s.target = 1; });
+    draw();
+
     // Unmask the lines once the rise-in has finished (or straight away with reduced motion / on scroll).
     const ready = () => hero.classList.add('is-ready');
     const lines = hero.querySelectorAll('.bhero__line > span');
@@ -145,30 +192,34 @@ const trail = await Promise.all(
     if (reduce) ready();
     setTimeout(ready, 1800);
     addEventListener('scroll', ready, { once: true, passive: true });
-    document.fonts?.ready.then(() => { measure(); if (!reduce) draw(); onScroll(); });
-    path.style.strokeDashoffset = reduce ? '0' : `${len}`;
+    document.fonts?.ready.then(() => { measure(); draw(); onScroll(); });
 
-    // Circle progress follows scroll, but eased: scroll sets a target and the stroke glides toward it every
-    // frame (exponential smoothing, ~0.14s), so wheel "notches" become one smooth draw instead of steps.
-    let target = 0, shown = 0, glide = 0, last = 0;
-    const draw = () => { path.style.strokeDashoffset = String(len * (1 - shown)); };
+    // Progress follows scroll, but eased: scroll sets a target and each stroke glides toward it every frame
+    // (exponential smoothing, ~0.14s), so wheel "notches" become one smooth draw instead of steps.
+    let glide = 0, last = 0;
     const step = (now: number) => {
       const dt = Math.min(0.05, (now - (last || now)) / 1000);
       last = now;
-      shown += (target - shown) * (1 - Math.exp(-dt / 0.14));
-      if (Math.abs(target - shown) < 0.001) shown = target;
+      let moving = false;
+      strokes.forEach((s) => {
+        s.shown += (s.target - s.shown) * (1 - Math.exp(-dt / 0.14));
+        if (Math.abs(s.target - s.shown) < 0.001) s.shown = s.target;
+        else moving = true;
+      });
       draw();
-      glide = shown === target ? 0 : requestAnimationFrame(step);
+      glide = moving ? requestAnimationFrame(step) : 0;
       if (!glide) last = 0;
     };
 
     let ticking = false;
     const update = () => {
       ticking = false;
-      const h = hero.offsetHeight;
-      // Draw the circle over the first ~40% of the hero's scroll.
       if (!reduce) {
-        target = Math.min(1, Math.max(0, scrollY / (h * 0.4)));
+        // How far into the runway we are: 0 when the hero first sticks, 1 when it's about to scroll away.
+        const runway = pin ? Math.max(1, pin.offsetHeight - hero.offsetHeight) : hero.offsetHeight * 0.36;
+        const travelled = pin ? parseFloat(getComputedStyle(hero).top) - pin.getBoundingClientRect().top : scrollY;
+        const p = travelled / runway;
+        strokes.forEach((s) => { s.target = Math.min(1, Math.max(0, (p - s.from) / (s.to - s.from))); });
         if (!glide) glide = requestAnimationFrame(step);
       }
       // Leave hero colours once the next section is well into view.
@@ -177,7 +228,7 @@ const trail = await Promise.all(
     };
     const onScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } };
     addEventListener('scroll', onScroll, { passive: true });
-    addEventListener('resize', () => { measure(); if (!reduce) draw(); onScroll(); }, { passive: true });
+    addEventListener('resize', () => { measure(); draw(); onScroll(); }, { passive: true });
     update();
   }
 

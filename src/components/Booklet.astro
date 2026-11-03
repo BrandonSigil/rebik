@@ -1,0 +1,282 @@
+---
+/**
+ * Booklet — a flippable printed piece (annual report, brand guide…) that sits inside a project's image grid.
+ *
+ * Pages live in src/assets/booklets/<id>/ as 01.webp, 02.webp… (render them from the PDF with
+ * `python3 scripts/pdf-to-booklet.py <file.pdf> <id>`). Reference it from a project's `gallery` as a row:
+ *
+ *   - booklet: pt-annual-report-2024
+ *     title: "2024 Annual Report"
+ *     spreads: true        # true = cover alone, then two-page spreads, back cover alone (a printed booklet)
+ *                          # false = one page at a time (slide decks, landscape guides)
+ *
+ * Desktop shows spreads; below 700px it always goes one page at a time. Arrows, ← → keys and swipe turn pages.
+ * Clicking a page opens it in the project lightbox. Reduced motion swaps the page-turn for a cross-fade.
+ */
+import { getImage } from 'astro:assets';
+import Icon from './Icon.astro';
+
+interface Props { id: string; title: string; spreads?: boolean; index: number }
+const { id, title, spreads = true, index } = Astro.props;
+
+const all = import.meta.glob<{ default: ImageMetadata }>('../assets/booklets/*/*.{webp,jpg,jpeg,png}', { eager: true });
+const files = Object.entries(all)
+  .filter(([path]) => path.includes(`/booklets/${id}/`))
+  .sort(([a], [b]) => a.localeCompare(b, undefined, { numeric: true }))
+  .map(([, mod]) => mod.default);
+if (!files.length) throw new Error(`Booklet "${id}" has no pages in src/assets/booklets/${id}/`);
+
+// Every page sits in the same box (the first page's shape); odd-sized pages are letterboxed, not cropped.
+const ratio = files[0].width / files[0].height;
+const pages = await Promise.all(
+  files.map(async (src, i) => {
+    const view = await getImage({ src, width: Math.min(900, src.width), format: 'webp' });
+    const full = await getImage({ src, width: Math.min(2000, src.width), format: 'webp' });
+    const label = i === 0 ? 'cover' : i === files.length - 1 && spreads ? 'back cover' : `page ${i}`;
+    return { view: view.src, full: full.src, alt: `${title}, ${label}` };
+  }),
+);
+const uid = `bk-${id}`;
+---
+<figure class="booklet" data-booklet data-spreads={spreads ? '' : undefined} data-reveal
+  style={`--page-ar:${ratio.toFixed(4)}`} aria-labelledby={`${uid}-cap`}>
+  <div class="booklet__stage" data-stage tabindex="0" role="group" aria-roledescription="booklet"
+    aria-label={`${title}. Use the arrow keys to turn pages.`}>
+    <div class="booklet__book" data-book>
+      <button type="button" class="booklet__page booklet__page--l" data-slot="l" tabindex="-1"><img alt="" decoding="async" /></button>
+      <button type="button" class="booklet__page booklet__page--r" data-slot="r" tabindex="-1"><img alt="" decoding="async" /></button>
+    </div>
+  </div>
+
+  <figcaption class="booklet__bar" id={`${uid}-cap`}>
+    <span class="booklet__title">{title}</span>
+    <span class="booklet__count" data-count aria-live="polite"></span>
+    <span class="booklet__arrows">
+      <button type="button" class="booklet__arrow" data-prev aria-label="Previous pages"><Icon name="chevron-left" /></button>
+      <button type="button" class="booklet__arrow" data-next aria-label="Next pages"><Icon name="chevron-right" /></button>
+    </span>
+  </figcaption>
+
+  {/* One lightbox link per page (hidden): clicking a page opens the project lightbox at that page */}
+  <div hidden>
+    {pages.map((p, i) => <a href={p.full} data-lightbox={index + i} data-booklet-page={i}><img src={p.view} alt={p.alt} loading="lazy" /></a>)}
+  </div>
+  <script type="application/json" data-pages set:html={JSON.stringify(pages.map(({ view, alt }) => ({ view, alt })))} />
+</figure>
+
+<style>
+  .booklet { display: grid; gap: var(--space-3); margin: 0; }
+
+  /* Stage: soft panel the book sits in, like the image tiles */
+  .booklet__stage {
+    position: relative; border-radius: var(--radius-md); background: var(--bg-alt);
+    padding: clamp(14px, 3%, 28px); display: grid; place-items: center; outline-offset: 3px;
+    touch-action: pan-y; user-select: none;
+  }
+  .booklet__book {
+    --cols: 2;
+    position: relative; display: grid; grid-template-columns: repeat(var(--cols), 1fr);
+    width: 100%; aspect-ratio: calc(var(--page-ar) * var(--cols));
+    perspective: 2200px; transition: transform 0.6s var(--ease-out, ease);
+  }
+  /* Spreads view, on the cover (only right page) or back cover (only left): slide the book so the single page is centred */
+  .booklet__book.is-cover { transform: translateX(-25%); }
+  .booklet__book.is-back { transform: translateX(25%); }
+  .booklet:not([data-spreads]) .booklet__book, .booklet__book.is-single { --cols: 1; transform: none; }
+
+  .booklet__page {
+    position: relative; display: block; padding: 0; border: 0; background: transparent; cursor: zoom-in;
+    min-width: 0; height: 100%;
+  }
+  .booklet__page img {
+    width: 100%; height: 100%; object-fit: contain; display: block;
+    background: var(--color-white); box-shadow: 0 10px 30px -14px rgb(12 31 20 / 0.45);
+  }
+  .booklet__page:not(.has-page) { visibility: hidden; }
+  .booklet__book.is-single .booklet__page--l { display: none; }
+  /* Spine: a soft fold shadow on the inside edge of each page */
+  .booklet__book:not(.is-single) .booklet__page--l::after,
+  .booklet__book:not(.is-single) .booklet__page--r::after {
+    content: ''; position: absolute; top: 0; bottom: 0; width: 9%; pointer-events: none;
+  }
+  .booklet__book:not(.is-single) .booklet__page--l::after { right: 0; background: linear-gradient(to left, rgb(0 0 0 / 0.16), transparent); }
+  .booklet__book:not(.is-single) .booklet__page--r::after { left: 0; background: linear-gradient(to right, rgb(0 0 0 / 0.16), transparent); }
+  .booklet__page:not(.has-page)::after { display: none; }
+
+  /* The turning leaf (built by the script): front = page being turned, back = page revealed */
+  .booklet__book :global(.leaf) {
+    position: absolute; top: 0; bottom: 0; transform-style: preserve-3d; z-index: 3; pointer-events: none;
+    transition: transform var(--turn, 0.7s) cubic-bezier(0.45, 0.05, 0.25, 1);
+  }
+  .booklet__book :global(.leaf > img) {
+    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; backface-visibility: hidden;
+    background: var(--color-white);
+  }
+  .booklet__book :global(.leaf > img.back) { transform: rotateY(180deg); }
+  .booklet__book :global(.leaf::after) { /* shading that peaks mid-turn */
+    content: ''; position: absolute; inset: 0; pointer-events: none; opacity: 0;
+    background: linear-gradient(to right, rgb(0 0 0 / 0.18), transparent 60%);
+    transition: opacity calc(var(--turn, 0.7s) / 2) ease-in-out;
+  }
+  .booklet__book :global(.leaf.is-turning::after) { opacity: 1; }
+
+  /* Bar under the book: title · page count · arrows */
+  .booklet__bar {
+    display: flex; align-items: center; gap: var(--space-4);
+    font-family: var(--font-label); text-transform: var(--label-case); letter-spacing: var(--label-tracking);
+    font-size: var(--fs-micro); color: var(--text-muted);
+  }
+  .booklet__title { color: var(--color-forest); }
+  .booklet__count { margin-right: auto; font-variant-numeric: tabular-nums; }
+  .booklet__arrows { display: flex; gap: var(--space-2); }
+  .booklet__arrow {
+    display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%;
+    border: 1.5px solid color-mix(in srgb, var(--color-forest) 35%, transparent); background: transparent; color: var(--color-forest);
+    transition: background-color var(--dur-fast) linear, border-color var(--dur-fast) linear, transform var(--dur-base) var(--ease-out);
+  }
+  .booklet__arrow:hover:not(:disabled), .booklet__arrow:focus-visible { background: var(--accent); border-color: var(--accent); transform: scale(1.06); }
+  .booklet__arrow:disabled { opacity: 0.35; cursor: default; }
+  .booklet__arrow :global(svg) { width: 18px; height: 18px; }
+
+  @media (max-width: 560px) { .booklet__title { display: none; } }
+</style>
+
+<script>
+  type Page = { view: string; alt: string };
+  const REDUCE = matchMedia('(prefers-reduced-motion: reduce)');
+  const NARROW = matchMedia('(max-width: 699px)');
+
+  document.querySelectorAll<HTMLElement>('[data-booklet]').forEach((root) => {
+    const pages: Page[] = JSON.parse(root.querySelector('[data-pages]')!.textContent || '[]');
+    const book = root.querySelector<HTMLElement>('[data-book]')!;
+    const stage = root.querySelector<HTMLElement>('[data-stage]')!;
+    const slotL = root.querySelector<HTMLButtonElement>('[data-slot="l"]')!;
+    const slotR = root.querySelector<HTMLButtonElement>('[data-slot="r"]')!;
+    const prevBtn = root.querySelector<HTMLButtonElement>('[data-prev]')!;
+    const nextBtn = root.querySelector<HTMLButtonElement>('[data-next]')!;
+    const count = root.querySelector<HTMLElement>('[data-count]')!;
+    const links = [...root.querySelectorAll<HTMLAnchorElement>('[data-booklet-page]')];
+    const wantsSpreads = root.hasAttribute('data-spreads');
+
+    // A "view" is [left page index | null, right page index | null].
+    // Spreads: cover alone on the right, then 1–2, 3–4 … and, if the count works out, the back cover alone on the left.
+    let views: [number | null, number | null][] = [];
+    const build = () => {
+      const spreads = wantsSpreads && !NARROW.matches;
+      views = [];
+      if (!spreads) pages.forEach((_, i) => views.push([null, i]));
+      else {
+        views.push([null, 0]);
+        for (let i = 1; i < pages.length; i += 2) views.push([i, i + 1 < pages.length ? i + 1 : null]);
+      }
+      book.classList.toggle('is-single', !spreads);
+    };
+
+    let at = 0, busy = false;
+    const setSlot = (slot: HTMLButtonElement, n: number | null) => {
+      const img = slot.querySelector('img')!;
+      slot.classList.toggle('has-page', n !== null);
+      slot.dataset.page = n === null ? '' : String(n);
+      if (n === null) { img.removeAttribute('src'); img.alt = ''; return; }
+      img.src = pages[n].view; img.alt = pages[n].alt;
+    };
+    const preload = (v: number) => views[v]?.forEach((n) => { if (n !== null) new Image().src = pages[n].view; });
+    const render = () => {
+      const [l, r] = views[at];
+      setSlot(slotL, l); setSlot(slotR, r);
+      const spreads = !book.classList.contains('is-single');
+      book.classList.toggle('is-cover', spreads && l === null);
+      book.classList.toggle('is-back', spreads && r === null);
+      const shown = [l, r].filter((n): n is number => n !== null).map((n) => n + 1);
+      count.textContent = `${shown.length > 1 ? `Pages ${shown[0]}–${shown[1]}` : `Page ${shown[0]}`} of ${pages.length}`;
+      prevBtn.disabled = at === 0; nextBtn.disabled = at === views.length - 1;
+      preload(at + 1); preload(at - 1);
+    };
+
+    // Page turn: a leaf hinged on the spine flips across, carrying the old page on its front and the new one on its back.
+    //  spreads, forward:  leaf over the right page, hinged on its left edge, turns 0 → -180°  (front: old right, back: new left)
+    //  spreads, backward: leaf over the left page, hinged on its right edge, turns 0 → 180°   (front: old left, back: new right)
+    //  single,  forward:  the page lifts off to the left (0 → -180°) revealing the next page underneath
+    //  single,  backward: the previous page drops back in from the left (-180° → 0) over the current one
+    const turn = (dir: 1 | -1) => {
+      const to = at + dir;
+      if (busy || to < 0 || to >= views.length) return;
+      const from = views[at], next = views[to];
+      at = to;
+      if (REDUCE.matches) {
+        book.animate([{ opacity: 1 }, { opacity: 0.15 }, { opacity: 1 }], { duration: 280 });
+        setTimeout(render, 140); return;
+      }
+      busy = true;
+      const single = book.classList.contains('is-single');
+      const leaf = document.createElement('div');
+      leaf.className = 'leaf';
+      const face = (n: number | null, cls = '') => {
+        const img = document.createElement('img'); img.alt = ''; img.className = cls;
+        if (n !== null) img.src = pages[n].view; else img.style.visibility = 'hidden';
+        return img;
+      };
+      let start = 'rotateY(0deg)', end: string;
+      if (single) {
+        Object.assign(leaf.style, { left: '0', width: '100%', transformOrigin: 'left center' });
+        if (dir === 1) { leaf.append(face(from[1]), face(null, 'back')); setSlot(slotR, next[1]); end = 'rotateY(-180deg)'; }
+        else { leaf.append(face(next[1]), face(null, 'back')); start = 'rotateY(-180deg)'; end = 'rotateY(0deg)'; }
+      } else if (dir === 1) {
+        Object.assign(leaf.style, { left: '50%', width: '50%', transformOrigin: 'left center' });
+        leaf.append(face(from[1]), face(next[0], 'back'));
+        setSlot(slotR, next[1]);
+        end = 'rotateY(-180deg)';
+      } else {
+        Object.assign(leaf.style, { left: '0', width: '50%', transformOrigin: 'right center' });
+        leaf.append(face(from[0]), face(next[1], 'back'));
+        setSlot(slotL, next[0]);
+        end = 'rotateY(180deg)';
+      }
+      leaf.style.transition = 'none';
+      leaf.style.transform = start;
+      book.append(leaf);
+      // Re-centre the book for the covers in step with the turn
+      book.classList.toggle('is-cover', !single && next[0] === null);
+      book.classList.toggle('is-back', !single && next[1] === null);
+      void leaf.offsetWidth;
+      leaf.style.transition = '';
+      requestAnimationFrame(() => { leaf.classList.add('is-turning'); leaf.style.transform = end; });
+      const done = () => { if (!leaf.isConnected) return; leaf.remove(); busy = false; render(); };
+      leaf.addEventListener('transitionend', (e) => { if (e.propertyName === 'transform') done(); });
+      setTimeout(done, 1200); // safety net
+    };
+
+    prevBtn.addEventListener('click', () => turn(-1));
+    nextBtn.addEventListener('click', () => turn(1));
+    stage.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') { e.preventDefault(); turn(1); }
+      if (e.key === 'ArrowLeft') { e.preventDefault(); turn(-1); }
+    });
+    // Click a page → project lightbox at that page
+    [slotL, slotR].forEach((slot) => slot.addEventListener('click', () => {
+      if (moved) return;
+      const n = slot.dataset.page;
+      if (n) links[Number(n)]?.click();
+    }));
+    // Swipe (touch and pen); a real swipe doesn't count as a click
+    let x0: number | null = null, moved = false;
+    stage.addEventListener('pointerdown', (e) => { if (e.pointerType !== 'mouse') { x0 = e.clientX; moved = false; } });
+    stage.addEventListener('pointermove', (e) => { if (x0 !== null && Math.abs(e.clientX - x0) > 10) moved = true; });
+    stage.addEventListener('pointerup', (e) => {
+      if (x0 === null) return;
+      const dx = e.clientX - x0; x0 = null;
+      if (Math.abs(dx) > 40) turn(dx < 0 ? 1 : -1);
+      setTimeout(() => { moved = false; }, 0);
+    });
+
+    // Rebuild views when crossing the narrow breakpoint, keeping the reader on the same page
+    const relayout = () => {
+      const page = views[at]?.find((n) => n !== null) ?? 0;
+      build();
+      at = Math.max(0, views.findIndex((v) => v.includes(page)));
+      render();
+    };
+    NARROW.addEventListener('change', relayout);
+    build(); render();
+  });
+</script>

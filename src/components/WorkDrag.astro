@@ -29,7 +29,7 @@ const featureOf = (p: (typeof projects)[number]) => {
     </div>
     <div class="wd-head__aside" data-reveal style="--i:1">
       <p>A closer look at the design challenges behind each project, the thinking that shaped the solutions, and the outcomes that followed.</p>
-      <a href="/work/" class="wd-link">All work <span aria-hidden="true">↗</span></a>
+      <a href="/work/" class="wd-link">Browse projects <span aria-hidden="true">↗</span></a>
     </div>
   </div>
 
@@ -50,9 +50,7 @@ const featureOf = (p: (typeof projects)[number]) => {
                   draggable="false"
                   style={p.data.featurePosition ? `object-position:${p.data.featurePosition}` : undefined}
                 />
-                {p.data.results[0] && (
-                  <p class="wstat"><strong>{p.data.results[0].value}</strong> {p.data.results[0].label}</p>
-                )}
+                {p.data.cardVideo && <video class="card-video" src={p.data.cardVideo} autoplay muted loop playsinline preload="none" aria-hidden="true" />}
               </div>
               <p class="wcard__meta"><span>{pad(i + 1)}</span>{p.data.employer && <span>{p.data.employer}</span>}</p>
               <h3 class="wcard__title"><span>{p.data.title}</span></h3>
@@ -128,15 +126,9 @@ const featureOf = (p: (typeof projects)[number]) => {
     transition: transform 0.55s var(--ease-salient);
   }
   .wcard__media { position: relative; aspect-ratio: 4 / 5; overflow: hidden; border-radius: var(--radius-md); background: var(--bg-alt); margin-bottom: var(--space-3); }
+  .card-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+  @media (prefers-reduced-motion: reduce) { .card-video { display: none; } }
   .wcard__media img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.75s var(--ease-salient); pointer-events: none; }
-  /* Headline result pinned to the image */
-  .wstat {
-    position: absolute; left: var(--space-3); bottom: var(--space-3); max-width: calc(100% - 2 * var(--space-3));
-    display: inline-flex; align-items: baseline; gap: 0.5em; padding: 0.45em 0.85em; border-radius: var(--radius-pill);
-    background: var(--color-lime); color: var(--color-forest);
-    font-family: var(--font-label); font-size: var(--fs-micro); text-transform: uppercase; letter-spacing: 0.06em; line-height: 1.2;
-  }
-  .wstat strong { font-family: var(--font-heading); font-weight: var(--heading-weight); font-size: 1.35em; letter-spacing: -0.02em; text-transform: none; }
   .wcard__meta { display: flex; gap: var(--space-3); font-size: var(--fs-micro); color: var(--text-muted); }
   .wcard__title { font-size: var(--fs-h3); line-height: var(--lh-snug); color: var(--color-forest); }
   .wcard__title span {

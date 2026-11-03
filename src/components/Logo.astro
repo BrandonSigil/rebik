@@ -1,8 +1,6 @@
 ---
-import { getImage } from 'astro:assets';
-import markPng from '../assets/brand/logo-mark-2x.png';
-// WebP keeps the alpha the mask needs at a fraction of the PNG's 23 KB. Swap for Peter's SVG when it arrives.
-const mark = await getImage({ src: markPng, format: 'webp' });
+// Peter's vector mark (Oct 2026), used as a CSS mask so it takes the current text colour.
+import mark from '../assets/brand/logo-mark.svg';
 interface Props { size?: 'md' | 'sm'; href?: string }
 const { size = 'md', href = '/' } = Astro.props;
 ---

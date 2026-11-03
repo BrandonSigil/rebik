@@ -9,6 +9,8 @@ import { Image, getImage } from 'astro:assets';
 import { render, getEntries } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import Icon from '../../components/Icon.astro';
+import Booklet from '../../components/Booklet.astro';
+import Tile from '../../components/GalleryTile.astro';
 import { getAllWork, type Work } from '../../lib/work';
 
 export async function getStaticPaths() {
@@ -51,26 +53,55 @@ const SIZES: Record<number, { widths: number[]; sizes: string }> = {
   1: { widths: [480, 800, 1320], sizes: '(max-width: 900px) 100vw, 680px' },
   2: { widths: [360, 680], sizes: '(max-width: 900px) 50vw, 340px' },
   3: { widths: [240, 460], sizes: '(max-width: 900px) 33vw, 230px' },
+  4: { widths: [200, 360], sizes: '(max-width: 900px) 25vw, 170px' },
 };
+type G = (typeof data.gallery)[number];
+type Img = Extract<G, unknown[]>[number];
 let count = 0;
+const bookletPages = (id: string) =>
+  Object.keys(import.meta.glob('../../assets/booklets/*/*.{webp,jpg,jpeg,png}')).filter((p) => p.includes(`/booklets/${id}/`)).length;
+/* One tile. `aspect` = the tile's shape. Layout frames (`ratio`) crop like InDesign; otherwise an image whose shape is
+   far from its row's is letterboxed instead of cropped. Videos don't join the lightbox. */
+const tile = async (g: Img, aspect: number) => {
+  const own = g.src.width / g.src.height;
+  const fit = g.fit ?? (g.ratio || Math.abs(own / aspect - 1) <= 0.3 ? 'cover' : 'contain');
+  if (g.video) return { ...g, aspect, fit, index: -1, full: '' };
+  const full = await getImage({ src: g.src, width: Math.min(2000, g.src.width), format: 'webp' });
+  return { ...g, aspect, fit, index: count++, full: full.src };
+};
 const rows = await Promise.all(
   data.gallery.map(async (row) => {
-    const ratios = row.map((g) => g.src.width / g.src.height);
-    const avg = ratios.reduce((a, b) => a + b, 0) / ratios.length;
-    const aspect = row.length === 1 ? clamp(avg, 0.8, 3) : clamp(avg, 0.62, 2.2);
-    const items = await Promise.all(
-      row.map(async (g, i) => {
-        const full = await getImage({ src: g.src, width: Math.min(2000, g.src.width), format: 'webp' });
-        const off = Math.abs(ratios[i] / aspect - 1) > 0.3;
-        return { ...g, index: count++, full: full.src, fit: g.fit ?? (off ? 'contain' : 'cover') };
-      }),
-    );
-    return { n: row.length, aspect: aspect.toFixed(4), items };
+    if (Array.isArray(row)) {
+      const ratios = row.map((g) => g.ratio ?? g.src.width / g.src.height);
+      const avg = ratios.reduce((a, b) => a + b, 0) / ratios.length;
+      const framed = row.every((g) => g.ratio);
+      const aspect = framed ? avg : row.length === 1 ? clamp(avg, 0.8, 3) : clamp(avg, 0.5, 2.2);
+      const items = [];
+      for (const g of row) items.push(await tile(g, aspect));
+      return { kind: 'row' as const, n: row.length, aspect: aspect.toFixed(4), items };
+    }
+    if ('booklet' in row) {
+      const index = count;
+      count += bookletPages(row.booklet); // its pages join the lightbox sequence
+      return { kind: 'booklet' as const, booklet: row, index };
+    }
+    if ('cols' in row) {
+      const cols = [];
+      for (const col of row.cols) {
+        const out = [];
+        for (const g of col) out.push(await tile(g, g.ratio ?? g.src.width / g.src.height));
+        cols.push(out);
+      }
+      const widths = row.widths ?? row.cols.map(() => 1);
+      return { kind: 'cols' as const, cols, template: widths.map((w) => `minmax(0, ${w}fr)`).join(' ') };
+    }
+    return { kind: 'heading' as const, heading: row.heading, text: row.text };
   }),
 );
-const ogImage = data.gallery[0]?.[0]?.src ?? data.cover;
+const firstRow = data.gallery.find((r) => Array.isArray(r) && r.some((g) => !g.video));
+const ogImage = (Array.isArray(firstRow) && firstRow.find((g) => !g.video)?.src) || data.cover;
 ---
-<Base title={data.title} description={data.summary} image={ogImage} imageAlt={data.gallery[0]?.[0]?.alt ?? data.coverAlt}>
+<Base title={data.title} description={data.summary} image={ogImage} imageAlt={(Array.isArray(firstRow) && firstRow.find((g) => !g.video)?.alt) || data.coverAlt}>
   <article class="project">
     <div class="project__grid container">
       <div class="project__text" data-sticky>
@@ -134,21 +165,26 @@ const ogImage = data.gallery[0]?.[0]?.src ?? data.cover;
       {rows.length > 0 && (
         <section class="project__media" aria-label="Project images">
           {rows.map((row) => (
-            <div class={`row row--${row.n}`} style={`--ar:${row.aspect}`} data-reveal>
-              {row.items.map((g) => (
-                <a href={g.full} class:list={['tile', `tile--${g.fit}`]} data-lightbox={g.index} aria-label={`View larger: ${g.alt}`}>
-                  <Image
-                    src={g.src}
-                    alt={g.alt}
-                    widths={SIZES[row.n].widths}
-                    sizes={SIZES[row.n].sizes}
-                    loading={g.index < 2 ? 'eager' : 'lazy'}
-                    fetchpriority={g.index < 2 ? 'high' : undefined}
-                    style={g.position ? `object-position:${g.position}` : undefined}
-                  />
-                </a>
-              ))}
-            </div>
+            row.kind === 'booklet' ? (
+              <Booklet id={row.booklet.booklet} title={row.booklet.title} spreads={row.booklet.spreads} index={row.index} />
+            ) : row.kind === 'heading' ? (
+              <div class="media-head" data-reveal>
+                <h2 class="media-head__title">{row.heading}</h2>
+                {row.text && <p class="media-head__text">{row.text}</p>}
+              </div>
+            ) : row.kind === 'cols' ? (
+              <div class="row row--cols" style={`grid-template-columns:${row.template}`} data-reveal>
+                {row.cols.map((col) => (
+                  <div class="col">
+                    {col.map((g) => <Tile g={g} n={2} />)}
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div class={`row row--${row.n}`} style={`--ar:${row.aspect}`} data-reveal>
+                {row.items.map((g) => <Tile g={g} n={row.n} />)}
+              </div>
+            )
           ))}
         </section>
       )}
@@ -324,6 +360,14 @@ const ogImage = data.gallery[0]?.[0]?.src ?? data.cover;
   .row { display: grid; grid-template-columns: repeat(var(--n, 1), minmax(0, 1fr)); gap: 10px; }
   .row--2 { --n: 2; }
   .row--3 { --n: 3; }
+  .row--4 { --n: 4; }
+  /* Mosaic row: columns of stacked tiles (widths set inline from the layout) */
+  .row--cols { align-items: start; }
+  .col { display: grid; gap: 10px; }
+  /* Sub-heading between rows */
+  .media-head { padding-block: var(--space-6) var(--space-2); border-top: 1px solid color-mix(in srgb, var(--color-forest) 22%, transparent); margin-top: var(--space-4); }
+  .media-head__title { font-size: var(--fs-h3); line-height: 1.1; }
+  .media-head__text { margin-top: var(--space-2); font-size: var(--fs-small); color: var(--text-muted); max-width: 44ch; }
   .tile {
     display: block; aspect-ratio: var(--ar); overflow: hidden;
     border-radius: var(--radius-md); background: #e3e3e3;
@@ -379,7 +423,7 @@ const ogImage = data.gallery[0]?.[0]?.src ?? data.cover;
     .project__text { max-width: 40rem; }
   }
   @media (max-width: 520px) {
-    .project__media, .row { gap: 6px; }
+    .project__media, .row, .col { gap: 6px; }
     .tile { border-radius: var(--radius-sm); }
     .pager__btn { padding: 0 var(--space-4); }
     .lightbox__prev, .lightbox__next { top: auto; bottom: var(--space-4); translate: none; }

@@ -16,6 +16,8 @@ const icons = import.meta.glob<string>('../assets/skills/*-icon.svg', { query: '
 const iconName = (file?: string) => file?.replace(/-bg\.\w+$/, '');
 const iconFor = (file?: string) => (file ? icons[`../assets/skills/${iconName(file)}-icon.svg`] : undefined);
 const pad = (n: number) => String(n).padStart(2, '0');
+// The reel renders every card twice for the loop. The copy is aria-hidden and out of the tab order, but NOT inert:
+// after one full pass the copy is what's on screen, and inert would block its hover and tap ("cards stop working").
 // Design-export provenance (C2PA) adds ~15 KB of base64 per icon, and the reel inlines every icon twice.
 // Strip it from the page; the source files keep it.
 const lean = (svg: string) => svg.replace(/<metadata>[\s\S]*?<\/metadata>/g, '').replace(/\s+xmlns:c2pa="[^"]*"/g, '');
@@ -31,7 +33,7 @@ const lean = (svg: string) => svg.replace(/<metadata>[\s\S]*?<\/metadata>/g, '')
   <div class="reel" data-reel>
     <div class="reel__track" data-reel-track>
       {[0, 1].map((copy) => (
-        <ul class="reel__group" role="list" aria-hidden={copy === 1 ? 'true' : undefined} inert={copy === 1 ? true : undefined}>
+        <ul class="reel__group" role="list" aria-hidden={copy === 1 ? 'true' : undefined}>
           {skills.map(({ data }, i) => {
             const img = imageFor(data.image);
             const icon = iconFor(data.image);

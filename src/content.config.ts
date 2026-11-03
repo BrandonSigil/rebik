@@ -15,6 +15,12 @@ const galleryImage = (image: () => any) =>
     fit: z.enum(['cover', 'contain']).optional(),
     /** Optional CSS object-position for cropping, e.g. "top" or "30% 50%". */
     position: z.string().optional(),
+    /** Optional frame shape (width / height) from Peter's layout. The tile is cropped to it, like an InDesign frame. */
+    ratio: z.number().optional(),
+    /** Optional video (a path under /public, e.g. /video/project/clip.mp4). `src` becomes its poster frame. */
+    video: z.string().optional(),
+    /** With `video`: show player controls and don't autoplay (for long clips with sound). */
+    controls: z.boolean().optional(),
   });
 
 const work = defineCollection({
@@ -37,6 +43,8 @@ const work = defineCollection({
       feature: image().optional(),
       /** Where to crop the feature image, as CSS object-position, e.g. "40% 50%". */
       featurePosition: z.string().optional(),
+      /** Optional looping clip (path under /public) that plays over the card image on the homepage and /work. */
+      cardVideo: z.string().optional(),
       /** Lower numbers appear first (carousel, work index, prev/next order). */
       order: z.number().default(100),
       /** Show in the homepage carousel. */
@@ -48,8 +56,21 @@ const work = defineCollection({
       skills: z.array(reference('skills')).default([]),
       /** Headline results, e.g. { value: "50%+", label: "more applications" } */
       results: z.array(z.object({ value: z.string(), label: z.string() })).default([]),
-      /** Right-hand image column. Each entry is ONE ROW of 1, 2 or 3 images. */
-      gallery: z.array(z.array(galleryImage(image)).min(1).max(3)).default([]),
+      /** Right-hand image column. Each entry is ONE ROW of 1, 2 or 3 images, or a flippable booklet:
+       *  `- booklet: pt-annual-report-2024` + `title:` (+ `spreads: false` for one page at a time).
+       *  Booklet pages live in src/assets/booklets/<id>/ (scripts/pdf-to-booklet.py makes them from a PDF). */
+      gallery: z
+        .array(
+          z.union([
+            z.array(galleryImage(image)).min(1).max(4),
+            z.object({ booklet: z.string(), title: z.string(), spreads: z.boolean().default(true) }),
+            /** Mosaic: columns of stacked tiles side by side, e.g. a tall ad beside three small ones. `widths` are relative. */
+            z.object({ cols: z.array(z.array(galleryImage(image)).min(1)).min(2).max(3), widths: z.array(z.number()).optional() }),
+            /** A sub-heading between rows, e.g. "Design examples". */
+            z.object({ heading: z.string(), text: z.string().optional() }),
+          ]),
+        )
+        .default([]),
     }),
 });
 
@@ -72,7 +93,7 @@ const skills = defineCollection({
 
 const reviews = defineCollection({
   loader: file('./src/data/reviews.yaml'),
-  schema: z.object({ order: z.number(), quote: z.string(), org: z.string(), role: z.string() }),
+  schema: z.object({ order: z.number(), quote: z.string(), org: z.string(), role: z.string(), name: z.string().optional(), full: z.string().optional() }),
 });
 
 export const collections = { work, skills, reviews, roles };

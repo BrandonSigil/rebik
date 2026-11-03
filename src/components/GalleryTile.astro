@@ -1,0 +1,75 @@
+---
+/**
+ * One tile in a project's image column: an image that opens the lightbox, or a looping / playable video.
+ * Shape comes from `g.aspect` (the row's shape, or the layout frame's), fit from `g.fit`.
+ */
+import { Image, getImage } from 'astro:assets';
+
+interface Props {
+  g: {
+    src: ImageMetadata; alt: string; aspect: number; fit: 'cover' | 'contain'; index: number; full: string;
+    position?: string; video?: string; controls?: boolean;
+  };
+  n: number;
+}
+const { g, n } = Astro.props;
+const SIZES: Record<number, { widths: number[]; sizes: string }> = {
+  1: { widths: [480, 800, 1320], sizes: '(max-width: 900px) 100vw, 680px' },
+  2: { widths: [360, 680], sizes: '(max-width: 900px) 50vw, 340px' },
+  3: { widths: [240, 460], sizes: '(max-width: 900px) 33vw, 230px' },
+  4: { widths: [200, 360], sizes: '(max-width: 900px) 25vw, 170px' },
+};
+const size = SIZES[n] ?? SIZES[2];
+const poster = g.video ? (await getImage({ src: g.src, width: Math.min(1400, g.src.width), format: 'webp' })).src : undefined;
+const style = `--ar:${g.aspect.toFixed(4)}` + (g.position ? `;--pos:${g.position}` : '');
+---
+{g.video ? (
+  <div class:list={['tile', 'tile--video', `tile--${g.fit}`]} style={style}>
+    {g.controls ? (
+      <video src={g.video} poster={poster} controls preload="none" playsinline aria-label={g.alt} />
+    ) : (
+      <video src={g.video} poster={poster} autoplay muted loop playsinline preload="metadata" aria-label={g.alt} />
+    )}
+    <Image src={g.src} alt="" widths={size.widths} sizes={size.sizes} loading="lazy" class="tile__poster" aria-hidden="true" />
+  </div>
+) : (
+  <a href={g.full} class:list={['tile', `tile--${g.fit}`]} style={style} data-lightbox={g.index} aria-label={`View larger: ${g.alt}`}>
+    <Image src={g.src} alt={g.alt} widths={size.widths} sizes={size.sizes}
+      loading={g.index < 2 ? 'eager' : 'lazy'} fetchpriority={g.index < 2 ? 'high' : undefined} />
+  </a>
+)}
+
+<style>
+  .tile {
+    position: relative; display: block; aspect-ratio: var(--ar); overflow: hidden;
+    border-radius: var(--radius-md); background: #e3e3e3; cursor: zoom-in;
+  }
+  :global([data-theme="2026"]) .tile { background: var(--bg-alt); }
+  .tile img, .tile video { width: 100%; height: 100%; object-fit: cover; object-position: var(--pos, center); display: block; }
+  .tile img { transition: transform 900ms var(--ease-out); }
+  .tile--contain img, .tile--contain video { object-fit: contain; }
+  a.tile:hover img { transform: scale(1.04); }
+  .tile:focus-visible { outline-offset: 2px; }
+  /* Video: the poster image sits underneath until the clip has a frame (and is the still with reduced motion) */
+  .tile--video { cursor: default; }
+  .tile--video video { position: relative; z-index: 1; background: transparent; }
+  .tile__poster { position: absolute; inset: 0; }
+  @media (max-width: 760px) { .tile { border-radius: var(--radius-sm); } }
+  @media (prefers-reduced-motion: reduce) {
+    .tile--video video[autoplay] { visibility: hidden; }
+  }
+</style>
+
+<script>
+  // Autoplaying clips: pause off-screen (saves battery) and stay paused with reduced motion.
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const clips = document.querySelectorAll<HTMLVideoElement>('.tile--video video[autoplay]');
+  if (reduce) clips.forEach((v) => { v.pause(); v.removeAttribute('autoplay'); });
+  else {
+    const io = new IntersectionObserver((es) => es.forEach((e) => {
+      const v = e.target as HTMLVideoElement;
+      if (e.isIntersecting) v.play().catch(() => {}); else v.pause();
+    }), { rootMargin: '200px' });
+    clips.forEach((v) => io.observe(v));
+  }
+</script>
