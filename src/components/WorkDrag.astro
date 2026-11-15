@@ -11,15 +11,21 @@
 import { Image } from 'astro:assets';
 import Icon from './Icon.astro';
 import { getAllWork } from '../lib/work';
+import { cardImage } from '../lib/cardImage';
 
 const projects = await getAllWork();
 const pad = (n: number) => String(n).padStart(2, '0');
 const featureOf = (p: (typeof projects)[number]) => {
   const g = p.data.gallery[0]?.[0];
-  if (p.data.feature) return { src: p.data.feature, alt: g?.alt ?? p.data.coverAlt };
+  if (p.data.feature) {
+    const sameAsCover = p.data.feature.src === p.data.cover.src;
+    return { src: p.data.feature, alt: sameAsCover ? p.data.coverAlt : (g?.alt ?? p.data.coverAlt) };
+  }
   if (g) return { src: g.src, alt: g.alt };
   return { src: p.data.cover, alt: p.data.coverAlt };
 };
+const cardFit = (src: ImageMetadata) =>
+  cardImage(src, 4 / 5, { mobile: '78vw', desktop: 'clamp(260px, 27vw, 400px)' });
 ---
 <section class="section work-drag" id="work" aria-labelledby="work-title">
   <div class="container wd-head">
@@ -37,6 +43,7 @@ const featureOf = (p: (typeof projects)[number]) => {
     <ul class="wd__track" role="list" data-wd-track tabindex="0" aria-label="Work examples. Scroll sideways or use the arrow buttons below.">
       {projects.map((p, i) => {
         const f = featureOf(p);
+        const fz = cardFit(f.src);
         return (
           <li class="wcard" style={`--i:${i}`} data-wd-card>
             <a href={`/work/${p.id}/`} class="wcard__link" draggable="false">
@@ -44,8 +51,8 @@ const featureOf = (p: (typeof projects)[number]) => {
                 <Image
                   src={f.src}
                   alt={f.alt}
-                  widths={[360, 560, 800, 1100]}
-                  sizes="(max-width: 760px) 78vw, 400px"
+                  widths={fz.widths}
+                  sizes={fz.sizes}
                   loading="lazy"
                   draggable="false"
                   style={p.data.featurePosition ? `object-position:${p.data.featurePosition}` : undefined}
