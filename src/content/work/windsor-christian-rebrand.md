@@ -11,7 +11,7 @@ cover: ../../assets/work/website-rebrand.webp
 coverAlt: "Hand holding a phone showing the redesigned Windsor Christian website"
 feature: ../../assets/work/windsor-christian-rebrand/01-17.webp
 featurePosition: "42% 50%"
-order: 5
+order: 4
 featured: true
 roles: [graphic-designer]
 skills: [digital-experiences, brand-strategy, systems-processes, alignment-collaboration]
@@ -34,7 +34,7 @@ gallery:
   - widths: [206, 206]
     cols:
       - - { src: ../../assets/projects/windsor-christian-rebrand/13-portfolio-presentation-wcc-home-original-03.webp, alt: "Full-length screenshot of the original First Baptist Church Windsor homepage, with a Family Camp graphic and dated layout", ratio: 0.3428 }
-        - { src: ../../assets/projects/windsor-christian-rebrand/14-onboarding-task-flow.webp, alt: "Onboarding task flow diagram: Home page, Plan A Visit page, I'm Visiting form, then Confirmation", ratio: 0.7384 }
+        - { src: ../../assets/projects/windsor-christian-rebrand/14-onboarding-task-flow.webp, alt: "Onboarding task flow diagram: Home page, Plan A Visit page, I'm Visiting form, then Confirmation", ratio: 0.753 }
       - - { src: ../../assets/projects/windsor-christian-rebrand/15-wireframe-and-nav.webp, alt: "Greyscale homepage wireframe for Windsor Christian, headed 'A Church for Windsor', with repeated 'Plan a visit' buttons", ratio: 0.2328 }
   - - { src: ../../assets/projects/windsor-christian-rebrand/16-event-search-user-flow.webp, alt: "Event search user flow chart for the Windsor Christian site, tracing pages, interactions and decisions to find a family camping event", ratio: 1.8744 }
   - - { src: ../../assets/projects/windsor-christian-rebrand/17-windsor-website-scroll.webp, alt: "Scrolling recording of the redesigned Windsor Christian website on a laptop, from 'Are you looking for…' to FAQs and a contact form", ratio: 1.4982, video: /video/windsor-christian-rebrand/17-windsor-website-scroll.mp4 }

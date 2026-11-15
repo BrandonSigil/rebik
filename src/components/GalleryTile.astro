@@ -24,14 +24,22 @@ const poster = g.video ? (await getImage({ src: g.src, width: Math.min(1400, g.s
 const style = `--ar:${g.aspect.toFixed(4)}` + (g.position ? `;--pos:${g.position}` : '');
 ---
 {g.video ? (
-  <div class:list={['tile', 'tile--video', `tile--${g.fit}`]} style={style}>
-    {g.controls ? (
+  g.controls ? (
+    // Long clip with sound: plays in place; the corner button opens it in the lightbox with the rest of the gallery
+    <div class:list={['tile', 'tile--video', `tile--${g.fit}`]} style={style}>
       <video src={g.video} poster={poster} controls preload="none" playsinline aria-label={g.alt} />
-    ) : (
-      <video src={g.video} poster={poster} data-autoplay muted loop playsinline preload="none" aria-label={g.alt} />
-    )}
-    <Image src={g.src} alt="" widths={size.widths} sizes={size.sizes} loading="lazy" class="tile__poster" aria-hidden="true" />
-  </div>
+      <Image src={g.src} alt="" widths={size.widths} sizes={size.sizes} loading="lazy" class="tile__poster" aria-hidden="true" />
+      <a href={g.video} class="tile__expand" data-lightbox={g.index} data-video data-controls data-poster={poster} data-alt={g.alt} aria-label={`View larger: ${g.alt}`}>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+      </a>
+    </div>
+  ) : (
+    // Looping clip (GIF-style): the whole tile opens the lightbox
+    <a href={g.video} class:list={['tile', 'tile--video', 'tile--link', `tile--${g.fit}`]} style={style} data-lightbox={g.index} data-video data-poster={poster} data-alt={g.alt} aria-label={`View larger: ${g.alt}`}>
+      <video src={g.video} poster={poster} data-autoplay muted loop playsinline preload="none" aria-hidden="true" />
+      <Image src={g.src} alt="" widths={size.widths} sizes={size.sizes} loading="lazy" class="tile__poster" aria-hidden="true" />
+    </a>
+  )
 ) : (
   <a href={g.full} class:list={['tile', `tile--${g.fit}`]} style={style} data-lightbox={g.index} aria-label={`View larger: ${g.alt}`}>
     <Image src={g.src} alt={g.alt} widths={size.widths} sizes={size.sizes}
@@ -52,6 +60,13 @@ const style = `--ar:${g.aspect.toFixed(4)}` + (g.position ? `;--pos:${g.position
   .tile:focus-visible { outline-offset: 2px; }
   /* Video: the poster image sits underneath until the clip has a frame (and is the still with reduced motion) */
   .tile--video { cursor: default; }
+  .tile--link { cursor: zoom-in; }
+  .tile__expand {
+    position: absolute; top: 10px; right: 10px; z-index: 3; display: grid; place-items: center; width: 36px; height: 36px;
+    border-radius: 999px; background: rgb(0 0 0 / 0.55); color: #fff; opacity: 0; transition: opacity 200ms;
+  }
+  .tile:hover .tile__expand, .tile__expand:focus-visible { opacity: 1; }
+  @media (hover: none) { .tile__expand { opacity: 1; } }
   .tile--video video { position: relative; z-index: 1; background: transparent; }
   .tile__poster { position: absolute; inset: 0; }
   @media (max-width: 760px) { .tile { border-radius: var(--radius-sm); } }

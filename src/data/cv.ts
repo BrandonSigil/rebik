@@ -13,17 +13,17 @@ export const experience: Job[] = [
     location: 'Lakewood, Washington',
     roles: [
       {
-        title: 'Marketing Coordinator',
+        title: 'Art Director',
         start: 'Sep 2023', end: 'Present', mode: 'Hybrid',
         summary: 'Lead brand and creative strategy across web, campaigns, lifecycle communications and environmental design, improving consistency across 5+ departments.',
       },
       {
-        title: 'Marketing Analyst',
+        title: 'Senior Marketing Designer',
         start: 'Mar 2021', end: 'Sep 2023', mode: 'Hybrid',
         summary: 'Designed and launched multi-channel campaigns across web, print and digital, simplifying complex policy and service information into clear visual narratives.',
       },
       {
-        title: 'Marketing Specialist',
+        title: 'Marketing Designer',
         start: 'Mar 2020', end: 'Mar 2021', mode: 'Remote',
         summary: 'Produced campaign, report and promotional assets while maintaining brand consistency and ADA compliance.',
       },

@@ -11,7 +11,7 @@ cover: ../../assets/work/brand-refresh.webp
 coverAlt: "Open brand guidelines book showing graphic elements, fonts and icon set"
 feature: ../../assets/work/brand-refresh/01-brand-guide-mockup.webp
 featurePosition: "55% 50%"
-order: 7
+order: 5
 featured: true
 roles: [graphic-designer, art-director]
 skills: [brand-strategy, creative-direction, systems-processes, digital-experiences, alignment-collaboration]
@@ -37,8 +37,8 @@ gallery:
     - { src: ../../assets/projects/brand-refresh/10-image-5bff3713.webp, alt: "Hands holding a printed 'Our Customer Promise' sheet in Pierce Transit blue, with a smiling rider photo and the promise text.", ratio: 0.7454 }
   - - { src: ../../assets/projects/brand-refresh/11-sponsored-web-content.webp, alt: "Sponsored article placement on a news site promoting a regional transit pass as 'The affordable annual employee benefit'.", ratio: 2.1495 }
   - - { src: ../../assets/projects/brand-refresh/12-business-summit-2024-strickland-04.webp, alt: "U.S. Representative Marilyn Strickland speaking at a Pierce Transit lectern, in front of a branded speaker introduction slide on screen.", ratio: 1.6815 }
-  - - { src: ../../assets/projects/brand-refresh/13-image-446ff6cf-1.webp, alt: "Pierce Transit 'Full Fare Required' fare chart fitted to a bus farebox, listing adult, youth and discounted fares.", ratio: 1.0097 }
-  - - { src: ../../assets/projects/brand-refresh/14-image-72d80dfd.webp, alt: "Pierce Transit Rideshare sign in a car park asking 'Here to pick up or drop off your vehicle?' above a keybox.", ratio: 1.0097 }
+  - - { src: ../../assets/projects/brand-refresh/13-image-446ff6cf-1.webp, alt: "Pierce Transit 'Full Fare Required' fare chart fitted to a bus farebox, listing adult, youth and discounted fares.", ratio: 0.8477 }
+  - - { src: ../../assets/projects/brand-refresh/14-image-72d80dfd.webp, alt: "Pierce Transit Rideshare sign in a car park asking 'Here to pick up or drop off your vehicle?' above a keybox.", ratio: 0.9265 }
 ---
 
 ## The Challenge

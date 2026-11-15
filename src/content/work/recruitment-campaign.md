@@ -7,11 +7,11 @@ intro: |
   During the COVID-19 labor shortage, Pierce Transit faced critical staffing gaps that threatened service continuity. Competing against a saturated “Now Hiring” landscape, the challenge was to create a campaign that stood out and motivated action.
 
   As Senior Designer, I developed a differentiated recruitment campaign that reframed transit jobs as fulfilling, long-term careers.
-cover: ../../assets/work/hiring-campaign.webp
-coverAlt: "Roadside billboard advertising careers above a highway"
-feature: ../../assets/work/recruitment-campaign/08-recruitment-brochure.webp
-featurePosition: "50% 50%"
-order: 4
+cover: ../../assets/work/recruitment-campaign/00-night-ad-shelter.webp
+coverAlt: "Pierce Transit 'Great Career. Happy You.' recruitment poster lit up in a bus shelter at night"
+feature: ../../assets/work/recruitment-campaign/00-night-ad-shelter.webp
+featurePosition: "52% 50%"
+order: 3
 featured: true
 roles: [graphic-designer, art-director]
 skills: [creative-direction, messaging-story, systems-processes]

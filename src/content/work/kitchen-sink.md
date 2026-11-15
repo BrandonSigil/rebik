@@ -12,7 +12,7 @@ featurePosition: "50% 50%"
 order: 9
 featured: false
 roles: [graphic-designer]
-skills: []
+skills: [brand-strategy, creative-direction, messaging-story, systems-processes, digital-experiences, alignment-collaboration]
 # Images: each "-" is one row of 1, 2 or 3 images (same height across the row).
 gallery:
   - heading: "Pierce Transit Swag"
@@ -39,10 +39,10 @@ gallery:
     - { src: ../../assets/projects/kitchen-sink/16-pt-proposed-rebrand-rebrand-presentation-v4-1.webp, alt: "Access+ concept: a smiling man in a wheelchair framed by a large green P icon", ratio: 0.9915 }
   - - { src: ../../assets/projects/kitchen-sink/17-pt-proposed-rebrand-rebrand-presentation-v4-2.webp, alt: "Events concept: a man leaping with a bass guitar against a pink P icon on plum", ratio: 0.9915 }
     - { src: ../../assets/projects/kitchen-sink/18-pt-proposed-rebrand-rebrand-presentation-v4-3.webp, alt: "Trolley concept: a couple with a baby walking in front of a red P icon on maroon", ratio: 0.9915 }
-  - - { src: ../../assets/projects/kitchen-sink/19-pt-proposed-rebrand-routes-wrap-gilling-cng.webp, alt: "Side, front and rear views of a bus wrap in green gradients with the large P icon and \"Pierce Transit, improving lives with local rides\"", ratio: 1.6142 }
-  - - { src: ../../assets/projects/kitchen-sink/20-pt-proposed-rebrand-gemini-generated-image-llrpuyllrpuyllrp.webp, alt: "Concept render of a green Pierce Transit bus in the proposed livery on a downtown Tacoma street", ratio: 3.8023 }
-  - - { src: ../../assets/projects/kitchen-sink/21-pt-proposed-rebrand-gemini-generated-image-ygdg51ygdg51ygdg.webp, alt: "Concept render of a magenta Events bus at a stop outside the Tacoma Dome", ratio: 1.6158 }
-  - - { src: ../../assets/projects/kitchen-sink/22-pt-proposed-rebrand-pierce-transit-headquarters-at-night.webp, alt: "Pierce Transit headquarters at dusk with the proposed logo lit in green on the building", ratio: 1.5000 }
+  - - { src: ../../assets/projects/kitchen-sink/19-pt-proposed-rebrand-routes-wrap-gilling-cng.webp, alt: "Side, front and rear views of a bus wrap in green gradients with the large P icon and \"Pierce Transit, improving lives with local rides\"", ratio: 1.8993 }
+  - - { src: ../../assets/projects/kitchen-sink/20-pt-proposed-rebrand-gemini-generated-image-llrpuyllrpuyllrp.webp, alt: "Concept render of a green Pierce Transit bus in the proposed livery on a downtown Tacoma street", ratio: 2.4876 }
+  - - { src: ../../assets/projects/kitchen-sink/21-pt-proposed-rebrand-gemini-generated-image-ygdg51ygdg51ygdg.webp, alt: "Concept render of a magenta Events bus at a stop outside the Tacoma Dome", ratio: 2.4876 }
+  - - { src: ../../assets/projects/kitchen-sink/22-pt-proposed-rebrand-pierce-transit-headquarters-at-night.webp, alt: "Pierce Transit headquarters at dusk with the proposed logo lit in green on the building", ratio: 2.1075 }
   - heading: "Pierce Transit x Broadway Farmers Market Street Banners"
     text: "I designed colourful, evergreen street banners to promote the Broadway Farmers Market, using bold typography and photography to highlight its diverse offerings, attract visitors, and encourage community engagement."
   - - { src: ../../assets/projects/kitchen-sink/23-pt-farmers-market-collab-img-1828.webp, alt: "Worker in a hard hat in a bucket lift hanging a blue Broadway Farmers Market banner beside a Visitor Info sign", ratio: 0.8009 }

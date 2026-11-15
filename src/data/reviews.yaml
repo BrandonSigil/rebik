@@ -3,6 +3,7 @@
 # shown under "Read the full review". Source: Peter's "Portfolio Testimonials.pdf" (Oct 2026).
 # Keep clients spread out so the same organisation doesn't appear twice in a row.
 # Quotes that read "Should have soon." are hidden from the 2026 slider until filled in.
+# All copy re-pasted from Peter's updated "Portfolio Testimonials.pdf" (Nov 2026).
 - id: ryan-wheaton
   order: 1
   name: Ryan Wheaton
@@ -22,7 +23,9 @@
   org: Smith-Kandal Insurance & Real Estate
   quote: We highly value Peter’s expertise, collaborative approach, and commitment to bringing our brand to life, which ultimately produced an increase in revenue for our agency.
   full: |
-    Peter has been an invaluable partner in shaping and elevating our brand over the years. From developing our website branding to guiding us through a full logo rebrand, he consistently brings creativity, strategic thinking, and a clear vision to every project. His work on our video campaign further strengthened our company’s identity and presence in the community. It helped us communicate our story compellingly and engagingly. We highly value Peter’s expertise, collaborative approach, and commitment to bringing our brand to life, which ultimately produced an increase in revenue for our agency.
+    Peter has been an invaluable partner in shaping and elevating our brand over the years. From developing our website branding to guiding us through a full logo rebrand, he consistently brings creativity, strategic thinking, and a clear vision to every project.
+
+    His work on our video campaign further strengthened our company’s identity and presence in the community. It helped us communicate our story compellingly and engagingly. We highly value Peter’s expertise, collaborative approach, and commitment to bringing our brand to life, which ultimately produced an increase in revenue for our agency.
 - id: merriah-kubista
   order: 3
   name: Merriah Kubista
@@ -42,23 +45,24 @@
   org: Windsor Christian Church & Academy
   quote: He transformed an outdated and complicated brand and website into something clear, cohesive, and easy to navigate.
   full: |
-    Peter Rebik of Rebik Design was a tremendous help to us at Windsor Christian Church and Academy. He did far more than redesign our logos and websites. He helped us clarify our message, particularly how our church and school relate to and complement one another, and communicate that relationship consistently across both websites.
+    Peter Rebik was a tremendous help to us at Windsor Christian Church and Academy. He did far more than redesign our logos and websites. He helped us clarify our message, particularly how our church and school relate to and complement one another, and communicate that relationship consistently across both websites.
 
     From the beginning, Peter involved our team, listened carefully, and responded to feedback quickly and graciously. He transformed an outdated and complicated brand and website into something clear, cohesive, and easy to navigate.
 
-    I would gladly recommend Peter to anyone looking for a true partner, not just a developer.
+    I would gladly recommend Peter to anyone looking for a true partner, not just a designer.
 - id: chelsea-talbert
   order: 5
   name: Chelsea Talbert
   role: Strategic Community Engagement Administrator
   org: Pierce Transit
-  quote: Peter is an incredible thought-partner and executor of the work. He identifies gaps and things that I don’t see while staying true to the north star of the work.
+  quote: Peter is an exceptional thought partner and creative executor. He anticipates gaps and identifies considerations I might otherwise overlook.
   full: |
-    Peter is an incredible thought-partner and executor of the work. He identifies gaps and things that I don’t see while staying true to the north star of the work. He ensures accuracy and alignment and works quickly to pivot as needs rapidly evolve.
-# NOTE: the testimonials PDF lists this one under "Merriah Kubista" too (a copy-paste slip?). Shown by role only
-# until Peter confirms the second intern's name; add `name:` here when he does.
-- id: pt-marketing-intern-2
+    Peter is an exceptional thought partner and creative executor. He anticipates gaps and identifies considerations I might otherwise overlook, all while keeping the work grounded in its overarching vision and goals.
+
+    He brings a strong commitment to accuracy and alignment, paired with the agility to adapt quickly as needs evolve. His ability to balance strategic thinking with thoughtful, responsive execution makes him an invaluable partner.
+- id: mckinzey-holcom
   order: 6
+  name: Mckinzey Holcom
   role: Marketing Intern
   org: Pierce Transit
   quote: Whether he was walking me through his suggestions or leaving detailed comments on ways to make a design clearer and more visually engaging, he helped me understand not just what could be improved, but why.
@@ -73,4 +77,8 @@
   name: Curt Kohlwes
   role: Government Relations Manager
   org: Pierce Transit
-  quote: Should have soon.
+  quote: The work he produces is always exactly what you were looking for, even if it is something you never could have imagined or envisioned on your own.
+  full: |
+    Peter has such a deep well of knowledge about the intricacies and technical considerations of effective design that, when paired with his unique perspective and intuition, yields phenomenal results.
+
+    The work he produces is always exactly what you were looking for, even if it is something you never could have imagined or envisioned on your own. He always puts the client and project first, and he’s receptive and adaptable to feedback, while asking the right questions and offering understandable best practices from his design expertise to develop the best and most impactful version of your project.
