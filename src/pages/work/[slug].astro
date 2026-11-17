@@ -154,10 +154,10 @@ const ogImage = (Array.isArray(firstRow) && firstRow.find((g) => !g.video)?.src)
         )}
 
         {hasWriteUp && (
-          <div class="story" data-reveal style="--i:5">
+          <div class="story">
             {storyCards.length
-              ? storyCards.map((html) => <section class="story__card" set:html={html} />)
-              : <section class="story__card"><Content /></section>}
+              ? storyCards.map((html) => <section class="story__card" data-reveal set:html={html} />)
+              : <section class="story__card" data-reveal><Content /></section>}
           </div>
         )}
       </div>

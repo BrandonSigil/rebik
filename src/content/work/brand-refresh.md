@@ -23,8 +23,10 @@ gallery:
   - booklet: pt-brand-guide
     title: "Brand Guide (Sept 2025)"
     spreads: false
-  - - { src: ../../assets/projects/brand-refresh/01-asset-library.webp, alt: "Adobe CC Libraries panel for 'PT Brand Assets', organised into Elements (single), Components (combined) and Templates (built).", ratio: 0.8306 }
-    - { src: ../../assets/projects/brand-refresh/02-icon-set.webp, alt: "Custom Pierce Transit icon set: 48 white pictograms in green circles on blue, covering vehicles, places, payment, schedules and accessibility.", ratio: 0.8306 }
+  - widths: [0.7195, 0.8316]
+    cols:
+      - - { src: ../../assets/projects/brand-refresh/01-asset-library.webp, alt: "Screen recording of the Adobe CC Libraries panel for 'PT Brand Assets', scrolling through Elements (single), Components (combined) and Templates (built).", ratio: 0.7195, video: /video/brand-refresh/01-asset-library.mp4 }
+      - - { src: ../../assets/projects/brand-refresh/02-icon-set.webp, alt: "Custom Pierce Transit icon set: 48 white pictograms in green circles on blue, covering vehicles, places, payment, schedules and accessibility.", ratio: 0.8316 }
   - - { src: ../../assets/projects/brand-refresh/03-presentation-templates.webp, alt: "Pierce Transit presentation templates: a blue title slide plus layouts for numbered steps, cards, service cost comparisons and a CEO introduction.", ratio: 0.9207 }
   - - { src: ../../assets/projects/brand-refresh/04-department-lockups.webp, alt: "Pierce Transit logo lockups for three departments: Office of Chief Executive Officer, Planning and Community Development, and Procurement.", ratio: 1.2875 }
     - { src: ../../assets/projects/brand-refresh/05-certificate-template.webp, alt: "Employee of the Quarter certificate template in a blue presentation folder, with placeholder name, brand graphics and two signature lines.", ratio: 1.2875 }

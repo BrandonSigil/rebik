@@ -6,7 +6,6 @@
  */
 import Icon from './Icon.astro';
 import { site } from '../data/site';
-import CopyEmail from './CopyEmail.astro';
 import AboutCV from './AboutCV.astro';
 ---
 <section class="section asplit" id="about" aria-labelledby="about-title">
@@ -33,7 +32,7 @@ import AboutCV from './AboutCV.astro';
       <p>I’m looking for UK employers able to provide Skilled Worker visa sponsorship.</p>
       <div class="visa__actions">
         <a href={site.mailto} class="btn visa__btn">Let’s Talk</a>
-        <CopyEmail />
+        <a href="/work/" class="btn btn--outline">See My Work</a>
       </div>
     </aside>
   </div>

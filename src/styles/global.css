@@ -140,4 +140,6 @@ p { text-wrap: pretty; }
 }
 
 /* ---------- Icon helper ---------- */
+/* Centre the svg in its span: in a fixed circle the span stretches wider than the svg. */
+.icon { display: inline-flex; align-items: center; justify-content: center; }
 .icon svg { width: 100%; height: 100%; }

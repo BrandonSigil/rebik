@@ -49,10 +49,10 @@ gallery:
   - - { src: ../../assets/projects/kitchen-sink/22-pt-proposed-rebrand-pierce-transit-headquarters-at-night.webp, alt: "Pierce Transit headquarters at dusk with the proposed logo lit in green on the building", ratio: 2.1075 }
   - heading: "Pierce Transit x Broadway Farmers Market Street Banners"
     text: "I designed colourful, evergreen street banners to promote the Broadway Farmers Market, using bold typography and photography to highlight its diverse offerings, attract visitors, and encourage community engagement."
-  - - { src: ../../assets/projects/kitchen-sink/23-pt-farmers-market-collab-img-1828.webp, alt: "Worker in a hard hat in a bucket lift hanging a blue Broadway Farmers Market banner beside a Visitor Info sign", ratio: 0.8009 }
-  - - { src: ../../assets/projects/kitchen-sink/24-pt-farmers-market-collab-farmers-market-30x60-banners-page-3.webp, alt: "Red Broadway Farmers Market street banner with a heap of fresh cherries and \"Fresh food access\", at 9th & Broadway", ratio: 0.5075 }
-    - { src: ../../assets/projects/kitchen-sink/25-pt-farmers-market-collab-farmers-market-30x60-banners-page-2.webp, alt: "Green Broadway Farmers Market street banner showing four smiling women, \"Make community connections\", at 9th & Broadway", ratio: 0.5075 }
-    - { src: ../../assets/projects/kitchen-sink/26-pt-farmers-market-collab-farmers-market-30x60-banners-page-1.webp, alt: "Pink Broadway Farmers Market street banner with tulips, \"Fresh every Thursday\" and \"Support small business\"", ratio: 0.5075 }
+  - - { src: ../../assets/projects/kitchen-sink/23-pt-farmers-market-collab-img-1828.webp, alt: "Worker in a hard hat in a bucket lift hanging a blue Broadway Farmers Market banner beside a Visitor Info sign", ratio: 1.2571 }
+  - - { src: ../../assets/projects/kitchen-sink/24-pt-farmers-market-collab-farmers-market-30x60-banners-page-3.webp, alt: "Red Broadway Farmers Market street banner with a heap of fresh cherries and \"Fresh food access\", at 9th & Broadway", ratio: 0.5767 }
+    - { src: ../../assets/projects/kitchen-sink/25-pt-farmers-market-collab-farmers-market-30x60-banners-page-2.webp, alt: "Green Broadway Farmers Market street banner showing four smiling women, \"Make community connections\", at 9th & Broadway", ratio: 0.5767 }
+    - { src: ../../assets/projects/kitchen-sink/26-pt-farmers-market-collab-farmers-market-30x60-banners-page-1.webp, alt: "Pink Broadway Farmers Market street banner with tulips, \"Fresh every Thursday\" and \"Support small business\"", ratio: 0.5767 }
   - heading: "Pierce Transit World Cup Fan Zone Express"
     text: "I designed billboards and helped design a custom soccer jersey to build awareness of Pierce Transit’s Fan Zone Express, drive ridership, reduce game-day parking demand, and connect fans to world soccer."
   - - { src: ../../assets/projects/kitchen-sink/27-pt-world-cup-crisp-soccer-billboard-above-rainy-highway.webp, alt: "Highway billboard with Mount Rainier behind: \"World Soccer is Coming. Are you? Join us.\" PierceTransit.org/SEA26", ratio: 2.9940 }
@@ -74,10 +74,10 @@ gallery:
     text: "I redesigned Coastline Family Farms’ produce labels with a vibrant, cohesive system and crop-specific colours to improve shelf recognition, distinguish products, and celebrate its family-farming heritage."
   - - { src: ../../assets/projects/kitchen-sink/38-coastline-family-farms-1-coastline-label-before-and-after-15.webp, alt: "Before and after of the Coastline Family Farms onion label: dark green-trimmed design replaced by a navy and purple oval \"Red Onions\" label", ratio: 1.0005 }
     - { src: ../../assets/projects/kitchen-sink/39-coastline-family-farms-2-coastline-label-variety-03.webp, alt: "Coastline Family Farms label variants for red onions, lettuce and tomatoes, each with a different coloured ribbon", ratio: 1.0006 }
-  - widths: [0.9842, 1.7768]
+  - widths: [1.2164, 1.2706]
     cols:
-      - - { src: ../../assets/projects/kitchen-sink/40-coastline-family-farms-coastline-family-farms-red-onions.webp, alt: "Purple mesh sack of red onions wearing the redesigned Coastline Family Farms \"Red Onions\" label", ratio: 0.9842 }
-      - - { src: ../../assets/projects/kitchen-sink/41-coastline-family-farms-western-grower-magazine-onion-feature-and-fa.webp, alt: "Western Grower magazine spread with a Coastline Family Farms ad, \"Our Families Were Farming, Before Family Farms Were Cool!\"", ratio: 1.7768 }
+      - - { src: ../../assets/projects/kitchen-sink/40-coastline-family-farms-coastline-family-farms-red-onions.webp, alt: "Purple mesh sack of red onions wearing the redesigned Coastline Family Farms \"Red Onions\" label", ratio: 1.2164 }
+      - - { src: ../../assets/projects/kitchen-sink/41-coastline-family-farms-western-grower-magazine-onion-feature-and-fa.webp, alt: "Western Grower magazine spread with a Coastline Family Farms ad, \"Our Families Were Farming, Before Family Farms Were Cool!\"", ratio: 1.2706 }
   - heading: "Moundsville Baptist Website Redesign and Graphics"
     text: "I redesigned Moundsville Baptist Church’s website to improve navigation, welcome visitors, and encourage engagement, while creating bold, distinctive sermon graphics to bring each teaching series to life."
   - widths: [1.0, 1.408]
