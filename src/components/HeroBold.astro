@@ -27,14 +27,13 @@ import ghStop from '../assets/projects/gig-harbor-connector/07-gig-harbor-waterf
 import nightPoster from '../assets/projects/perception-campaign/03-01-urban-bus-stop-poster-mockup.webp';
 import bdVan from '../assets/hero/trail-bd-van.webp';
 import jersey from '../assets/hero/trail-chambers-jersey.webp';
-import hoodie from '../assets/hero/trail-known-hoodie.webp';
 import onions from '../assets/hero/trail-red-onions.webp';
 import brickhouse from '../assets/hero/trail-brickhouse.webp';
 
 const trail = await Promise.all(
   // Order mixes clients and formats so neighbours look different
   [billboard, skHat, phone, bdVan, recShelter, guidelines, jersey, skBillboard, market, wcPolo,
-   onions, recBus, beautifulDay, ghStop, hoodie, skSign, report, nightPoster, wcHat, brickhouse].map(async (src) => {
+   onions, recBus, beautifulDay, ghStop, skSign, report, nightPoster, wcHat, brickhouse].map(async (src) => {
     // Tiles show at ≤220px, so 480px wide covers 2× screens and keeps the preload light
     const img = await getImage({ src, width: Math.min(480, src.width), format: 'webp', quality: 75 });
     return { src: img.src, ratio: (src.width / src.height).toFixed(4) };

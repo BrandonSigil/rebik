@@ -9,7 +9,7 @@ import { nav, site } from '../data/site';
       <ul role="list">
         {nav.map((item) => <li><a href={item.href} class="nav__link">{item.label}</a></li>)}
       </ul>
-      <a href={site.mailto} class="btn btn--nav">Let’s Talk</a>
+      <a href="/work/" class="btn btn--nav">See My Work</a>
     </nav>
     <button class="nav__toggle" aria-expanded="false" aria-controls="mobile-menu" data-nav-toggle>
       <span class="sr-only">Open menu</span>
@@ -20,7 +20,7 @@ import { nav, site } from '../data/site';
     <ul role="list">
       {nav.map((item, i) => <li style={`--i:${i}`}><a href={item.href} data-nav-close>{item.label}</a></li>)}
     </ul>
-    <a href={site.mailto} class="btn" data-nav-close>Let’s Talk</a>
+    <a href="/work/" class="btn" data-nav-close>See My Work</a>
   </div>
 </header>
 

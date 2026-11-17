@@ -11,7 +11,7 @@ cover: ../../assets/work/brand-refresh.webp
 coverAlt: "Open brand guidelines book showing graphic elements, fonts and icon set"
 feature: ../../assets/work/brand-refresh/01-brand-guide-mockup.webp
 featurePosition: "55% 50%"
-order: 7
+order: 5
 featured: true
 roles: [graphic-designer, art-director]
 skills: [brand-strategy, creative-direction, systems-processes, digital-experiences, alignment-collaboration]
@@ -23,8 +23,10 @@ gallery:
   - booklet: pt-brand-guide
     title: "Brand Guide (Sept 2025)"
     spreads: false
-  - - { src: ../../assets/projects/brand-refresh/01-asset-library.webp, alt: "Adobe CC Libraries panel for 'PT Brand Assets', organised into Elements (single), Components (combined) and Templates (built).", ratio: 0.8306 }
-    - { src: ../../assets/projects/brand-refresh/02-icon-set.webp, alt: "Custom Pierce Transit icon set: 48 white pictograms in green circles on blue, covering vehicles, places, payment, schedules and accessibility.", ratio: 0.8306 }
+  - widths: [0.7195, 0.8316]
+    cols:
+      - - { src: ../../assets/projects/brand-refresh/01-asset-library.webp, alt: "Screen recording of the Adobe CC Libraries panel for 'PT Brand Assets', scrolling through Elements (single), Components (combined) and Templates (built).", ratio: 0.7195, video: /video/brand-refresh/01-asset-library.mp4 }
+      - - { src: ../../assets/projects/brand-refresh/02-icon-set.webp, alt: "Custom Pierce Transit icon set: 48 white pictograms in green circles on blue, covering vehicles, places, payment, schedules and accessibility.", ratio: 0.8316 }
   - - { src: ../../assets/projects/brand-refresh/03-presentation-templates.webp, alt: "Pierce Transit presentation templates: a blue title slide plus layouts for numbered steps, cards, service cost comparisons and a CEO introduction.", ratio: 0.9207 }
   - - { src: ../../assets/projects/brand-refresh/04-department-lockups.webp, alt: "Pierce Transit logo lockups for three departments: Office of Chief Executive Officer, Planning and Community Development, and Procurement.", ratio: 1.2875 }
     - { src: ../../assets/projects/brand-refresh/05-certificate-template.webp, alt: "Employee of the Quarter certificate template in a blue presentation folder, with placeholder name, brand graphics and two signature lines.", ratio: 1.2875 }
@@ -37,8 +39,8 @@ gallery:
     - { src: ../../assets/projects/brand-refresh/10-image-5bff3713.webp, alt: "Hands holding a printed 'Our Customer Promise' sheet in Pierce Transit blue, with a smiling rider photo and the promise text.", ratio: 0.7454 }
   - - { src: ../../assets/projects/brand-refresh/11-sponsored-web-content.webp, alt: "Sponsored article placement on a news site promoting a regional transit pass as 'The affordable annual employee benefit'.", ratio: 2.1495 }
   - - { src: ../../assets/projects/brand-refresh/12-business-summit-2024-strickland-04.webp, alt: "U.S. Representative Marilyn Strickland speaking at a Pierce Transit lectern, in front of a branded speaker introduction slide on screen.", ratio: 1.6815 }
-  - - { src: ../../assets/projects/brand-refresh/13-image-446ff6cf-1.webp, alt: "Pierce Transit 'Full Fare Required' fare chart fitted to a bus farebox, listing adult, youth and discounted fares.", ratio: 1.0097 }
-  - - { src: ../../assets/projects/brand-refresh/14-image-72d80dfd.webp, alt: "Pierce Transit Rideshare sign in a car park asking 'Here to pick up or drop off your vehicle?' above a keybox.", ratio: 1.0097 }
+  - - { src: ../../assets/projects/brand-refresh/13-image-446ff6cf-1.webp, alt: "Pierce Transit 'Full Fare Required' fare chart fitted to a bus farebox, listing adult, youth and discounted fares.", ratio: 0.8477 }
+  - - { src: ../../assets/projects/brand-refresh/14-image-72d80dfd.webp, alt: "Pierce Transit Rideshare sign in a car park asking 'Here to pick up or drop off your vehicle?' above a keybox.", ratio: 0.9265 }
 ---
 
 ## The Challenge

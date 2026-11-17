@@ -61,11 +61,11 @@ let count = 0;
 const bookletPages = (id: string) =>
   Object.keys(import.meta.glob('../../assets/booklets/*/*.{webp,jpg,jpeg,png}')).filter((p) => p.includes(`/booklets/${id}/`)).length;
 /* One tile. `aspect` = the tile's shape. Layout frames (`ratio`) crop like InDesign; otherwise an image whose shape is
-   far from its row's is letterboxed instead of cropped. Videos don't join the lightbox. */
+   far from its row's is letterboxed instead of cropped. Videos join the lightbox too (their `full` is the clip). */
 const tile = async (g: Img, aspect: number) => {
   const own = g.src.width / g.src.height;
   const fit = g.fit ?? (g.ratio || Math.abs(own / aspect - 1) <= 0.3 ? 'cover' : 'contain');
-  if (g.video) return { ...g, aspect, fit, index: -1, full: '' };
+  if (g.video) return { ...g, aspect, fit, index: count++, full: g.video };
   const full = await getImage({ src: g.src, width: Math.min(2000, g.src.width), format: 'webp' });
   return { ...g, aspect, fit, index: count++, full: full.src };
 };
@@ -154,10 +154,10 @@ const ogImage = (Array.isArray(firstRow) && firstRow.find((g) => !g.video)?.src)
         )}
 
         {hasWriteUp && (
-          <div class="story" data-reveal style="--i:5">
+          <div class="story">
             {storyCards.length
-              ? storyCards.map((html) => <section class="story__card" set:html={html} />)
-              : <section class="story__card"><Content /></section>}
+              ? storyCards.map((html) => <section class="story__card" data-reveal set:html={html} />)
+              : <section class="story__card" data-reveal><Content /></section>}
           </div>
         )}
       </div>
@@ -208,6 +208,7 @@ const ogImage = (Array.isArray(firstRow) && firstRow.find((g) => !g.video)?.src)
 
   <dialog class="lightbox" aria-label="Image viewer">
     <img class="lightbox__img" alt="" />
+    <video class="lightbox__video" playsinline hidden></video>
     <p class="lightbox__count t-xs" aria-live="polite"></p>
     <button class="lightbox__btn lightbox__close" type="button" aria-label="Close">×</button>
     <button class="lightbox__btn lightbox__prev" type="button" aria-label="Previous image"><Icon name="arrow-long-left" /></button>
@@ -242,13 +243,31 @@ const ogImage = (Array.isArray(firstRow) && firstRow.find((g) => !g.video)?.src)
   const links = [...document.querySelectorAll<HTMLAnchorElement>('[data-lightbox]')];
   if (dlg && links.length && typeof dlg.showModal === 'function') {
     const img = dlg.querySelector<HTMLImageElement>('.lightbox__img')!;
+    const vid = dlg.querySelector<HTMLVideoElement>('.lightbox__video')!;
     const counter = dlg.querySelector<HTMLElement>('.lightbox__count')!;
     let i = 0;
+    const stopVideo = () => { vid.pause(); vid.removeAttribute('src'); vid.load(); vid.hidden = true; };
     const show = (n: number) => {
       i = (n + links.length) % links.length;
       const a = links[i];
-      img.src = a.href;
-      img.alt = a.querySelector('img')?.alt ?? '';
+      stopVideo();
+      if (a.dataset.video !== undefined) {
+        // Clips: loop silently like the tile does, or (long clips with sound) show controls and wait for play
+        const long = a.dataset.controls !== undefined;
+        img.hidden = true;
+        vid.hidden = false;
+        vid.src = a.href;
+        vid.poster = a.dataset.poster ?? '';
+        vid.controls = true;
+        vid.loop = !long;
+        vid.muted = !long;
+        vid.setAttribute('aria-label', a.dataset.alt ?? '');
+        if (!long) vid.play().catch(() => {});
+      } else {
+        img.hidden = false;
+        img.src = a.href;
+        img.alt = a.querySelector('img')?.alt ?? '';
+      }
       counter.textContent = `${i + 1} / ${links.length}`;
     };
     links.forEach((a, n) => a.addEventListener('click', (e) => {
@@ -263,7 +282,7 @@ const ogImage = (Array.isArray(firstRow) && firstRow.find((g) => !g.video)?.src)
       if (e.key === 'ArrowLeft') show(i - 1);
       if (e.key === 'ArrowRight') show(i + 1);
     });
-    dlg.addEventListener('close', () => links[i]?.focus());
+    dlg.addEventListener('close', () => { stopVideo(); links[i]?.focus(); });
   }
 </script>
 
@@ -405,6 +424,8 @@ const ogImage = (Array.isArray(firstRow) && firstRow.find((g) => !g.video)?.src)
   }
   .lightbox[open] { display: grid; place-items: center; }
   .lightbox::backdrop { background: transparent; }
+  .lightbox__img[hidden], .lightbox__video[hidden] { display: none; }
+  .lightbox__video { max-width: min(92vw, 1600px); max-height: 86dvh; width: auto; height: auto; border-radius: var(--radius-sm); background: #000; }
   .lightbox__img { max-width: min(92vw, 1600px); max-height: 86dvh; width: auto; height: auto; object-fit: contain; border-radius: var(--radius-sm); }
   .lightbox__count { position: absolute; bottom: var(--space-4); left: 50%; translate: -50% 0; color: var(--color-sage); }
   .lightbox__btn {

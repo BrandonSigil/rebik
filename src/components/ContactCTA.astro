@@ -1,6 +1,5 @@
 ---
 import { site } from '../data/site';
-import CopyEmail from './CopyEmail.astro';
 const bold = site.theme === '2026';
 ---
 <section class="section section--inverse cta" id="contact" aria-labelledby="cta-title">
@@ -11,7 +10,7 @@ const bold = site.theme === '2026';
       : <p>Looking for someone who can help bring clarity to complex ideas and turn strategy into thoughtful creative work? I’d love to hear about your team, your challenges, and what you’re looking to build.</p>}
     <div class="cta__actions">
       <a href={site.mailto} class="btn">Let’s Talk</a>
-      {bold && <CopyEmail tone="dark" />}
+      {bold && <a href="/work/" class="btn btn--outline">See My Work</a>}
     </div>
     {bold && <p class="cta__email"><a href={site.mailto}>{site.email}</a></p>}
   </div>
