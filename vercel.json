@@ -1,0 +1,18 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "redirects": [
+    { "source": "/home", "destination": "/", "permanent": true },
+    { "source": "/home-3", "destination": "/", "permanent": true },
+    { "source": "/faq-3", "destination": "/", "permanent": true },
+    { "source": "/about", "destination": "/#about", "permanent": true },
+    { "source": "/connector", "destination": "/work/gig-harbor-connector", "permanent": true },
+    { "source": "/kitchen-sink", "destination": "/work/kitchen-sink", "permanent": true },
+    { "source": "/logos", "destination": "/work/select-logos", "permanent": true },
+    { "source": "/perception-campaign", "destination": "/work/perception-campaign", "permanent": true },
+    { "source": "/pt-brand", "destination": "/work/brand-refresh", "permanent": true },
+    { "source": "/recruitment-campaign", "destination": "/work/recruitment-campaign", "permanent": true },
+    { "source": "/report", "destination": "/work/annual-report", "permanent": true },
+    { "source": "/sk-brand", "destination": "/work/smith-kandal-rebrand", "permanent": true },
+    { "source": "/wc-brand", "destination": "/work/windsor-christian-rebrand", "permanent": true }
+  ]
+}
