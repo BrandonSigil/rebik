@@ -68,6 +68,9 @@
 /* Outline buttons: pine border (lime border failed non-text contrast) */
 [data-theme="2026"] .btn--outline { --btn-border: var(--color-forest); }
 [data-theme="2026"] .btn--outline:hover { --btn-border: var(--accent-hover); }
+/* On dark sections pine disappears, so use lime outline + text; dark text once it fills on hover */
+[data-theme="2026"] .section--inverse .btn--outline { --btn-border: var(--color-lime); --btn-fg: var(--color-lime); }
+[data-theme="2026"] .section--inverse .btn--outline:is(:hover, :focus-visible) { --btn-border: var(--accent-hover); --btn-fg: var(--color-forest); }
 [data-theme="2026"] .btn { min-height: 48px; padding-inline: var(--space-6); }
 [data-theme="2026"] .btn--nav { min-height: 36px; padding-inline: var(--space-4); }
 
