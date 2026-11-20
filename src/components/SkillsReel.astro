@@ -39,7 +39,7 @@ const lean = (svg: string) => svg.replace(/<metadata>[\s\S]*?<\/metadata>/g, '')
             const icon = iconFor(data.image);
             return (
               <li class="rcard" tabindex={copy === 0 ? 0 : undefined} aria-labelledby={copy === 0 ? `rcard-${i}-title` : undefined} aria-describedby={copy === 0 ? `rcard-${i}-desc` : undefined} data-rcard>
-                {img && <Image src={img} alt="" widths={[360, 540, 760]} sizes="(max-width: 760px) 72vw, 380px" loading="lazy" class="rcard__img" />}
+                {img && <Image src={img} alt="" widths={[280, 400, 540, 760]} sizes="(max-width: 760px) 72vw, clamp(260px, 26vw, 380px)" quality={70} loading="lazy" class="rcard__img" />}
                 <div class="rcard__scrim" aria-hidden="true" />
                 {icon && <div class="rcard__icon" data-icon={iconName(data.image)} aria-hidden="true" set:html={lean(icon).replaceAll('{uid}', `${copy}-${i}`)} />}
                 <div class="rcard__top">
@@ -259,7 +259,8 @@ const lean = (svg: string) => svg.replace(/<metadata>[\s\S]*?<\/metadata>/g, '')
       step = cards[0].offsetWidth + (parseFloat(getComputedStyle(group).columnGap) || 16);
       secs = parseFloat(getComputedStyle(reel).getPropertyValue('--speed')) || 100;
     };
-    measure();
+    // ResizeObserver also fires once on observe, after layout, so the first
+    // measurement doesn't force a layout during page load.
     new ResizeObserver(measure).observe(group);
 
     let x = 0;
@@ -274,7 +275,7 @@ const lean = (svg: string) => svg.replace(/<metadata>[\s\S]*?<\/metadata>/g, '')
     const frame = (now: number) => {
       const dt = Math.min(0.05, (now - last) / 1000);
       last = now;
-      if (onScreen && !reduce.matches) {
+      if (onScreen && loopW && !reduce.matches) {
         if (nudge) {
           const t = Math.min(1, (now - nudge.t0) / nudge.dur);
           x = nudge.from + (nudge.to - nudge.from) * ease(t);

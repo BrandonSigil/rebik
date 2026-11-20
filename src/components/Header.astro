@@ -114,7 +114,11 @@ import { nav, site } from '../data/site';
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') setOpen(false); });
   matchMedia('(min-width: 761px)').addEventListener('change', (e) => e.matches && setOpen(false));
 
-  const onScroll = () => header.classList.toggle('is-scrolled', scrollY > 8);
-  addEventListener('scroll', onScroll, { passive: true });
-  onScroll();
+  // Watch a 9px marker at the top of the page instead of reading scrollY,
+  // which forced a layout during page load.
+  const marker = document.createElement('div');
+  marker.setAttribute('aria-hidden', 'true');
+  marker.style.cssText = 'position:absolute;top:0;left:0;width:1px;height:9px;visibility:hidden;pointer-events:none';
+  document.body.prepend(marker);
+  new IntersectionObserver(([e]) => header.classList.toggle('is-scrolled', !e.isIntersecting)).observe(marker);
 </script>

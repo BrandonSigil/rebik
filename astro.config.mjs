@@ -6,6 +6,8 @@ export default defineConfig({
   output: 'static',
   trailingSlash: 'ignore',
   prefetch: { prefetchAll: false, defaultStrategy: 'hover' },
-  build: { inlineStylesheets: 'auto' },
+  // Inline all CSS (about 15 KB compressed on the homepage) so first paint
+  // doesn't wait on separate stylesheet requests.
+  build: { inlineStylesheets: 'always' },
   image: { responsiveStyles: false },
 });
