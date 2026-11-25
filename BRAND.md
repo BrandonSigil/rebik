@@ -316,3 +316,10 @@ Source: Peter's Drive folder, downloaded to `incoming/Rebik Site/` (not committe
 - **Hero image trail** pictures now live in `src/assets/hero/trail-*.webp`, so gallery rebuilds can't break the homepage.
 - Already in from the Oct 25 drop and confirmed: logos GIF as the Select Logos card video, testimonials from his PDF, project galleries in his PDF order.
 - **Work order (Brandon):** Select Logos moved up to 3rd: Perception, Smith-Kandal, Select Logos, Recruitment, Windsor, Gig Harbor, Brand Refresh, Annual Report, Kitchen Sink.
+
+## Peter's follow-up: double corners, favicon (B, Nov 25 2026)
+
+- **Perception double corners:** two gallery images had the rounded corners of Peter's InDesign frames baked in, so with the gallery's own radius they showed two corners. Both had been cut from the layout PDF (`crop` rows in `scripts/process-drive-drop.py`, so rerunning that script brings the corners back).
+  - `04-transit-king.webp`: re-cut from `Perception - Transit King.psd` with the same framing as before (crop 3934×2475 at +932,+1198 of the 5616×3744 PSD), now 2000×1258 instead of 1672×1052, with no rounded corners. Ratio 1.5898.
+  - `11-landing-page.webp`: the black rounded frame stroke is trimmed off and its corner arcs painted white, so it's a plain white panel. Now 1668×2300 (was 1672×2304). Ratio 0.7252.
+- **Favicon:** the tab, touch and manifest icons are now the header's PR mark (`src/icons/pr-mark.svg`) instead of the "PR" monogram. It's a volt circle with the R in pine, like the nav. `favicon.svg` (new, linked after the PNG) and the 64px `favicon.png` are transparent around the circle. `apple-touch-icon.png` and `icon-192/512.png` are opaque pine squares with the mark at 70%.

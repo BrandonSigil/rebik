@@ -23,7 +23,7 @@ gallery:
   - - { src: ../../assets/projects/perception-campaign/01-public-perception-billboard-mockup.webp, alt: "Billboard mock-up reading 'Because Opportunity Matters.' with a joyful graduate holding a diploma, under 'Helping students get to school'.", ratio: 1.6392 }
   - - { src: ../../assets/projects/perception-campaign/02-26-city-billboard-mockups.webp, alt: "Bus shelter poster reading 'Because Local Business Matters.', showing a young man working at a laptop, set in a leafy street.", ratio: 1.2875 }
     - { src: ../../assets/projects/perception-campaign/03-01-urban-bus-stop-poster-mockup.webp, alt: "Illuminated night-time bus shelter poster reading 'Because Getting Out Matters.' with two friends walking and laughing.", ratio: 1.2875 }
-  - - { src: ../../assets/projects/perception-campaign/04-transit-king.webp, alt: "Pierce Transit bus on route 3 Lakewood carrying a side ad reading 'Because Family Time Matters', at a kerbside stop.", ratio: 1.5894 }
+  - - { src: ../../assets/projects/perception-campaign/04-transit-king.webp, alt: "Pierce Transit bus on route 3 Lakewood carrying a side ad reading 'Because Family Time Matters', at a kerbside stop.", ratio: 1.5898 }
   - widths: [96, 96, 210]
     cols:
       - - { src: ../../assets/projects/perception-campaign/05-perception-digital-ads-160x600.webp, alt: "160×600 skyscraper banner reading 'Because Pierce County Matters.' with a smiling family walking, and a 'Learn More' button.", ratio: 0.2674 }
@@ -32,7 +32,7 @@ gallery:
         - { src: ../../assets/projects/perception-campaign/08-perception-digital-ads-300x250-2.webp, alt: "Spanish 300×250 web banner reading 'Porque Pierce County Importa.' with a collage of local residents and an 'Aprender Más' button.", ratio: 1.2 }
   - - { src: ../../assets/projects/perception-campaign/09-perception-digital-ads-728x90.webp, alt: "728×90 leaderboard banner reading 'Because Pierce County Matters.' with a smiling family and a 'Learn More' button.", ratio: 8.0385 }
   - - { src: ../../assets/projects/perception-campaign/10-perception-digital-ads-728x90-2.webp, alt: "Spanish 728×90 leaderboard banner reading 'Porque Pierce County Importa.' with a smiling family and an 'Aprender Más' button.", ratio: 8.0385 }
-  - - { src: ../../assets/projects/perception-campaign/11-landing-page.webp, alt: "Landing page wireframe outlining sections What We Are, Why We Are, Who This Helps and How We Do It, with calls to action.", ratio: 0.7257 }
+  - - { src: ../../assets/projects/perception-campaign/11-landing-page.webp, alt: "Landing page wireframe outlining sections What We Are, Why We Are, Who This Helps and How We Do It, with calls to action.", ratio: 0.7252 }
   - - { src: ../../assets/projects/perception-campaign/12-perception-wireframe2.webp, alt: "Landing page design for 'Because Pierce County Matters', covering Pierce Transit services, key local challenges and 'Who Benefits? Everyone.'", ratio: 0.3422 }
     - { src: ../../assets/projects/perception-campaign/13-perception-wireframe3.webp, alt: "Landing page design section 'We Do a Lot With Less', with a service area map, key statistics, sales tax comparison and contact form.", ratio: 0.3422 }
 ---

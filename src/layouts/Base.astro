@@ -58,6 +58,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     {!noindex && <link rel="canonical" href={canonical} />}
     {preloads.map((href) => <link rel="preload" href={href} as="font" type="font/woff2" crossorigin />)}
     <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
     <meta name="theme-color" content={site.theme === '2026' ? '#0c1f14' : '#162d16'} />
