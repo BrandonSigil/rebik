@@ -161,7 +161,7 @@ From Peter's project wireframe.
 
 ---
 
-# Theme B: "2026" (tinker branch)
+# Theme B: "2026" (live on main)
 
 This is an alternative theme layered on top of the original. The original tokens in `tokens.css` are untouched, and `src/styles/themes/2026.css` overrides them when `<html data-theme="2026">` is set.
 
