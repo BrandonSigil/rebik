@@ -26,10 +26,10 @@ gallery:
   - - { src: ../../assets/projects/annual-report/05-annual-report-4.webp, alt: "Annual report spread listing fare-free ride totals for special days, alongside cut-out photos of young riders, families and a rider on crutches.", ratio: 1.9 }
   - widths: [198, 212]
     cols:
-      - - { src: ../../assets/projects/annual-report/06-2024-annual-report-social-media-ad.webp, alt: "Social media ad for the 2024 Annual Report: a green Pierce Transit bus and a passing pedestrian beneath 'Click to View Online'.", ratio: 0.7984 }
-      - - { src: ../../assets/projects/annual-report/07-2024-annual-report-mcclatchy-ads-320x50.webp, alt: "320×50 mobile banner for the Pierce Transit Annual Report over a blue grid of faces, with a green 'Click To Learn More' panel.", ratio: 6.4242 }
-        - { src: ../../assets/projects/annual-report/08-2024-annual-report-mcclatchy-ads-728x90.webp, alt: "728×90 leaderboard banner promoting the Pierce Transit Annual Report against a blue wall of faces, ending in 'Click To Learn More'.", ratio: 8.1538 }
-        - { src: ../../assets/projects/annual-report/09-2024-annual-report-mcclatchy-ads-300x250.webp, alt: "300×250 web banner announcing 'The 2024 Annual Report' over a blue grid of smiling faces, with a green 'Click To Learn More' arc.", ratio: 1.1977 }
+      - - { src: ../../assets/projects/annual-report/06-2024-annual-report-social-post.webp, alt: "Social media ad for the 2024 Annual Report: a green Pierce Transit bus and a passing pedestrian beneath 'Click to View Online'.", ratio: 0.7984 }
+      - - { src: ../../assets/projects/annual-report/07-2024-annual-report-mcclatchy-mobile.webp, alt: "320×50 mobile banner for the Pierce Transit Annual Report over a blue grid of faces, with a green 'Click To Learn More' panel.", ratio: 6.4242 }
+        - { src: ../../assets/projects/annual-report/08-2024-annual-report-mcclatchy-wide.webp, alt: "728×90 leaderboard banner promoting the Pierce Transit Annual Report against a blue wall of faces, ending in 'Click To Learn More'.", ratio: 8.1538 }
+        - { src: ../../assets/projects/annual-report/09-2024-annual-report-mcclatchy-box.webp, alt: "300×250 web banner announcing 'The 2024 Annual Report' over a blue grid of smiling faces, with a green 'Click To Learn More' arc.", ratio: 1.1977 }
 ---
 
 ## The Challenge

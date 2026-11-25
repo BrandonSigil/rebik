@@ -25,7 +25,7 @@ gallery:
     - { src: ../../assets/projects/kitchen-sink/04-pt-swag-amber-mug-artwork-lightning-bolt.webp, alt: "Two amber glass mugs printed with the Pierce Transit lightning-bolt logo and \"Ditch Your Car. Keep Your Cash.\"", ratio: 1.6287 }
   - widths: [1.0, 1.015]
     cols:
-      - - { src: ../../assets/projects/kitchen-sink/05-pt-swag-community-poster-24x36.webp, alt: "Blue line-art \"Connecting Our Community\" poster: a winding transit route linking farms, Mount Rainier, downtown Tacoma and the waterfront", ratio: 0.6665 }
+      - - { src: ../../assets/projects/kitchen-sink/05-pt-swag-community-poster.webp, alt: "Blue line-art \"Connecting Our Community\" poster: a winding transit route linking farms, Mount Rainier, downtown Tacoma and the waterfront", ratio: 0.6665 }
       - - { src: ../../assets/projects/kitchen-sink/06-pt-swag-monoline-community-mock-up-poster.webp, alt: "The \"Connecting Our Community\" poster framed on a blue wall", ratio: 1.3333 }
         - { src: ../../assets/projects/kitchen-sink/07-pt-swag-your-world-in-motion-mock-up-black.webp, alt: "Black \"Your World In Motion\" T-shirts: a globe-and-bus badge on the front, transit facts listed on the back", ratio: 1.3746 }
   - widths: [1.3746, 1.6474]
@@ -50,9 +50,9 @@ gallery:
   - heading: "Pierce Transit x Broadway Farmers Market Street Banners"
     text: "I designed colourful, evergreen street banners to promote the Broadway Farmers Market, using bold typography and photography to highlight its diverse offerings, attract visitors, and encourage community engagement."
   - - { src: ../../assets/projects/kitchen-sink/23-pt-farmers-market-collab-img-1828.webp, alt: "Worker in a hard hat in a bucket lift hanging a blue Broadway Farmers Market banner beside a Visitor Info sign", ratio: 1.2571 }
-  - - { src: ../../assets/projects/kitchen-sink/24-pt-farmers-market-collab-farmers-market-30x60-banners-page-3.webp, alt: "Red Broadway Farmers Market street banner with a heap of fresh cherries and \"Fresh food access\", at 9th & Broadway", ratio: 0.5767 }
-    - { src: ../../assets/projects/kitchen-sink/25-pt-farmers-market-collab-farmers-market-30x60-banners-page-2.webp, alt: "Green Broadway Farmers Market street banner showing four smiling women, \"Make community connections\", at 9th & Broadway", ratio: 0.5767 }
-    - { src: ../../assets/projects/kitchen-sink/26-pt-farmers-market-collab-farmers-market-30x60-banners-page-1.webp, alt: "Pink Broadway Farmers Market street banner with tulips, \"Fresh every Thursday\" and \"Support small business\"", ratio: 0.5767 }
+  - - { src: ../../assets/projects/kitchen-sink/24-pt-farmers-market-collab-signs-page-3.webp, alt: "Red Broadway Farmers Market street banner with a heap of fresh cherries and \"Fresh food access\", at 9th & Broadway", ratio: 0.5767 }
+    - { src: ../../assets/projects/kitchen-sink/25-pt-farmers-market-collab-signs-page-2.webp, alt: "Green Broadway Farmers Market street banner showing four smiling women, \"Make community connections\", at 9th & Broadway", ratio: 0.5767 }
+    - { src: ../../assets/projects/kitchen-sink/26-pt-farmers-market-collab-signs-page-1.webp, alt: "Pink Broadway Farmers Market street banner with tulips, \"Fresh every Thursday\" and \"Support small business\"", ratio: 0.5767 }
   - heading: "Pierce Transit World Cup Fan Zone Express"
     text: "I designed billboards and helped design a custom soccer jersey to build awareness of Pierce Transit’s Fan Zone Express, drive ridership, reduce game-day parking demand, and connect fans to world soccer."
   - - { src: ../../assets/projects/kitchen-sink/27-pt-world-cup-crisp-soccer-billboard-above-rainy-highway.webp, alt: "Highway billboard with Mount Rainier behind: \"World Soccer is Coming. Are you? Join us.\" PierceTransit.org/SEA26", ratio: 2.9940 }
