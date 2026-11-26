@@ -32,8 +32,8 @@ gallery:
     cols:
       - - { src: ../../assets/projects/recruitment-campaign/09-recruitment-web-tall.webp, alt: "160×600 skyscraper banner reading 'Great Career. Happy You.' with two smiling mechanics and a 'Learn More' button.", ratio: 0.2674 }
       - - { src: ../../assets/projects/recruitment-campaign/10-recruitment-web-tall-2.webp, alt: "Spanish 160×600 skyscraper banner opening 'Gran Carrera.' with two smiling mechanics and an 'Aprender Más' button.", ratio: 0.2674 }
-      - - { src: ../../assets/projects/recruitment-campaign/11-recruitment-web-box.webp, alt: "300×250 web banner reading 'Great Career. Happy You.' between two smiling mechanics, with a 'Learn More' button.", ratio: 1.2 }
-        - { src: ../../assets/projects/recruitment-campaign/12-recruitment-web-box-2.webp, alt: "Spanish 300×250 web banner opening 'Gran Carrera.' between two smiling mechanics, with an 'Aprender Más' button.", ratio: 1.2 }
+      - - { src: ../../assets/projects/recruitment-campaign/11-recruitment-web-box.webp, alt: "300×250 web banner reading 'Great Career. Happy You.' between two smiling mechanics, with a 'Learn More' button.", ratio: 1.2012 }
+        - { src: ../../assets/projects/recruitment-campaign/12-recruitment-web-box-2.webp, alt: "Spanish 300×250 web banner opening 'Gran Carrera.' between two smiling mechanics, with an 'Aprender Más' button.", ratio: 1.2012 }
   - - { src: ../../assets/projects/recruitment-campaign/13-recruitment-web-wide.webp, alt: "728×90 leaderboard banner reading 'Great Career. Happy You.' flanked by two mechanics, with a 'Learn More' button.", ratio: 8.0385 }
   - - { src: ../../assets/projects/recruitment-campaign/14-recruitment-web-wide-2.webp, alt: "Spanish 728×90 leaderboard banner reading 'Gran Carrera. Tú Feliz.' flanked by two mechanics, with an 'Aprender Más' button.", ratio: 8.0385 }
 ---

@@ -26,10 +26,10 @@ gallery:
   - - { src: ../../assets/projects/perception-campaign/04-transit-king.webp, alt: "Pierce Transit bus on route 3 Lakewood carrying a side ad reading 'Because Family Time Matters', at a kerbside stop.", ratio: 1.5898 }
   - widths: [96, 96, 210]
     cols:
-      - - { src: ../../assets/projects/perception-campaign/05-perception-web-tall.webp, alt: "160×600 skyscraper banner reading 'Because Pierce County Matters.' with a smiling family walking, and a 'Learn More' button.", ratio: 0.2674 }
-      - - { src: ../../assets/projects/perception-campaign/06-perception-web-tall-2.webp, alt: "Spanish 160×600 skyscraper banner reading 'Porque Pierce County Importa.' with a walking family and an 'Aprender Más' button.", ratio: 0.2674 }
-      - - { src: ../../assets/projects/perception-campaign/07-perception-web-box.webp, alt: "300×250 web banner reading 'Because Pierce County Matters.' with a collage of a family, graduate, cyclist and worker.", ratio: 1.2 }
-        - { src: ../../assets/projects/perception-campaign/08-perception-web-box-2.webp, alt: "Spanish 300×250 web banner reading 'Porque Pierce County Importa.' with a collage of local residents and an 'Aprender Más' button.", ratio: 1.2 }
+      - - { src: ../../assets/projects/perception-campaign/05-perception-web-tall.webp, alt: "160×600 skyscraper banner reading 'Because Pierce County Matters.' with a smiling family walking, and a 'Learn More' button.", ratio: 0.2644 }
+      - - { src: ../../assets/projects/perception-campaign/06-perception-web-tall-2.webp, alt: "Spanish 160×600 skyscraper banner reading 'Porque Pierce County Importa.' with a walking family and an 'Aprender Más' button.", ratio: 0.2644 }
+      - - { src: ../../assets/projects/perception-campaign/07-perception-web-box.webp, alt: "300×250 web banner reading 'Because Pierce County Matters.' with a collage of a family, graduate, cyclist and worker.", ratio: 1.2012 }
+        - { src: ../../assets/projects/perception-campaign/08-perception-web-box-2.webp, alt: "Spanish 300×250 web banner reading 'Porque Pierce County Importa.' with a collage of local residents and an 'Aprender Más' button.", ratio: 1.2012 }
   - - { src: ../../assets/projects/perception-campaign/09-perception-web-wide.webp, alt: "728×90 leaderboard banner reading 'Because Pierce County Matters.' with a smiling family and a 'Learn More' button.", ratio: 8.0385 }
   - - { src: ../../assets/projects/perception-campaign/10-perception-web-wide-2.webp, alt: "Spanish 728×90 leaderboard banner reading 'Porque Pierce County Importa.' with a smiling family and an 'Aprender Más' button.", ratio: 8.0385 }
   - - { src: ../../assets/projects/perception-campaign/11-landing-page.webp, alt: "Landing page wireframe outlining sections What We Are, Why We Are, Who This Helps and How We Do It, with calls to action.", ratio: 0.7252 }
